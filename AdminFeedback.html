@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=overlays-content">
+    <title>鸡毛蒜皮 - 管理后台</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* 🛡️ 修复：iOS Safari 聚焦输入框时，系统会自己把"可视视口"往下滚一截去
+           帮你露出光标，这个滚动完全绕过 body 的 overflow:hidden（它滚动的是
+           visualViewport，不是文档流），表现就是整个页面被顶上去，最上面一截
+           （常常正好是输入框所在的区域）被推到刘海/状态栏底下、彻底看不见。
+           解法：把 body 钉成 position:fixed（不再是一个"可以被系统滚动的文档"），
+           再配合下面 JS 用 visualViewport.offsetTop 把它精确地反向平移回来，
+           让它始终和当前真正可见的那一块区域对齐，不再被系统的自动滚动带偏。 */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; position: fixed; top: 0; left: 0; right: 0; height: var(--app-height, 100dvh); transform: translateY(var(--vv-offset-top, 0px)); display: flex; flex-direction: column; color: #333; overflow: hidden; overscroll-behavior: none; }
+        /* 🛡️ 修复：#app 本身没有设置过高度（block 元素，height 默认 auto），
+           下面 .admin-container 用的是 height:100%，而百分比高度必须要祖先节点有
+           "确定的高度" 才能生效——之前缺了这一条规则，导致 .admin-container 的
+           100% 解析不出来（等效于没设置），整个布局失去了"卡在视口高度内"的约束，
+           改成跟着聊天记录内容一起无限变高。消息一多，输入框就被顶到视口范围之外，
+           而 body 又是 overflow:hidden，用户连滚动都滚不到，表现为"完全点不到输入框"。
+           这里把 body 的确定高度通过 #app 传递下去，恢复"整个界面卡在一屏内、
+           内部各自滚动"的原有布局。 */
+        #app { height: 100%; }
+
+        /* === 登录遮罩 === */
+        .login-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 999; }
+        .login-box { background: #fff; padding: 30px; border-radius: 12px; width: 90%; max-width: 340px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); text-align: center; }
+        .login-box h3 { margin-bottom: 20px; color: #333; }
+        .login-box input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 12px; font-size: 15px; outline: none; transition: border 0.2s; }
+        .login-box input:focus { border-color: #007aff; }
+        .login-box button { width: 100%; padding: 12px; background: #007aff; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: bold; transition: background 0.2s; }
+        .login-box button:hover:not(:disabled) { background: #0056b3; }
+        .login-box button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .error-tip { color: #ff3b30; font-size: 13px; margin-bottom: 12px; text-align: left; }
+
+        /* === 主体布局 === */
+        .admin-container { display: flex; flex: 1; height: 100%; overflow: hidden; }
+        
+        /* 左侧：设备列表 */
+        .device-list { width: 280px; background: #fff; border-right: 1px solid #e5e5e5; display: flex; flex-direction: column; flex-shrink: 0; }
+        .list-header { padding: 16px; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; background: #f9fafb; }
+        .list-header h3 { font-size: 15px; margin: 0; color: #333; }
+        .device-items-wrap { flex: 1; overflow-y: auto; padding: 12px; }
+        .device-item { padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; border-radius: 8px; margin-bottom: 6px; transition: background 0.2s; }
+        .device-item:hover { background: #f9fafb; }
+        .device-item.active { background: #eef2ff; border-bottom-color: transparent; }
+        .dev-id { font-weight: 600; font-size: 13px; color: #111; word-break: break-all; }
+        .dev-preview { font-size: 12px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; }
+        
+        /* 右侧：主内容区 */
+        .main-area { flex: 1; display: flex; flex-direction: column; background: #f5f6f8; min-width: 0; position: relative; }
+        .area-header { padding: 15px 20px; border-bottom: 1px solid #e5e5e5; background: #fff; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+        .header-title { font-size: 15px; font-weight: 600; color: #333; display: flex; align-items: center; gap: 8px; }
+        
+        .btn-ghost { background: transparent; border: none; color: #007aff; font-size: 14px; font-weight: 500; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
+        .btn-ghost:hover { background: rgba(0,122,255,0.1); }
+        .mobile-back-btn { display: none; background: transparent; border: none; color: #007aff; font-size: 14px; font-weight: 500; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
+        .mobile-back-btn:hover { background: rgba(0,122,255,0.1); }
+        
+        .logout-btn { background: #ff3b30; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; }
+        .delete-btn { background: #fff; color: #ff3b30; border: 1px solid #ff3b30; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; transition: 0.2s; }
+        .delete-btn:hover { background: #fff5f5; }
+
+        /* 视图 1：工单列表网格 */
+        .ticket-grid-view { flex: 1; overflow-y: auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; align-content: flex-start; }
+        .ticket-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 16px; cursor: pointer; display: flex; flex-direction: column; gap: 12px; transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .ticket-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); border-color: #ddd; }
+        .tc-header { display: flex; justify-content: space-between; align-items: center; }
+        .tc-id { font-size: 12px; color: #888; font-family: monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }
+        .tc-status { font-size: 11px; padding: 2px 8px; border-radius: 12px; font-weight: bold; }
+        .tc-status.open { background: #e0f8f5; color: #10b981; border: 1px solid #a7f3d0; }
+        .tc-status.closed { background: #fee2e2; color: #ef4444; border: 1px solid #fca5a5; }
+        .tc-preview { font-size: 14px; color: #333; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-break: break-all; }
+        .tc-footer { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #999; border-top: 1px solid #f0f0f0; padding-top: 12px; }
+        
+        .del-ticket-btn { background: transparent; border: none; color: #ff3b30; cursor: pointer; font-size: 12px; padding: 4px 8px; border-radius: 4px; transition: 0.2s; opacity: 0.7; font-weight: 500; }
+        .del-ticket-btn:hover { opacity: 1; background: rgba(255, 59, 48, 0.1); }
+
+        /* 视图 2：对话详情页 */
+        .chat-view { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #f5f6f8; }
+        .message-box { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+        .msg-row { display: flex; width: 100%; }
+        .user-msg { justify-content: flex-start; }
+        .admin-msg { justify-content: flex-end; }
+        .bubble { max-width: 75%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; word-break: break-word; position: relative; }
+        .user-msg .bubble { background: #fff; color: #333; border: 1px solid #e5e5e5; border-top-left-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .admin-msg .bubble { background: #007aff; color: #fff; border-top-right-radius: 4px; box-shadow: 0 1px 2px rgba(0,122,255,0.2); }
+        .role-tag { font-size: 11px; opacity: 0.7; display: block; margin-bottom: 4px; }
+        .msg-time { font-size: 10px; color: #999; margin-top: 4px; text-align: right; }
+        .admin-msg .msg-time { color: rgba(255,255,255,0.7); }
+        
+        .del-msg-btn { background: none; border: none; color: #999; font-size: 11px; cursor: pointer; padding: 4px; margin-top: 4px; transition: color 0.2s; }
+        .del-msg-btn:hover { color: #ff3b30; }
+        .admin-msg .del-msg-btn { color: rgba(255,255,255,0.6); }
+        .admin-msg .del-msg-btn:hover { color: #fff; }
+
+        /* 🌟 运行日志区块 + 复制日志按钮 */
+        .log-block { margin-top: 10px; padding: 8px 10px; background: rgba(0,0,0,0.05); border-radius: 8px; }
+        .log-block-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 12px; opacity: 0.85; }
+        .copy-log-btn { flex-shrink: 0; background: #007aff; color: #fff; border: none; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 500; cursor: pointer; transition: background 0.2s, opacity 0.2s; }
+        .copy-log-btn:hover { opacity: 0.85; }
+        .copy-log-btn.copied { background: #10b981; }
+        .admin-msg .log-block { background: rgba(255,255,255,0.15); }
+        .admin-msg .copy-log-btn { background: #fff; color: #007aff; }
+        .admin-msg .copy-log-btn.copied { background: #fff; color: #10b981; }
+
+        .system-divider { text-align: center; margin: 20px 0; }
+        .system-divider span { background: #fee2e2; color: #ef4444; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: bold; border: 1px solid #fca5a5; }
+
+        .closed-banner { padding: 16px; text-align: center; background: #fff; border-top: 1px solid #e5e5e5; color: #999; font-size: 13px; font-weight: 500; }
+        .no-select { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 15px; background: #f5f6f8; gap: 12px; }
+        .no-select svg { opacity: 0.2; }
+        
+        .image-preview-area { display: flex; gap: 10px; padding: 10px 20px 0; background: #fff; flex-wrap: wrap; }
+        .preview-item { position: relative; width: 60px; height: 60px; border-radius: 8px; border: 1px solid #eee; }
+        .preview-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+        .preview-item .remove-btn { position: absolute; top: -6px; right: -6px; background: rgba(0,0,0,0.6); color: #fff; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; border: none; }
+        
+        /* 🌟 发送区全新自适应布局 🌟 */
+        .send-box { padding: 12px 20px; display: flex; gap: 12px; background: #fff; align-items: flex-end; border-top: 1px solid #e5e5e5; }
+        .send-box textarea { flex: 1; min-height: 80px; max-height: 250px; padding: 12px 16px; border: 1px solid #ddd; border-radius: 12px; resize: vertical; font-size: 14px; outline: none; background: #f9fafb; transition: border 0.2s; }
+        .send-box textarea:focus { border-color: #007aff; background: #fff; }
+        
+        .icon-btn { background: none; border: none; color: #999; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 8px; border-radius: 50%; transition: 0.2s; flex-shrink: 0; }
+        .icon-btn:hover { background: #f0f0f0; color: #007aff; }
+        
+        .send-btn { padding: 0 24px; height: 44px; background: #007aff; color: #fff; border: none; border-radius: 22px; cursor: pointer; font-size: 14px; font-weight: 600; white-space: nowrap; transition: 0.2s; margin-bottom: 4px; flex-shrink: 0; }
+        .send-btn:hover { background: #0056b3; }
+
+        @media (prefers-color-scheme: dark) {
+            .image-preview-area { background: #1e1e1e; }
+            .preview-item { border-color: #333; }
+            .icon-btn:hover { background: #333; }
+        }
+        
+        /* ====== 移动端适配：将输入框排在第一行，按钮放在下面 ====== */
+        @media (max-width: 768px) {
+            .device-list { width: 100%; border-right: none; }
+            .admin-container[data-view="device"] .main-area { display: none; }
+            .admin-container[data-view="ticket"] .device-list { display: none; }
+            .admin-container[data-view="chat"] .device-list { display: none; }
+            
+            .ticket-grid-view { grid-template-columns: 1fr; padding: 12px; }
+            .bubble { max-width: 85%; }
+            .area-header { padding: 12px; }
+            .mobile-back-btn { display: inline-block; }
+            
+            /* 重点：输入框折行排版 */
+            .send-box { flex-wrap: wrap; padding: 10px 12px; gap: 8px; align-items: center; }
+            .send-box textarea { width: 100%; flex: none; order: -1; min-height: 80px; margin-bottom: 4px; }
+            .icon-btn { margin-right: auto; padding: 4px; margin-bottom: 0; }
+            .send-btn { height: 36px; padding: 0 20px; font-size: 13px; margin-bottom: 0; }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body { background: #121212; color: #e5e5e5; }
+            .login-box { background: #1e1e1e; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+            .login-box h3 { color: #f5f5f5; }
+            .login-box input { background: #2c2c2c; border: 1px solid #444; color: #f5f5f5; }
+            .login-box input:focus { border-color: #0a84ff; }
+            
+            .device-list, .area-header, .send-box, .closed-banner { background: #1e1e1e; border-color: #333; }
+            .list-header { background: #181818; border-color: #333; }
+            .list-header h3, .header-title { color: #e5e5e5; }
+            .device-item { border-bottom-color: #2c2c2c; }
+            .device-item:hover { background: #242424; }
+            .device-item.active { background: #2c3344; }
+            .dev-id { color: #f5f5f5; }
+            
+            .main-area, .chat-view { background: #121212; }
+            
+            .ticket-card { background: #1e1e1e; border-color: #333; }
+            .ticket-card:hover { border-color: #555; background: #242424; }
+            .tc-id { background: #2c2c2c; color: #aaa; }
+            .tc-preview { color: #e5e5e5; }
+            .tc-footer { border-color: #333; }
+            .tc-status.open { background: rgba(16, 185, 129, 0.15); border-color: rgba(16,185,129,0.3); }
+            .tc-status.closed { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.3); }
+
+            .user-msg .bubble { background: #242424; color: #e5e5e5; border-color: #333; }
+            .admin-msg .bubble { background: #0a84ff; color: #fff; }
+            .copy-log-btn { background: #0a84ff; }
+            .admin-msg .copy-log-btn { background: #fff; color: #0a84ff; }
+            .send-box textarea { background: #2c2c2c; border-color: #444; color: #f5f5f5; }
+            .send-box textarea:focus { background: #242424; border-color: #0a84ff; }
+            .no-select { background: #121212; color: #666; }
+            .btn-ghost, .mobile-back-btn { color: #0a84ff; }
+            .btn-ghost:hover, .mobile-back-btn:hover { background: rgba(10, 132, 255, 0.15); }
+            
+            ::-webkit-scrollbar { width: 6px; }
+            ::-webkit-scrollbar-track { background: transparent; }
+            ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+            ::-webkit-scrollbar-thumb:hover { background: #666; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- 登录界面 -->
+    <div v-if="!isLoggedIn" class="login-overlay">
+        <div class="login-box">
+            <h3>管理员登录</h3>
+            <div v-if="loginError" class="error-tip">{{ loginError }}</div>
+            <input type="email" v-model="email" placeholder="输入管理员邮箱..." @keyup.enter="handleLogin">
+            <input type="password" v-model="password" placeholder="输入密码..." @keyup.enter="handleLogin">
+            <button @click="handleLogin" :disabled="loading">{{ loading ? '登录中...' : '登 录' }}</button>
+        </div>
+    </div>
+
+    <!-- 主界面 -->
+    <div class="admin-container" :data-view="mobileView" v-else>
+        
+        <!-- 左侧：用户列表 -->
+        <div class="device-list">
+            <div class="list-header">
+                <h3>用户列表</h3>
+                <button class="logout-btn" @click="handleLogout">退出</button>
+            </div>
+            <div class="device-items-wrap">
+                <div 
+                    v-for="item in devices" 
+                    :key="item.device_id"
+                    class="device-item"
+                    :class="{ active: currentDevice === item.device_id }"
+                    @click="selectDevice(item.device_id)"
+                >
+                    <div class="dev-id">{{ item.device_id }}</div>
+                    <div class="dev-preview">{{ item.content }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 右侧：主内容区 -->
+        <div class="main-area">
+            
+            <!-- 空白状态 -->
+            <div class="no-select" v-if="!currentDevice">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                请在左侧选择一个用户查看反馈
+            </div>
+
+            <!-- 视图 1：该用户的工单列表 -->
+            <template v-else-if="currentDevice && !currentTicketId">
+                <div class="area-header">
+                    <div class="header-title">
+                        <button class="mobile-back-btn" @click="goBackToDevices" style="margin-right: 8px;">← 返回</button>
+                        <span>工单列表</span>
+                        <span style="font-weight:normal; font-size:13px; color:#999; margin-left:8px;">{{ currentDevice }}</span>
+                    </div>
+                    <button class="delete-btn" @click="deleteDeviceThread(currentDevice)">清空该用户数据</button>
+                </div>
+                
+                <div class="ticket-grid-view">
+                    <div 
+                        v-for="ticket in groupedTickets" 
+                        :key="ticket.ticket_id" 
+                        class="ticket-card"
+                        @click="openTicket(ticket.ticket_id)"
+                    >
+                        <div class="tc-header">
+                            <span class="tc-id">#{{ ticket.ticket_id ? ticket.ticket_id.split('_')[1] || ticket.ticket_id : '早期记录' }}</span>
+                            <span class="tc-status" :class="ticket.isClosed ? 'closed' : 'open'">
+                                {{ ticket.isClosed ? '已关闭' : '处理中' }}
+                            </span>
+                        </div>
+                        <div class="tc-preview">
+                            {{ ticket.preview || '[图片或文件反馈]' }}
+                        </div>
+                        <div class="tc-footer">
+                            <span>共 {{ ticket.messages.length }} 条对话</span>
+                            <div style="display:flex; gap: 12px; align-items: center;">
+                                <span>{{ formatDate(ticket.lastTime) }}</span>
+                                <button class="del-ticket-btn" @click.stop="deleteTicket(ticket)">删除</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="groupedTickets.length === 0" style="grid-column: 1/-1; text-align: center; color: #999; margin-top: 40px;">
+                        暂无有效记录
+                    </div>
+                </div>
+            </template>
+
+            <!-- 视图 2：对话详情页 -->
+            <template v-else-if="currentDevice && currentTicketId">
+                <div class="chat-view">
+                    <div class="area-header">
+                        <div class="header-title">
+                            <button class="btn-ghost" @click="currentTicketId = null">← 返回工单列表</button>
+                            <span style="font-weight:normal; font-size:13px; color:#999; margin-left:8px;">工单号: {{ currentTicketId }}</span>
+                        </div>
+                        <button v-if="!isCurrentTicketClosed" class="delete-btn" @click="closeCurrentTicket">关闭工单</button>
+                    </div>
+
+                    <div class="message-box" ref="messageBoxRef">
+                        <template v-for="msg in currentTicketMessages" :key="msg.id">
+                            
+                            <!-- 🌟 在这里，我们将底层关闭信号展现为你要求的文本 -->
+                            <div v-if="msg.sender_role === 'admin' && msg.content === 'TICKET_CLOSED'" class="system-divider">
+                                <span>管理员已关闭反馈</span>
+                            </div>
+
+                            <div v-else class="msg-row" :class="msg.sender_role === 'admin' ? 'admin-msg' : 'user-msg'">
+                                <div class="bubble">
+                                    <span class="role-tag">{{ msg.sender_role === 'admin' ? '我（客服）' : '用户' }}</span>
+                                    <div v-if="parseMessage(msg.content).text">{{ parseMessage(msg.content).text }}</div>
+                                    <div v-if="parseMessage(msg.content).images.length" style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                                        <img
+                                            v-for="(url, i) in parseMessage(msg.content).images"
+                                            :key="i"
+                                            :src="url"
+                                            style="width:100px; height:100px; object-fit:cover; border-radius:8px; cursor:pointer;"
+                                            @click="openImage(url)"
+                                        >
+                                    </div>
+                                    <div v-if="parseMessage(msg.content).logs" class="log-block">
+                                        <div class="log-block-header">
+                                            <span>📋 运行日志</span>
+                                            <button
+                                                class="copy-log-btn"
+                                                :class="{ copied: copiedMsgId === msg.id }"
+                                                @click.stop="copyLogs(msg, parseMessage(msg.content).logs)"
+                                            >{{ copiedMsgId === msg.id ? '已复制 ✓' : '复制日志' }}</button>
+                                        </div>
+                                    </div>
+                                    <div class="msg-time">{{ formatDate(msg.created_at) }}</div>
+                                    <button class="del-msg-btn" @click="deleteMessage(msg)">删除</button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div class="closed-banner" v-if="isCurrentTicketClosed">
+                        此工单已被关闭，无法继续回复。
+                    </div>
+                    <div v-else style="display: flex; flex-direction: column; border-top: 1px solid #e5e5e5; background: #fff;" :style="isCurrentTicketClosed ? 'display:none;' : ''">
+                        
+                        <div class="image-preview-area" v-if="imagePreviews.length > 0">
+                            <div class="preview-item" v-for="(src, idx) in imagePreviews" :key="idx">
+                                <img :src="src">
+                                <button class="remove-btn" @click="removeImage(idx)">✕</button>
+                            </div>
+                        </div>
+
+                        <!-- 🌟 重新布局的发送框结构 -->
+                        <div class="send-box" style="border-top: none;">
+                            <button class="icon-btn" @click="triggerImageSelect" title="添加图片">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                            </button>
+                            
+                            <input type="file" ref="fileInputRef" accept="image/*" multiple style="display: none" @change="handleFileChange">
+                            
+                            <textarea 
+                                v-model="replyText" 
+                                placeholder="输入回复内容..."
+                                @keyup.enter.exact.prevent="sendReply"
+                            ></textarea>
+                            
+                            <!-- 修改回：发 送 -->
+                            <button class="send-btn" @click="sendReply" :disabled="isSending">
+                                {{ isSending ? '上传中...' : '发 送' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+        </div>
+    </div>
+</div>
+
+<script>
+const { createApp, ref, computed, onMounted, nextTick } = Vue
+
+const SUPABASE_URL = 'https://reikfzpaefbbokwwocdr.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJlaWtmenBhZWZiYm9rd3dvY2RyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkyNTM3ODcsImV4cCI6MjA2NDgyOTc4N30.E2qEwZWZO3ckVkqq9hzmDxrQK61MonUDOpCqUJpzhCQ'
+const ALLOWED_ADMIN_EMAILS = ['ming@woabc.com', 'another_admin@example.com']
+
+// 🌟 键盘弹出时输入框"跟手"升降：用 visualViewport 精确算出可视高度，
+// 写进 CSS 变量 --app-height，body 的 height 直接绑定这个变量。
+// 之前完全依赖 <meta interactive-widget=resizes-content> 让浏览器自己缩放
+// 布局视口，不同浏览器/系统版本支持程度不一，还会和输入框聚焦时浏览器自带
+// 的 scrollIntoView 叠加，导致"有时不顶、有时顶得过高"。现在改成 JS 主动、
+// 唯一地控制高度（meta 改成 overlays-content，键盘只覆盖不再自动缩放布局
+// 视口），避免两套机制互相打架，行为在各浏览器下保持一致。
+;(function setupKeyboardFollow() {
+    const root = document.documentElement
+
+    // 🛡️ 修复了由于过早 return 导致界面没被强制刷新的 BUG
+    const nudgeRepaint = () => {
+        // 1. 强制给整个 window 发送极轻微的无感滚动指令。
+        // 这对触发 iOS Safari 重绘 fixed 层非常有效，不受内部 div 元素是否溢出的限制。
+        window.scrollBy(0, 1)
+        window.scrollBy(0, -1)
+        
+        // 2. 原本的 .message-box 滚动逻辑。
+        // 重点：去掉了 scrollHeight <= clientHeight 的 return 拦截！
+        // 就算内容不够多，强行改变一下 scrollTop 也能刺激 WebKit 更新。
+        const scrollEl = document.querySelector('.message-box')
+        if (scrollEl) {
+            const original = scrollEl.scrollTop
+            scrollEl.scrollTop = original + 1
+            requestAnimationFrame(() => { scrollEl.scrollTop = original })
+        }
+        
+        // 3. 兜底策略：给 body 施加无感重排
+        document.body.style.paddingTop = '0.1px'
+        document.body.offsetHeight // 触发 reflow
+        document.body.style.paddingTop = ''
+    }
+
+    let lastHeight = null
+    let lastOffsetTop = null
+    const applyHeight = () => {
+        const vv = window.visualViewport
+        const h = vv ? vv.height : window.innerHeight
+        // 🌟 同步记录 visualViewport 相对布局视口的偏移量，配合上面 body 的
+        // transform:translateY(var(--vv-offset-top)) 一起，抵消 iOS Safari
+        // 聚焦输入框时自己触发的那次"自动滚动可视视口"，见 CSS 里 body 规则上方注释
+        const offsetTop = vv ? vv.offsetTop : 0
+        const changed = h !== lastHeight || offsetTop !== lastOffsetTop
+        lastHeight = h
+        lastOffsetTop = offsetTop
+        root.style.setProperty('--app-height', h + 'px')
+        root.style.setProperty('--vv-offset-top', offsetTop + 'px')
+        // 只在数值真的变化时才去"拨一下"，避免轮询期间数值没变也一直
+        // 触发滚动、造成不必要的画面抖动
+        if (changed) nudgeRepaint()
+    }
+
+    // 🌟 iOS Safari 键盘弹出不是一次到位的：键盘本体、上方的"上一条/下一条/完成"
+    // 工具条、有时还有账号密码自动填充建议条，是分好几个阶段依次出现的，
+    // 每个阶段都可能让实际可用高度再变一次，但 visualViewport 的 resize 事件
+    // 不一定会为每个阶段都精确、完整地触发一次——尤其是自动填充建议条，它经常
+    // 要等 Safari 异步查完钥匙串才出现，时间点完全不固定。之前用固定的几个
+    // 延时点（80/200/400/700/1000ms）重算，测下来还是会在某些机型/时机上错过
+    // 最终那一下变化。改成更保险的做法：只要有输入框在聚焦，就用一个短间隔
+    // 定时器持续轮询、持续同步高度，而不是赌几个固定的时间点——不管这个变化
+    // 什么时候发生、发不发 resize 事件，下一次轮询都能追上。
+    let pollTimer = null
+    let pollStopTimer = null
+    const stopPolling = () => {
+        if (pollTimer) { clearInterval(pollTimer); pollTimer = null }
+        if (pollStopTimer) { clearTimeout(pollStopTimer); pollStopTimer = null }
+    }
+    const startPolling = () => {
+        stopPolling()
+        pollTimer = setInterval(applyHeight, 120)
+        // 轮询 4 秒后自动停止，避免用户长时间停留输入时白白空耗性能；
+        // 4 秒足够覆盖键盘 + 工具条 + 自动填充条这几个阶段全部出现/收起完
+        pollStopTimer = setTimeout(stopPolling, 4000)
+    }
+
+    applyHeight()
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => { applyHeight(); startPolling() })
+        window.visualViewport.addEventListener('scroll', applyHeight)
+    } else {
+        window.addEventListener('resize', applyHeight)
+    }
+    // 输入框获得/失去焦点，都是"键盘 + 工具条"动画可能重新开始的时刻，
+    // 这里也主动兜底启动一轮轮询，不完全依赖 visualViewport 自己的事件时机
+    document.addEventListener('focusin', (e) => {
+        const tag = e.target && e.target.tagName
+        if (tag === 'TEXTAREA' || tag === 'INPUT') startPolling()
+    })
+    document.addEventListener('focusout', startPolling)
+})()
+
+createApp({
+    setup() {
+        const isLoggedIn = ref(false)
+        const email = ref('')
+        const password = ref('')
+        const loginError = ref('')
+        const loading = ref(false)
+        const fileInputRef = ref(null)
+        const selectedFiles = ref([])
+        const imagePreviews = ref([])
+        const isSending = ref(false)
+
+        const triggerImageSelect = () => {
+            if (fileInputRef.value) fileInputRef.value.click()
+        }
+
+        const handleFileChange = (e) => {
+            if (!e.target.files) return
+            const files = Array.from(e.target.files)
+            files.forEach(file => {
+                selectedFiles.value.push(file)
+                imagePreviews.value.push(URL.createObjectURL(file))
+            })
+            e.target.value = ''
+        }
+
+        const removeImage = (idx) => {
+            selectedFiles.value.splice(idx, 1)
+            URL.revokeObjectURL(imagePreviews.value[idx])
+            imagePreviews.value.splice(idx, 1)
+        }
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        
+        // 核心状态
+        const devices = ref([])         
+        const allMessages = ref([])     
+        const currentDevice = ref(null) 
+        const currentTicketId = ref(null) 
+        const replyText = ref('')
+        const messageBoxRef = ref(null)
+
+        const mobileView = computed(() => {
+            if (!currentDevice.value) return 'device'
+            if (!currentTicketId.value) return 'ticket'
+            return 'chat'
+        })
+
+        const groupedTickets = computed(() => {
+            if (!allMessages.value.length) return []
+            const groups = {}
+            let lastUserTicketId = 'legacy_ticket'
+
+            const sortedMsgs = [...allMessages.value].sort((a,b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+
+            sortedMsgs.forEach(msg => {
+                let tid = msg.ticket_id
+                if (msg.sender_role === 'user' && tid) {
+                    lastUserTicketId = tid
+                } else if (msg.sender_role === 'admin' && !tid) {
+                    tid = lastUserTicketId
+                }
+                if (!tid) tid = lastUserTicketId
+
+                if (!groups[tid]) {
+                    groups[tid] = {
+                        ticket_id: tid,
+                        messages: [],
+                        lastTime: 0,
+                        preview: '',
+                        isClosed: false
+                    }
+                }
+                
+                groups[tid].messages.push(msg)
+                const msgTime = new Date(msg.created_at).getTime()
+                if (msgTime > groups[tid].lastTime) groups[tid].lastTime = msgTime
+
+                if (msg.sender_role === 'admin' && msg.content === 'TICKET_CLOSED') {
+                    groups[tid].isClosed = true
+                } else {
+                    const parsed = parseMessage(msg.content)
+                    if (msg.sender_role === 'user' && parsed.text && !groups[tid].preview) {
+                        groups[tid].preview = parsed.text
+                    }
+                }
+            })
+            return Object.values(groups).sort((a, b) => b.lastTime - a.lastTime)
+        })
+
+        const currentTicketMessages = computed(() => {
+            const group = groupedTickets.value.find(t => t.ticket_id === currentTicketId.value)
+            return group ? group.messages : []
+        })
+
+        const isCurrentTicketClosed = computed(() => {
+            const group = groupedTickets.value.find(t => t.ticket_id === currentTicketId.value)
+            return group ? group.isClosed : false
+        })
+
+        onMounted(async () => {
+            const { data: { session } } = await supabaseClient.auth.getSession()
+            if (session && ALLOWED_ADMIN_EMAILS.includes(session.user.email)) {
+                isLoggedIn.value = true
+                initData()
+            }
+        })
+
+        const handleLogin = async () => {
+            if (!email.value || !password.value) return (loginError.value = '请输入邮箱和密码')
+            loading.value = true
+            loginError.value = ''
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email: email.value, password: password.value })
+            loading.value = false
+            if (error) return loginError.value = '登录失败: ' + error.message
+            if (ALLOWED_ADMIN_EMAILS.includes(data.user.email)) {
+                isLoggedIn.value = true
+                initData()
+            } else {
+                loginError.value = '权限不足'
+                await supabaseClient.auth.signOut()
+            }
+        }
+
+        const handleLogout = async () => {
+            await supabaseClient.auth.signOut()
+            isLoggedIn.value = false
+            currentDevice.value = null
+            currentTicketId.value = null 
+            allMessages.value = []
+        }
+
+        const initData = () => {
+            fetchDevices()
+            supabaseClient
+                .channel('admin-web-realtime')
+                .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'ticket_messages' }, payload => {
+                    const newMsg = payload.new
+                    if (currentDevice.value === newMsg.device_id) {
+                        allMessages.value.push(newMsg)
+                        if (currentTicketId.value === newMsg.ticket_id) {
+                            scrollToBottom()
+                        }
+                    }
+                    fetchDevices() 
+                })
+                .subscribe()
+        }
+
+        const fetchDevices = async () => {
+            const { data, error } = await supabaseClient
+                .from('ticket_messages')
+                .select('device_id, created_at, content')
+                .order('created_at', { ascending: false })
+
+            if (!error && data) {
+                const map = new Map()
+                data.forEach(item => {
+                    if (!map.has(item.device_id)) map.set(item.device_id, item)
+                })
+                devices.value = Array.from(map.values())
+            }
+        }
+
+        const selectDevice = async (deviceId) => {
+            currentDevice.value = deviceId
+            currentTicketId.value = null 
+            allMessages.value = []
+
+            const { data, error } = await supabaseClient
+                .from('ticket_messages')
+                .select('*')
+                .eq('device_id', deviceId)
+                .order('created_at', { ascending: true })
+
+            if (!error && data) {
+                allMessages.value = data
+            }
+        }
+
+        const goBackToDevices = () => {
+            currentDevice.value = null
+            currentTicketId.value = null
+        }
+
+        const openTicket = (tid) => {
+            currentTicketId.value = tid
+            scrollToBottom()
+        }
+
+        const deleteTicket = async (ticket) => {
+            const displayId = ticket.ticket_id ? ticket.ticket_id.split('_')[1] || ticket.ticket_id : '早期记录'
+            if (!confirm(`确定要彻底删除工单 #${displayId} 及其全部对话吗？此操作不可恢复。`)) return
+
+            const allPaths = []
+            ticket.messages.forEach(m => {
+                parseMessage(m.content).images.forEach(url => {
+                    const idx = url.indexOf('/public/feedback-images/')
+                    if (idx !== -1) allPaths.push(url.slice(idx + 24))
+                })
+            })
+
+            if (allPaths.length > 0) {
+                await supabaseClient.storage.from('feedback-images').remove(allPaths)
+            }
+
+            const msgIds = ticket.messages.map(m => m.id)
+            const { error } = await supabaseClient
+                .from('ticket_messages')
+                .delete()
+                .in('id', msgIds)
+
+            if (error) {
+                alert('删除工单失败: ' + error.message)
+                return
+            }
+
+            allMessages.value = allMessages.value.filter(m => !msgIds.includes(m.id))
+        }
+
+        // 🌟 核心修改点：插入包含两步信息的数组，不影响既有状态逻辑
+        const closeCurrentTicket = async () => {
+            if (!confirm('确定要关闭此工单吗？')) return
+            const { error } = await supabaseClient
+                .from('ticket_messages')
+                .insert([
+                    {
+                        device_id: currentDevice.value,
+                        ticket_id: currentTicketId.value,
+                        sender_role: 'admin', 
+                        content: '管理员已将反馈标记为已解决'
+                    },
+                    {
+                        device_id: currentDevice.value,
+                        ticket_id: currentTicketId.value,
+                        sender_role: 'admin', 
+                        content: 'TICKET_CLOSED'
+                    }
+                ])
+            if (error) alert('关闭失败: ' + error.message)
+            else scrollToBottom()
+        }
+
+        // ================= 彻底底层兼容版的图片压缩，返回纯 Blob =================
+        const compressImage = (file, maxWidth = 800, quality = 0.6) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader()
+                reader.readAsDataURL(file)
+                reader.onload = (e) => {
+                    const img = new Image()
+                    img.src = e.target.result
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas')
+                        let width = img.width
+                        let height = img.height
+                        
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width)
+                            width = maxWidth
+                        }
+                        
+                        canvas.width = width
+                        canvas.height = height
+                        const ctx = canvas.getContext('2d')
+                        
+                        // 防透明PNG变黑：先铺一层纯白底色
+                        ctx.fillStyle = '#FFFFFF'
+                        ctx.fillRect(0, 0, canvas.width, canvas.height)
+                        ctx.drawImage(img, 0, 0, width, height)
+                        
+                        // 直接返回 Blob 数据以兼容各种浏览器上传
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                resolve(blob)
+                            } else {
+                                reject(new Error('图片压缩转换失败'))
+                            }
+                        }, 'image/jpeg', quality)
+                    }
+                    img.onerror = () => reject(new Error('图片加载失败'))
+                }
+                reader.onerror = () => reject(new Error('文件读取失败'))
+            })
+        }
+
+        const sendReply = async () => {
+            if (!replyText.value.trim() && selectedFiles.value.length === 0) return
+            if (!currentTicketId.value) return
+            
+            isSending.value = true
+            let finalContent = replyText.value.trim()
+            const uploadedUrls = []
+
+            try {
+                if (selectedFiles.value.length > 0) {
+                    for (const file of selectedFiles.value) {
+                        
+                        // 1. 调用极简压缩 (转为 JPEG Blob)
+                        const compressedBlob = await compressImage(file, 800, 0.6)
+                        
+                        // 2. 构造嵌套路径目录 (设备ID/工单ID/文件名.jpg)
+                        const fileName = `admin_${Date.now()}_${Math.random().toString(36).substr(2, 5)}.jpg`
+                        const filePath = `${currentDevice.value}/${currentTicketId.value}/${fileName}`
+                        
+                        // 3. 上传到对应路径
+                        const { data, error } = await supabaseClient.storage
+                            .from('feedback-images')
+                            .upload(filePath, compressedBlob, {
+                                contentType: 'image/jpeg'
+                            })
+                        
+                        if (error) throw error
+
+                        const { data: publicUrlData } = supabaseClient.storage
+                            .from('feedback-images')
+                            .getPublicUrl(filePath)
+                            
+                        if (publicUrlData && publicUrlData.publicUrl) {
+                            uploadedUrls.push(publicUrlData.publicUrl)
+                        }
+                    }
+                }
+
+                if (uploadedUrls.length > 0) {
+                    finalContent += finalContent ? '\n\n【附图】：\n' : '【附图】：\n'
+                    finalContent += uploadedUrls.join('\n')
+                }
+
+                const { error: dbError } = await supabaseClient
+                    .from('ticket_messages')
+                    .insert([{
+                        device_id: currentDevice.value,
+                        ticket_id: currentTicketId.value, 
+                        sender_role: 'admin',
+                        content: finalContent
+                    }])
+                    
+                if (dbError) throw dbError
+                
+                replyText.value = ''
+                selectedFiles.value = []
+                imagePreviews.value.forEach(url => URL.revokeObjectURL(url))
+                imagePreviews.value = []
+                scrollToBottom()
+                
+            } catch (err) {
+                console.error(err)
+                alert('发送失败: ' + err.message)
+            } finally {
+                isSending.value = false
+            }
+        }
+
+        const deleteMessage = async (msg) => {
+            if (!confirm('确定删除此消息？')) return
+            const { images } = parseMessage(msg.content)
+            if (images.length > 0) {
+                const paths = images.map(url => {
+                    const idx = url.indexOf('/public/feedback-images/')
+                    return idx !== -1 ? url.slice(idx + 24) : null
+                }).filter(Boolean)
+                if (paths.length > 0) supabaseClient.storage.from('feedback-images').remove(paths)
+            }
+            await supabaseClient.from('ticket_messages').delete().eq('id', msg.id)
+            allMessages.value = allMessages.value.filter(m => m.id !== msg.id)
+        }
+
+        const deleteDeviceThread = async (deviceId) => {
+            if (!confirm(`确定清空 ${deviceId} 的所有数据？`)) return
+            const { data } = await supabaseClient.from('ticket_messages').select('content').eq('device_id', deviceId)
+            const allPaths = []
+            ;(data || []).forEach(m => {
+                parseMessage(m.content).images.forEach(url => {
+                    const idx = url.indexOf('/public/feedback-images/')
+                    if (idx !== -1) allPaths.push(url.slice(idx + 24))
+                })
+            })
+            if (allPaths.length > 0) await supabaseClient.storage.from('feedback-images').remove(allPaths)
+            
+            await supabaseClient.from('ticket_messages').delete().eq('device_id', deviceId)
+            
+            if (currentDevice.value === deviceId) {
+                goBackToDevices()
+            }
+            fetchDevices()
+        }
+
+        const scrollToBottom = () => {
+            nextTick(() => {
+                if (messageBoxRef.value) messageBoxRef.value.scrollTop = messageBoxRef.value.scrollHeight
+            })
+        }
+
+        // 🌟 补充解析【运行日志】区块（原来只切了图片，日志会混在正文里显示）
+        const parseMessage = (content) => {
+            if (!content) return { text: '', images: [], logs: '' }
+            const logMarker = '【运行日志】：'
+            const imgMarker = '【附图】：'
+            const logIdx = content.indexOf(logMarker)
+            const imgIdx = content.indexOf(imgMarker)
+
+            // 正文要在最早出现的标记（日志或图片，谁先谁截断）之前结束
+            const cutCandidates = [logIdx, imgIdx].filter(i => i !== -1)
+            const cutIdx = cutCandidates.length ? Math.min(...cutCandidates) : -1
+            const text = cutIdx !== -1 ? content.slice(0, cutIdx).trim() : content
+
+            // 日志区间：从日志标记开始，到图片标记（如果在日志之后）或字符串末尾
+            let logs = ''
+            if (logIdx !== -1) {
+                const start = logIdx + logMarker.length
+                const end = (imgIdx !== -1 && imgIdx > logIdx) ? imgIdx : content.length
+                logs = content.slice(start, end).trim()
+            }
+
+            let images = []
+            if (imgIdx !== -1) {
+                images = content.slice(imgIdx + imgMarker.length).split('\n').map(s => s.trim()).filter(s => s.startsWith('http'))
+            }
+
+            return { text, images, logs }
+        }
+
+        // 🌟 复制日志按钮：优先用 Clipboard API，不支持时退回 execCommand 兼容写法
+        const copiedMsgId = ref(null)
+        const copyLogs = async (msg, logs) => {
+            if (!logs) return
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(logs)
+                } else {
+                    const ta = document.createElement('textarea')
+                    ta.value = logs
+                    ta.style.position = 'fixed'
+                    ta.style.opacity = '0'
+                    document.body.appendChild(ta)
+                    ta.focus()
+                    ta.select()
+                    document.execCommand('copy')
+                    document.body.removeChild(ta)
+                }
+                copiedMsgId.value = msg.id
+                setTimeout(() => {
+                    if (copiedMsgId.value === msg.id) copiedMsgId.value = null
+                }, 1500)
+            } catch (err) {
+                alert('复制失败: ' + err.message)
+            }
+        }
+
+        const formatDate = (isoString) => {
+            if (!isoString) return ''
+            const d = new Date(isoString)
+            return `${d.getMonth()+1}-${d.getDate()} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`
+        }
+
+        const openImage = (url) => window.open(url, '_blank')
+        
+        return {
+            isLoggedIn, email, password, loginError, loading, handleLogin, handleLogout,
+            devices, currentDevice, currentTicketId, mobileView,
+            groupedTickets, currentTicketMessages, isCurrentTicketClosed,
+            replyText, selectDevice, goBackToDevices, openTicket, closeCurrentTicket, sendReply,
+            deleteMessage, deleteDeviceThread, deleteTicket, 
+            messageBoxRef, parseMessage, formatDate, openImage,
+            fileInputRef, selectedFiles, imagePreviews, isSending,
+            triggerImageSelect, handleFileChange, removeImage,
+            copiedMsgId, copyLogs
+        }
+    }
+}).mount('#app')
+</script>
+
+</body>
+</html>
