@@ -212,7 +212,53 @@
       .card-hz .bento-img-wrap, .card-hz-rev .bento-img-wrap { flex: 1; margin-top: 0; padding: 48px; }
     }
 
-    .footer { text-align: center; margin-top: 80px; padding: 32px 0; font-size: 14px; color: var(--text-muted); border-top: 1px solid var(--card-border); }
+    /* === 页脚与联系方式 === */
+    .footer { 
+      text-align: center; 
+      margin-top: 80px; 
+      padding: 40px 0 20px; 
+      font-size: 14px; 
+      color: var(--text-muted); 
+      border-top: 1px solid var(--card-border); 
+    }
+    .contact-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 16px 28px;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+    .contact-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+    .contact-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s ease;
+    }
+    .contact-link:hover {
+      text-decoration: underline;
+      opacity: 0.85;
+    }
+    .contact-tag {
+      background: rgba(99, 102, 241, 0.08);
+      color: var(--text-main);
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    @media (prefers-color-scheme: dark) {
+      .contact-tag {
+        background: rgba(99, 102, 241, 0.18);
+      }
+    }
 
     .wechat-mask {
       display: none;
@@ -259,6 +305,8 @@
       .card-hz, .card-hz-rev { flex-direction: column; align-items: stretch; }
       .card-hz .bento-content, .card-hz-rev .bento-content { padding: 32px 32px 0 32px; justify-content: flex-start; flex: none; }
       .card-hz .bento-img-wrap, .card-hz-rev .bento-img-wrap { padding: 0 32px 32px 32px; margin-top: 24px; flex: none; }
+      
+      .contact-info { flex-direction: column; gap: 10px; }
     }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
@@ -412,7 +460,18 @@
       </div>
     </section>
 
+    <!-- 页脚与联系方式 -->
     <footer class="footer">
+      <div class="contact-info">
+        <div class="contact-item">
+          <span>📧 电子邮箱：</span>
+          <a class="contact-link" href="mailto:ming@woabc.com">ming@woabc.com</a>
+        </div>
+        <div class="contact-item">
+          <span>💬 意见反馈：</span>
+          <span class="contact-tag">App端点击「设置 - 意见反馈」</span>
+        </div>
+      </div>
       <p>© <span id="dynamic-year"></span> 鸡毛蒜皮 App. All rights reserved.</p>
     </footer>
   </div>
