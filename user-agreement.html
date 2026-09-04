@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>用户协议 / User Agreement - Trifles Daily</title>
+<style>
+  :root {
+    --app-bg: #ffffff;
+    --text-main: #333;
+    --theme-primary: #6366f1;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--app-bg);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+  }
+  .page {
+    max-width: 720px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px 16px;
+    background: var(--app-bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .lang-switch {
+    display: flex;
+    gap: 6px;
+  }
+  .lang-btn {
+    background: transparent;
+    border: 1px solid var(--theme-primary);
+    color: var(--theme-primary);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .lang-btn.active {
+    background: var(--theme-primary);
+    color: #fff;
+  }
+  .content-padding {
+    padding: 24px 24px 60px;
+  }
+  .meta-info { text-align: center; font-size: 0.85em; color: #888; margin-bottom: 24px; }
+  .meta-info p { margin: 2px 0; }
+  .intro-box {
+    background-color: #f0f7ff; border-radius: 8px; padding: 16px 18px;
+    margin-bottom: 28px; color: #2c5282; font-size: 0.95em; border-left: 4px solid #4299e1;
+  }
+  .intro-box p { margin: 0; line-height: 1.7; }
+  .welcome-text { font-weight: 600; margin-bottom: 8px !important; font-size: 1.1em; color: #1a365d; }
+  h3 { font-size: 1.1em; margin: 24px 0 12px; font-weight: 700; color: #000; }
+  ul { padding-left: 18px; margin: 0; }
+  li { margin-bottom: 10px; font-size: 0.95em; line-height: 1.7; color: #444; text-align: justify; }
+  li strong { color: #000; }
+  .end-copyright { margin-top: 48px; text-align: center; font-size: 0.85em; color: #bbb; }
+  a { color: #6366f1; word-break: break-all; }
+
+  @media (prefers-color-scheme: dark) {
+    :root { --app-bg: #1c1c1e; --text-main: #e0e0e0; }
+    .header-bar { border-bottom-color: rgba(255,255,255,0.08); }
+    .title { color: #eee; }
+    .meta-info { color: #888; }
+    .intro-box { background-color: rgba(66, 153, 225, 0.15); color: #90cdf4; border-left-color: #4299e1; }
+    .welcome-text { color: #63b3ed; }
+    h3 { color: #fff; }
+    li { color: #ccc; }
+    li strong { color: #fff; }
+    .end-copyright { color: #666; }
+  }
+
+  [data-lang="en"] .zh { display: none; }
+  [data-lang="zh"] .en { display: none; }
+</style>
+</head>
+<body>
+<div class="page" id="page" data-lang="zh">
+  <div class="header-bar">
+    <div class="title">
+      <span class="zh">鸡毛蒜皮用户协议</span>
+      <span class="en">Trifles Daily User Agreement</span>
+    </div>
+    <div class="lang-switch">
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+
+  <div class="content-padding">
+    <div class="meta-info">
+      <p class="zh">发布日期：2026 年 3 月 27 日</p>
+      <p class="zh">生效日期：2026 年 3 月 27 日</p>
+      <p class="en">Published: Mar 27, 2026</p>
+      <p class="en">Effective: Mar 27, 2026</p>
+    </div>
+
+    <div class="intro-box">
+      <p class="welcome-text zh">欢迎使用"鸡毛蒜皮"！</p>
+      <p class="zh">在您开始使用"鸡毛蒜皮"软件及相关服务（以下简称"本服务"）之前，请务必审慎阅读并充分理解本协议。当您开始实际使用本服务时，即视为您已充分阅读、理解并接受本协议的全部内容。</p>
+      <p class="welcome-text en">Welcome to Trifles Daily!</p>
+      <p class="en">Before you use the "Trifles Daily" software and related services (the "Service"), please read this agreement carefully. By using the Service, you acknowledge that you have read and accepted all terms.</p>
+    </div>
+
+    <!-- Section 1 -->
+    <section>
+      <h3 class="zh">一、 服务说明与授权</h3>
+      <h3 class="en">1. Service Description</h3>
+      <ul class="zh">
+        <li><strong>服务内容：</strong> "鸡毛蒜皮"是一款专注本地存储的笔记与记账工具。</li>
+        <li><strong>个人用途：</strong> 本服务仅限用户个人非商业用途。未经许可，您不得对本软件或其衍生资料进行商业营利活动。</li>
+        <li><strong>知识产权：</strong> 我们拥有"鸡毛蒜皮"的软件著作权及界面设计。您对您在软件中创建的任何内容享有完全的著作权。</li>
+      </ul>
+      <ul class="en">
+        <li><strong>Content:</strong> "Trifles Daily" is a local-first notes and accounting tool.</li>
+        <li><strong>Personal Use:</strong> This service is for personal, non-commercial use only.</li>
+        <li><strong>Intellectual Property:</strong> We own the software rights. You retain full copyright of all content you create within the app.</li>
+      </ul>
+    </section>
+
+    <!-- Section 2 -->
+    <section>
+      <h3 class="zh">二、 数据存储与安全（重要）</h3>
+      <h3 class="en">2. Data Storage &amp; Safety (Important)</h3>
+      <ul class="zh">
+        <li><strong>本地存储：</strong> "鸡毛蒜皮"是一款无须注册、无须强制联网的纯本地应用。您的所有笔记、账本及媒体文件均<strong>仅保存在您当前使用的设备中</strong>。</li>
+        <li><strong>数据丢失风险：</strong> 请您自行妥善保管设备并定期进行数据导出备份。<strong>若您卸载本应用、清除应用数据或设备损坏，将导致数据永久丢失</strong>，我们不承担因此产生的数据恢复或赔偿责任。</li>
+      </ul>
+      <ul class="en">
+        <li><strong>Local Storage:</strong> "Trifles Daily" works offline without requiring an account. <strong>All your data is stored exclusively on your device.</strong></li>
+        <li><strong>Data Risk:</strong> Please backup your data regularly. <strong>Uninstalling the app or clearing app data will permanently delete your records.</strong> We are not responsible for any data loss.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section>
+      <h3 class="zh">三、 用户行为规范</h3>
+      <h3 class="en">3. Code of Conduct</h3>
+      <ul class="zh">
+        <li><strong>技术破坏：</strong> 禁止反向工程、反向汇编、拆解本软件，或使用任何插件干扰本服务的正常运行。</li>
+        <li><strong>合规使用：</strong> 请遵守国家法律法规，妥善管理您的本地内容。</li>
+      </ul>
+      <ul class="en">
+        <li><strong>Technical Harm:</strong> No reverse engineering or using unauthorized tools to interfere with the app.</li>
+      </ul>
+    </section>
+
+    <!-- Section 4 -->
+    <section>
+      <h3 class="zh">四、 免责声明</h3>
+      <h3 class="en">4. Disclaimers</h3>
+      <ul class="zh">
+        <li><strong>"按现状"提供：</strong> 本服务按当前技术水平所能达到的现状提供。我们不担保服务一定能满足您的全部需求。</li>
+        <li><strong>第三方服务：</strong> 本软件部分功能（如天气）依赖第三方接口。因第三方服务产生的异常或纠纷，由您与该第三方自行解决，我们不承担连带责任。</li>
+      </ul>
+      <ul class="en">
+        <li><strong>"As Is":</strong> Service is provided "as is" without any warranty of uninterrupted operation.</li>
+        <li><strong>Third-Party:</strong> Any issues arising from third-party services (like weather APIs) are beyond our liability.</li>
+      </ul>
+    </section>
+
+    <!-- Section 5 -->
+    <section>
+      <h3 class="zh">五、 联系我们</h3>
+      <h3 class="en">5. Contact Us</h3>
+      <ul class="zh">
+        <li>如对本协议有任何疑问，请通过 <strong>ming@woabc.com</strong> 与我们联系。</li>
+      </ul>
+      <ul class="en">
+        <li>If you have questions, please contact us at: <strong>ming@woabc.com</strong></li>
+      </ul>
+    </section>
+
+    <div class="end-copyright">© 2026 Trifles Daily. All rights reserved.</div>
+  </div>
+</div>
+
+<script>
+  function setLang(lang) {
+    document.getElementById('page').setAttribute('data-lang', lang);
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh' : 'en');
+    document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    try { localStorage.setItem('td-lang', lang); } catch (e) {}
+  }
+
+  (function init() {
+    var lang = 'en';
+    try {
+      var saved = localStorage.getItem('td-lang');
+      if (saved) {
+        lang = saved;
+      } else {
+        var navLang = navigator.language || navigator.userLanguage || '';
+        lang = navLang.indexOf('zh') === 0 ? 'zh' : 'en';
+      }
+    } catch (e) {
+      var navLang2 = navigator.language || navigator.userLanguage || '';
+      lang = navLang2.indexOf('zh') === 0 ? 'zh' : 'en';
+    }
+    setLang(lang);
+  })();
+</script>
+</body>
+</html>
