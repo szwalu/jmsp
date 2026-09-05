@@ -14,7 +14,6 @@
       --header-border: rgba(0,0,0,0.04);
       --card-bg: #ffffff;
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-color: #0f172a;
@@ -25,7 +24,6 @@
         --card-bg: #1e293b;
       }
     }
-
     body, html {
       margin: 0; padding: 0;
       background-color: var(--bg-color);
@@ -33,7 +31,6 @@
       -webkit-font-smoothing: antialiased;
       overflow: hidden;
     }
-
     .sub-page-content {
       display: flex;
       flex-direction: column;
@@ -43,7 +40,6 @@
       box-sizing: border-box;
       padding-top: env(safe-area-inset-top);
     }
-
     .header-bar {
       display: flex;
       justify-content: space-between;
@@ -64,15 +60,13 @@
     .title {
       font-size: 17px; font-weight: 600; color: var(--text-main);
     }
-
     .scroll-container {
       flex: 1;
       overflow-y: auto;
-      padding: 20px 16px calc(40px + env(safe-area-inset-bottom)) 16px; 
+      padding: 20px 16px calc(40px + env(safe-area-inset-bottom)) 16px;
       -webkit-overflow-scrolling: touch;
       scroll-behavior: smooth;
     }
-
     .toc-btn {
       display: flex; align-items: center; justify-content: center;
       background: transparent; border: none;
@@ -81,14 +75,14 @@
       transition: all 0.2s ease;
     }
     .toc-btn.toc-active { color: var(--theme-primary); background: rgba(99, 102, 241, 0.1); }
-    
+
     .toc-dropdown-overlay {
-      position: absolute; top: calc(56px + env(safe-area-inset-top)); 
-      left: 0; right: 0; bottom: 0; z-index: 20; 
+      position: absolute; top: calc(56px + env(safe-area-inset-top));
+      left: 0; right: 0; bottom: 0; z-index: 20;
       display: none;
     }
     .toc-dropdown-overlay.show { display: block; }
-    
+
     .toc-dropdown {
       position: absolute; top: 8px; right: 16px;
       background: var(--card-bg);
@@ -99,7 +93,7 @@
       animation: dropDown 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.1);
       transform-origin: top right;
     }
-    
+
     .toc-item {
       padding: 12px 18px; font-size: 14px; color: var(--text-muted); cursor: pointer; position: relative;
     }
@@ -110,16 +104,14 @@
       content: ''; position: absolute; left: 0; top: 10%; bottom: 10%;
       width: 3px; background-color: var(--theme-primary); border-radius: 0 4px 4px 0;
     }
-
     .help-hero { text-align: center; margin-bottom: 20px; padding: 24px 0 4px; }
     .hero-icon { margin-bottom: 16px; display: flex; align-items: center; justify-content: center; }
     .hero-title { font-size: 1.3em; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; }
-    .handwriting-brand { 
+    .handwriting-brand {
       font-family: 'Wawati SC', 'STKaiti', 'KaiTi', 'Songti SC', 'STSong', 'SimSun', serif;
-      color: var(--theme-primary); font-style: italic; display: inline; font-weight: 600; margin: 0 4px; 
+      color: var(--theme-primary); font-style: italic; display: inline; font-weight: 600; margin: 0 4px;
     }
     .hero-desc { font-size: 0.85em; color: var(--text-muted); line-height: 1.6; margin: 0; text-align: left; }
-
     .top-action-group {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; padding: 0 4px;
     }
@@ -130,11 +122,9 @@
     .top-action-card:active { transform: scale(0.96); }
     .card-icon { font-size: 15px; margin-right: 4px; line-height: 1; }
     .card-text { font-size: 13px; font-weight: 600; white-space: nowrap; }
-
     .website-card { background: rgba(14, 165, 233, 0.08); color: #0284c7; }
     .share-card { background: rgba(16, 185, 129, 0.08); color: #10b981; }
     .secondary-card { background: rgba(99, 102, 241, 0.08); color: var(--theme-primary); }
-
     @media (prefers-color-scheme: dark) {
       .website-card { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
       .share-card { background: rgba(16, 185, 129, 0.15); color: #34d399; }
@@ -142,7 +132,6 @@
       .secondary-card .card-text, .secondary-card .card-icon { color: #818cf8 !important; }
       .handwriting-brand { color: #818cf8; text-shadow: 0 0 8px rgba(129, 140, 248, 0.3); }
     }
-
     .help-section {
       scroll-margin-top: 76px;
       background: var(--card-bg);
@@ -156,7 +145,7 @@
     .icon-wrap {
       width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: #ffffff; font-size: 16px;
     }
-    
+
     .bg-blue { background: #3b82f6; }
     .bg-orange { background: #f97316; }
     .bg-pink { background: #ec4899; }
@@ -165,14 +154,12 @@
     .bg-amber { background: #f59e0b; }
     .bg-purple { background: #a855f7; }
     .bg-green { background: #10b981; }
-
     .section-header h3 { margin: 0; font-size: 0.95em; font-weight: 600; color: var(--text-main); }
     .help-list { margin: 0; padding: 0 0 0 18px; color: var(--text-muted); font-size: 0.85em; line-height: 1.7; }
     .help-list li { margin-bottom: 12px; }
     .help-list strong { color: var(--text-main); font-weight: 600; }
     code { background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-family: monospace; color: #3b82f6; }
     @media (prefers-color-scheme: dark) { code { background: #334155; color: #60a5fa; } }
-
     .faq-container details { margin: 10px 0; padding: 12px 14px; border-radius: 12px; background: rgba(99,102,241,.06); cursor: pointer; transition: background 0.2s ease; }
     .faq-container details:hover { background: rgba(99,102,241,.1); }
     .faq-container summary { font-weight: 600; font-size: 0.85em; color: var(--text-main); outline: none; }
@@ -181,20 +168,18 @@
       .faq-container details { background: rgba(165,180,252,.1); }
       .faq-container details:hover { background: rgba(165,180,252,.15); }
     }
-
     @keyframes dropDown { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
   </style>
 </head>
 <body>
-
   <div class="sub-page-content">
-    
+
     <div class="header-bar">
       <button class="back-btn" onclick="window.location.href='./index.html'">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       </button>
       <div class="title">使用指南</div>
-      
+
       <button class="toc-btn" id="tocToggleBtn" onclick="toggleToc()">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line>
@@ -202,13 +187,16 @@
         </svg>
       </button>
     </div>
-
     <div class="toc-dropdown-overlay" id="tocOverlay" onclick="toggleToc()">
       <div class="toc-dropdown" onclick="event.stopPropagation()">
         <div class="toc-item" onclick="scrollToSec('sec-ai', this)">极速记账魔法</div>
         <div class="toc-item" onclick="scrollToSec('sec-manual', this)">精打细算记账</div>
         <div class="toc-item" onclick="scrollToSec('sec-diary', this)">时光日记本</div>
         <div class="toc-item" onclick="scrollToSec('sec-stats', this)">全能首页看板</div>
+        <div class="toc-item" onclick="scrollToSec('sec-savings', this)">存钱计划与目标</div>
+        <div class="toc-item" onclick="scrollToSec('sec-budget', this)">精细化预算管理</div>
+        <div class="toc-item" onclick="scrollToSec('sec-recurring', this)">周期与分期管理</div>
+        <div class="toc-item" onclick="scrollToSec('sec-reimburse', this)">报销追踪管理</div>
         <div class="toc-item" onclick="scrollToSec('sec-reminder', this)">贴心备忘提醒</div>
         <div class="toc-item" onclick="scrollToSec('sec-assets', this)">资产与物品</div>
         <div class="toc-item" onclick="scrollToSec('sec-advanced', this)">进阶玩法</div>
@@ -216,9 +204,8 @@
         <div class="toc-item" onclick="scrollToSec('sec-faq', this)">常见问题 (FAQ)</div>
       </div>
     </div>
-
     <div class="scroll-container" id="scrollArea">
-      
+
       <div class="help-hero">
         <div class="hero-icon">
           <img src="./images/主题.png" alt="鸡毛蒜皮 Logo" style="height: 72px; width: 72px; border-radius: 16px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.08);" onerror="this.src='https://api.iconify.design/fluent-emoji-flat:feather.svg'" />
@@ -228,7 +215,7 @@
           在这里，<strong>“鸡毛”</strong>是轻盈的羽毛笔，陪你记录生活点滴与情绪；<strong>“蒜皮”</strong>是精打细算的算盘，帮你理清每一笔财务账单。无论是柴米油盐，还是风花雪月，这里都能完美装下。
         </p>
       </div>
-    
+
       <div class="top-action-group">
         <button class="top-action-card website-card" onclick="window.location.href='./index.html'">
           <span class="card-icon">🌐</span>
@@ -243,7 +230,6 @@
           <span class="card-text">给好评</span>
         </button>
       </div>
-
       <div class="help-section" id="sec-ai">
         <div class="section-header">
           <div class="icon-wrap bg-blue">⚡️</div>
@@ -260,7 +246,6 @@
           <li><strong>专属关键词小抄：</strong>给二级分类添加关键词（如给“餐饮”加“麦当劳”）。输入包含关键词的句子，系统将强行精准分类，绝不误判。</li>
         </ul>
       </div>
-
       <div class="help-section" id="sec-manual">
         <div class="section-header">
           <div class="icon-wrap bg-orange">🧮</div>
@@ -278,12 +263,11 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="8" y2="10"></line><line x1="12" y1="10" x2="12" y2="10"></line><line x1="16" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="16" y1="14" x2="16" y2="14"></line></svg>
             </span>进入手工记账，<strong>请先在“日期时间”按钮左边确认或切换资金来源的账户</strong>。金额键盘自带 <code>+ - × ÷</code>，多件物品直接算，点击 <code>=</code> 自动出总价。
           </li>
-          <li><strong>智能高频记账胶囊：</strong>当触碰“写备注...”时，下方会根据你<strong>近三个月</strong>的记账记录，自动洗牌、合流并吐出一排快捷模板。轻轻一戳模板，不仅自动帮你代入备注，还会把当时的<strong>金额、分类和扣款账户一并全自动填满</strong>！免去你每月度固定账单重复打字的繁琐。</li>              
+          <li><strong>智能高频记账胶囊：</strong>当触碰“写备注...”时，下方会根据你<strong>近三个月</strong>的记账记录，自动洗牌、合流并吐出一排快捷模板。轻轻一戳模板，不仅自动帮你代入备注，还会把当时的<strong>金额、分类和扣款账户一并全自动填满</strong>！免去你每月度固定账单重复打字的繁琐。</li>
           <li><strong>转账与不计入收支：</strong>左上角切换“转账”可生成不污染总统计的流水。特殊资金可记入专属的“不计入收支”账户。</li>
           <li><strong>账单退款：</strong>网购退货、押金退还等场景，选择账单详情里的“退款”即可，系统会自动冲抵对应分类的支出，让统计数据真实反映净支出，不再被退款污染消费报表。</li>
         </ul>
       </div>
-
       <div class="help-section" id="sec-diary">
         <div class="section-header">
           <div class="icon-wrap bg-pink">📖</div>
@@ -302,14 +286,14 @@
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
               </svg>
             </span>
-            （或打字超 40 字）进入全屏日记。此时点击<strong>输入框右下角的 
+            （或打字超 40 字）进入全屏日记。此时点击<strong>输入框右下角的
             <span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px; margin: 0 2px;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
                 <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
                 <line x1="12" y1="19" x2="12" y2="22"></line>
               </svg>
-            </span> 
+            </span>
             麦克风图标</strong>进行听写，说完还能一键 AI 轻润色！
           </li>
           <li><strong>图文与环境感知：</strong>支持最多 20 张高清图与 10 个专属标签，更能为你盖上专属的心情印章。系统会在后台默默感知天气与定位，将彼时的环境与情绪，一并封存为珍贵的时光印记。</li>
@@ -319,7 +303,6 @@
           <li><strong>💡 相册找图神技：</strong>在回顾编辑“那年今日”、随机漫游或补记旧日记时，只要点击添加图片，系统会自动将那一天的日期复制到剪贴板。<strong>在手机相册搜索框直接粘贴，即可一秒找出当天的老照片！</strong></li>
         </ul>
       </div>
-
       <div class="help-section" id="sec-stats">
         <div class="section-header">
           <div class="icon-wrap bg-indigo">📊</div>
@@ -337,7 +320,62 @@
           <li><strong>净资产实时追踪：</strong>在首页看板点击“资产看板”或在设置中点击“资产账户”，一眼看清你的总资产、总负债与净资产，支持长按拖拽给你的账户卡片自由排序。</li>
         </ul>
       </div>
-
+      <div class="help-section" id="sec-savings">
+        <div class="section-header">
+          <div class="icon-wrap bg-pink">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.5-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z"></path><path d="M2 9v1c0 1.1.9 2 2 2h1"></path><path d="M16 11h.01"></path></svg>
+          </div>
+          <h3>存钱计划与目标</h3>
+        </div>
+        <ul class="help-list">
+          <li><strong>四大存钱法随心选：</strong> 内置“灵活存钱（随存随取）”、“定额存钱”、“52周存钱”以及“365天存钱”四种经典模式。无论是买车大计还是旅行基金，总有一款适合你。</li>
+          <li><strong>真实转账联动，无缝记账：</strong> 打卡或存入金额时，系统会在后台全自动生成一笔从“扣款账户”到“存入账户”的真实内部转账流水。如果两个账户币种不同，还会智能按当前汇率折算，保证资产分毫不差。</li>
+          <li><strong>自动打卡与进度跟踪：</strong> 列表进度条实时呈现“已存金额”与“剩余未存”。完成一期打卡，不仅会有满屏撒花动画，还会自动推算下一期日期。</li>
+          <li><strong>灵活存取与归档：</strong> 灵活模式下支持随时“存入”与“取钱”（资金原路退回）。完成目标后的计划会自动变身为已达成状态；对于暂时搁置的计划，支持一键“归档”隐藏。</li>
+        </ul>
+      </div>
+      <div class="help-section" id="sec-budget">
+        <div class="section-header">
+          <div class="icon-wrap bg-green">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+          </div>
+          <h3>精细化预算管理</h3>
+        </div>
+        <ul class="help-list">
+          <li><strong>三维周期看板：</strong> 支持按“周”、“月”、“年”独立查看预算和结余。主进度条自带颜色预警：花销达到 80% 会变为橙色，超出 100% 会变为醒目的红色。</li>
+          <li><strong>主次分级预算：</strong> 不仅可以设置总额，还能点击列表中的各主分类或二级子分类（如单独为“餐饮-咖啡”设置上限），精确掌控每一笔细分开销。</li>
+          <li><strong>退款智能抵扣与过滤：</strong> 预算引擎极其严谨——“内部转账”、“余额调整”以及“不计入预算”的账单会自动被剔除。如果某笔消费发生了退款，系统会智能按净支出计算，把退回来的钱实时补充回可用预算里。</li>
+          <li><strong>一键设为默认：</strong> 每月预算金额大同小异？在月度预算看板点击顶部的“设为默认”，未来的每个月都会自动套用这套模板，省去重复填写的烦恼。</li>
+        </ul>
+      </div>
+      <div class="help-section" id="sec-recurring">
+        <div class="section-header">
+          <div class="icon-wrap bg-indigo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l-5.41 5.41"></path></svg>
+          </div>
+          <h3>周期记账与分期管理</h3>
+        </div>
+        <ul class="help-list">
+          <li><strong>双管齐下的自动化账单：</strong> 面板顶部支持在“周期记账”与“分期管理”两大模块间无缝切换，集中打理你的自动化财务流水。</li>
+          <li><strong>周期记账（自动扣费）：</strong> 面对房租、水电、软件订阅等固定开销，只需设置好频率（每天/周/月/季/年）与结束条件（指定日期或次数）。时间一到，系统自动为你默默记上一笔账。</li>
+          <li><strong>分期管理（信用卡/花呗）：</strong> 买大件用了分期？输入总金额与期数（如 6、12 期），系统会自动生成“还款计划表明细”。支持四种手续费模式（无/总手续费/每期手续费/月费率），每一期需还本金与利息一目了然。</li>
+          <li><strong>提前结清与随时暂停：</strong> 如果中途手头宽裕，支持对分期计划“提前结清”；或者随时“暂停”某项周期记账。执行这些操作后，后续将不再生成新账单，但已生成的历史账单不受任何影响，绝对安全。</li>
+        </ul>
+      </div>
+      <div class="help-section" id="sec-reimburse">
+        <div class="section-header">
+          <div class="icon-wrap bg-amber">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+          </div>
+          <h3>报销追踪管理</h3>
+        </div>
+        <ul class="help-list">
+          <li><strong>待办与已结双看板：</strong> 记账时只要打开“是否报销”开关，这笔钱就会自动流入此处。看板清晰划分为“未报销”与“已报销”两大专区，帮你盯紧每一笔垫付的钱。</li>
+          <li><strong>支持分次与部分报销：</strong> 一笔大额差旅可以分多次报下来！系统底层使用严谨的计算模型，会自动根据该账单的“净额”扣减“已报销金额”，精确算出还剩多少没报完，防止重复计算待报销金额。</li>
+          <li><strong>万能搜索定位：</strong> 列表自带强大的搜索引擎。输入分类名称、账单备注、具体金额，甚至是你打的自定义标签（如 <code>#出差</code>），即可从海量记录中瞬间定位需要对账的那一笔。</li>
+          <li><strong>外币自动统一折算：</strong> 在月份汇总金额时，无论你垫付时用了哪国的货币，系统都会调取账单快照，将它们精准折算为统一的“本位币”呈现，直观展示月度总报销金额。</li>
+        </ul>
+      </div>
       <div class="help-section" id="sec-reminder">
         <div class="section-header">
           <div class="icon-wrap bg-teal">🔔</div>
@@ -350,7 +388,6 @@
           <li><strong>系统级强力推送：</strong>采用“极客级”的纯本地智能排期引擎。哪怕 App 被彻底退出、在无网环境下，只要时间一到，依然能通过手机系统底层准时弹出横幅通知，绝不漏发。</li>
         </ul>
       </div>
-
       <div class="help-section" id="sec-assets">
         <div class="section-header">
           <div class="icon-wrap bg-amber">📦</div>
@@ -363,7 +400,6 @@
           <li><strong>自定义字典扩容：</strong>在“分类”与“空间”界面的最后方，提供了专属的 <code>+</code> 虚线按钮，支持拓展全新的空间名字或特定物品分类。</li>
         </ul>
       </div>
-
       <div class="help-section" id="sec-advanced">
         <div class="section-header">
           <div class="icon-wrap bg-purple">✨</div>
@@ -386,7 +422,6 @@
           </li>
         </ul>
       </div>
-
       <div class="help-section" id="sec-security">
         <div class="section-header">
           <div class="icon-wrap bg-green">🛡️</div>
@@ -398,91 +433,80 @@
           <li><strong>多端备份：</strong>支持 iCloud、WebDAV（请自行前往 <strong>坚果云</strong> 或 <strong>Infini-cloud</strong> 等服务商免费申请 WebDAV 网盘）、百度网盘以及Google drive的增量无感备份。若有新数据则约每6小时自动备份一次(💡 注：退至手机桌面即可触发静默备份，请勿直接划掉清理应用。)。随时可导出全量数据的 <code>JSON</code> 或含图片的 <code>PDF</code>和<code>ZIP</code> 备份包。</li>
         </ul>
       </div>
-
       <div class="help-section" id="sec-faq">
         <div class="section-header">
           <div class="icon-wrap" style="background: #475569;">❓</div>
           <h3>常见问题与技巧 (FAQ)</h3>
         </div>
-        
+
         <div class="faq-container">
           <details>
   <summary>1. 如何补写过去的日记或补记以前的账单？</summary>
-
   <p>我们为您提供了两种灵活的补记方式，适用不同场景：</p>
-
   <p><strong>方法一：单笔快速补记（适合顺手修改）</strong><br>
   打开底部的 <code><span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
 </span></code> 日记本，或 <code><span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="8" y2="10"></line><line x1="12" y1="10" x2="12" y2="10"></line><line x1="16" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="16" y1="14" x2="16" y2="14"></line></svg>
 </span></code> 手工记账面板，直接点击最顶部或左边的<strong>“日期时间”</strong>，将其修改为过去的某一天即可。保存后，这条记录会自动归档到该日期下。</p>
-
   <p><strong>方法二：时光机沉浸模式（适合一次性补一整天）</strong><br>
   点击首页左上角的<strong>日历图标</strong>，在日历上选中你想补记的那一天，点击右上角的<strong>“编辑补记”</strong>。
   此时主页顶部会出现“⏳ 正在编辑补记”的横幅。接下来无论是你快捷发送一句话，还是手工记账、写日记，所有的记录都会集体“穿越”到那一天！补记完成后，点击横幅上的“退出”即可回到现在。</p>
-  
+
   <p><strong>另外，记账补记也可以通过主页输入框输入比如：“2025年8月1日打开50”，就可以补记8月1日的账单。</strong></p>
 </details>
-
           <details>
             <summary>2. 如何修改已经发出去的日记或账单？</summary>
             <p><strong>修改整条记录：</strong>长按主页上的气泡，在弹出的黑色菜单中选择“编辑”即可。<br><br><strong>修改账单里的单笔明细：</strong>如果一条账单里包含了多个分类（比如买菜和打车），你不需要重新记！直接在气泡里<strong>点击对应的那个分类小胶囊</strong>，就能进入编辑面板精准修改这一笔的金额或分类了。</p>
           </details>
-
           <details>
             <summary>3. 如何精确删除账单里的某一条明细？</summary>
             <p>点击气泡里的分类小胶囊进入手工编辑面板，点击右上角的 🗑️ 垃圾桶图标，选择“删除明细”即可。如果这一个气泡里所有的明细都被删空且没有包含图片，整个气泡会自动从时间线上消失。</p>
           </details>
-
           <details>
             <summary>4. 以前的日记和账单太多了，怎么快速查找？</summary>
             <p>点击首页右上角的 🔍 <strong>放大镜图标</strong>，你可以直接输入关键词搜索任何内容，也可以在下方点击你常用的“#标签”进行快速过滤筛选。其中“日记”和“账单”标签分别筛选出日记和账单。</p>
           </details>
-
           <details>
             <summary>5. 如何获取和配置 AI API Key？</summary>
             <p>我们的专属 API 密钥一键获取功能正在快马加鞭开发中，敬请期待后续版本！<br>现阶段，请先前往 <strong>硅基流动 (SiliconFlow)、智谱、DeepSeek</strong> 或 <strong>Groq</strong> 的官网自行注册并免费申请 API Key。<br>获取成功后，前往 App 的“设置 - AI 引擎设置”中填入并保存，即可唤醒强大的 AI 极速记账魔法。</p>
           </details>
-
           <details>
             <summary>6. 我的账单 and 日记数据保存在哪里？会丢失吗？</summary>
             <p>“鸡毛蒜皮”采用离线优先架构，你的所有数据默认加密保存在<strong>手机本地</strong>，我们没有任何中心化服务器来窃取你的隐私。请务必前往设置中开启 iCloud、WebDAV、百度网盘和Google drive中的一种或几种方式自动备份，以免手机丢失造成数据损毁。</p>
           </details>
-
           <details>
             <summary>7. 为什么有时上传图片会提示失败？</summary>
             <p>为了保证 App 运行极其流畅且不占用过多的手机空间，系统每天限制最多上传 20 张配图，并且会在后台进行无损压缩。超额后请明天再试哦。</p>
           </details>
-          
+
           <details>
             <summary>8. 如何快速查找我已经“收藏”或“置顶”的记录？</summary>
             <p><strong>关于置顶：</strong>点击主页右上角的“🔍”搜索按钮，在不输入任何字的情况下，搜索页会化身为你的“专属看板”，直接为你展示所有打上“置顶”标签的内容，一眼可见。</p>
             <p><strong>关于收藏：</strong>同样在搜索页面，下方的快捷标签栏中，固定了“#收藏”标签，点击它即可瞬间筛选出所有你珍藏的回忆与账单。</p>
           </details>
-          
+
           <details>
             <summary>9. 如何使用 WebDAV 进行跨设备同步？</summary>
             <p>WebDAV 是一种通用的网盘同步协议。请先前往 <strong>坚果云</strong> 或 <strong>Infini-Cloud</strong> 的官网，免费注册账号并开启 WebDAV 服务。</p>
             <p>获取到配置信息后，填入 App 的“备份与恢复”中即可。如需教程可以前往官网查看详细配置指南。</p>
           </details>
-          
+
           <details>
             <summary>10. “时光回音”里的连续记录天数是怎么计算的？</summary>
             <p>只要你每天在 App 里留下任何一点痕迹，不管是一笔几块钱的账单，还是只写了一句话的日记，系统都会算你今天打卡成功。每天记一点，看看你的记录能连成多长的线吧！</p>
           </details>
-          
+
           <details>
             <summary>11. 觉得聊天气泡的字体太小，看不清怎么办？</summary>
             <p>前往“设置 - 主题与外观设置”，打开<strong>“跟随系统字体大小”</strong>开关，App 会完美适配你手机系统里设置的大字号（支持长辈模式）。如果需要更精准的控制，你也可以关闭开关，直接拖动下方的滑块手动调节气泡字号。</p>
           </details>
         </div>
       </div>
-  
+
       <div style="height: 32px;"></div>
     </div>
   </div>
-
   <script>
     function toggleToc() {
       const overlay = document.getElementById('tocOverlay');
@@ -495,14 +519,12 @@
         btn.classList.add('toc-active');
       }
     }
-
     function scrollToSec(id, el) {
       document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
       document.querySelectorAll('.toc-item').forEach(item => item.classList.remove('active'));
       el.classList.add('active');
       toggleToc();
     }
-
     function shareApp() {
       const shareUrl = 'https://apps.apple.com/cn/app/id6762100023';
       const shareText = '推荐给你一款超好用的聊天式日记记账APP「鸡毛蒜皮」，快来试试吧！';
@@ -513,7 +535,6 @@
         alert('请复制链接分享：\n' + shareUrl);
       }
     }
-
     function rateApp() {
       window.open('https://apps.apple.com/cn/app/id6762100023', '_blank');
     }
