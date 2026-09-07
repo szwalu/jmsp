@@ -23,7 +23,6 @@
       --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.04);
       --bento-radius: 28px;
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
         --bg-color: #0f172a;
@@ -35,9 +34,8 @@
         --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       }
     }
-
     body, h1, h2, h3, p { margin: 0; padding: 0; }
-    
+
     body {
       background: var(--bg-color);
       color: var(--text-main);
@@ -45,12 +43,11 @@
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
       line-height: 1.7;
-      background-image: 
+      background-image:
         radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
         radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.08) 0%, transparent 50%);
       background-attachment: fixed;
     }
-
     .nav-help {
       position: absolute;
       top: max(24px, env(safe-area-inset-top));
@@ -78,63 +75,59 @@
       border-color: rgba(99, 102, 241, 0.3);
     }
     .nav-help:active { transform: scale(0.96); }
-
     .container {
       max-width: 960px;
       margin: 0 auto;
       padding: calc(env(safe-area-inset-top) + 80px) 24px calc(env(safe-area-inset-bottom) + 40px);
     }
-
     /* === Hero 区域 === */
-    .hero { 
-      display: flex; 
-      align-items: center; 
-      gap: 28px; 
-      margin-bottom: 56px; 
-      text-align: left; 
-      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1); 
+    .hero {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 56px;
+      text-align: left;
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .app-icon { 
-      width: 104px; 
-      height: 104px; 
-      border-radius: 24px; 
-      object-fit: cover; 
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1); 
-      flex-shrink: 0; 
-      transition: transform 0.3s ease; 
+    .app-icon {
+      width: 104px;
+      height: 104px;
+      border-radius: 24px;
+      object-fit: cover;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
     }
     .app-icon:hover { transform: scale(1.05); }
     .hero-content { display: flex; flex-direction: column; justify-content: center; }
-    
-    .app-title { 
-      font-size: 40px; 
-      font-weight: 800; 
-      letter-spacing: -0.5px; 
-      margin-bottom: 8px; 
-      background: linear-gradient(135deg, var(--text-main) 0%, #64748b 100%); 
-      -webkit-background-clip: text; 
-      -webkit-text-fill-color: transparent; 
+
+    .app-title {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--text-main) 0%, #64748b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .app-slogan { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0; font-weight: 400; }
-
     /* === 下载区域 === */
     .downloads { display: flex; flex-direction: column; gap: 16px; margin-bottom: 72px; max-width: 800px; margin-left: auto; margin-right: auto; animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
     .dl-btn { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; border-radius: 22px; background: var(--card-bg); border: 1px solid var(--card-border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: var(--glass-shadow); cursor: pointer; text-decoration: none; transition: all 0.2s ease; color: var(--text-main); }
     .dl-btn:active { transform: scale(0.98); }
     .dl-btn:hover { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08); border-color: rgba(99, 102, 241, 0.3); }
-    
+
     .dl-left { display: flex; align-items: center; gap: 18px; flex: 1; min-width: 0; }
     .dl-icon { font-size: 32px; line-height: 1; flex-shrink: 0; width: 36px; text-align: center; display: inline-block; }
     .dl-text-group { display: flex; flex-direction: column; justify-content: center; flex: 1; min-width: 0; }
-    
+
     .dl-text-main { font-size: 18px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .dl-text-sub { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.4; word-break: break-word; }
-    
+
     .dl-action { background: var(--text-main); color: var(--bg-color); padding: 10px 22px; border-radius: 14px; font-size: 15px; font-weight: 600; white-space: nowrap; flex-shrink: 0; margin-left: 12px; }
-    
+
     .dl-android-main .dl-action { background: #10b981; color: #fff; }
     .dl-android-alt .dl-action { background: #3b82f6; color: #fff; }
-
    .copy-pwd {
       display: inline-flex;
       align-items: center;
@@ -155,16 +148,13 @@
     .copy-pwd:active {
       transform: scale(0.95);
     }
-
     /* === 图文混排 Bento Box === */
     .section-title { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 40px; color: var(--text-main); }
-
     .bento-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 24px;
     }
-
     .bento-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -177,52 +167,44 @@
       position: relative;
       overflow: hidden;
       transition: transform 0.4s ease, box-shadow 0.4s ease;
-      height: auto; 
+      height: auto;
     }
-    
+
     .bento-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); }
-
     .span-2 { grid-column: span 2; }
-
     .bento-content { padding: 40px 40px 0 40px; z-index: 2; }
-
     .icon-wrapper { width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px; background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2)); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
     @media (prefers-color-scheme: dark) { .icon-wrapper { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); } }
-    
-    .c-blue { color: #3b82f6; } .c-pink { color: #ec4899; } .c-purple { color: #a855f7; } 
-    .c-green { color: #10b981; } .c-orange { color: #f97316; } .c-teal { color: #14b8a6; }
 
+    .c-blue { color: #3b82f6; } .c-pink { color: #ec4899; } .c-purple { color: #a855f7; }
+    .c-green { color: #10b981; } .c-orange { color: #f97316; } .c-teal { color: #14b8a6; }
     .bento-title { font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
     .bento-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
-
     .bento-img-wrap { flex: 1; margin-top: 32px; padding: 0 40px 40px 40px; display: flex; justify-content: center; align-items: center; }
-
-    .mockup-img { 
-      width: 100%; 
+    .mockup-img {
+      width: 100%;
       height: auto;
-      display: block; 
-      border-radius: 16px; 
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12); 
-      border: 1px solid var(--img-border); 
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); 
+      display: block;
+      border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      border: 1px solid var(--img-border);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .bento-card:hover .mockup-img { transform: translateY(-4px) scale(1.02); }
-
     @media (min-width: 768px) {
       .card-hz { flex-direction: row; align-items: center; }
       .card-hz-rev { flex-direction: row-reverse; align-items: center; }
       .card-hz .bento-content, .card-hz-rev .bento-content { flex: 1; padding: 48px; display: flex; flex-direction: column; justify-content: center; }
       .card-hz .bento-img-wrap, .card-hz-rev .bento-img-wrap { flex: 1; margin-top: 0; padding: 48px; }
     }
-
     /* === 页脚与联系方式 === */
-    .footer { 
-      text-align: center; 
-      margin-top: 80px; 
-      padding: 40px 0 20px; 
-      font-size: 14px; 
-      color: var(--text-muted); 
-      border-top: 1px solid var(--card-border); 
+    .footer {
+      text-align: center;
+      margin-top: 80px;
+      padding: 40px 0 20px;
+      font-size: 14px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--card-border);
     }
     .contact-info {
       display: flex;
@@ -262,7 +244,6 @@
         background: rgba(99, 102, 241, 0.18);
       }
     }
-
     .wechat-mask {
       display: none;
       position: fixed;
@@ -287,35 +268,33 @@
       margin-top: 16px;
       text-align: center;
     }
-
     @media (max-width: 768px) {
       .hero { gap: 20px; margin-bottom: 48px; }
       .app-icon { width: 88px; height: 88px; border-radius: 20px; }
       .app-title { font-size: 32px; }
       .app-slogan { font-size: 15px; }
-      
+
       .bento-grid { grid-template-columns: 1fr; gap: 20px; }
       .span-2 { grid-column: span 1; }
-      
+
       .downloads { padding: 0 12px; margin-bottom: 56px; }
       .dl-btn { padding: 18px 16px; }
       .dl-left { gap: 14px; }
       .dl-text-main { font-size: 16px; }
-      
+
       .bento-content { padding: 32px 32px 0 32px; }
       .bento-img-wrap { padding: 0 32px 32px 32px; margin-top: 24px; }
-      
+
       .card-hz, .card-hz-rev { flex-direction: column; align-items: stretch; }
       .card-hz .bento-content, .card-hz-rev .bento-content { padding: 32px 32px 0 32px; justify-content: flex-start; flex: none; }
       .card-hz .bento-img-wrap, .card-hz-rev .bento-img-wrap { padding: 0 32px 32px 32px; margin-top: 24px; flex: none; }
-      
+
       .contact-info { flex-direction: column; gap: 10px; }
     }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
-
   <!-- 微信提示蒙层 -->
   <div id="wechat-mask" class="wechat-mask" onclick="hideMask()">
     <div class="wechat-mask-content">
@@ -328,7 +307,6 @@
       </div>
     </div>
   </div>
-
   <a href="./help.html" class="nav-help">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="10"></circle>
@@ -337,9 +315,8 @@
     </svg>
     使用指南
   </a>
-
   <div class="container">
-    
+
     <header class="hero">
       <img class="app-icon" src="./images/主题.png" alt="鸡毛蒜皮 Logo" onerror="this.src='https://api.iconify.design/fluent-emoji-flat:feather.svg'" />
       <div class="hero-content">
@@ -347,11 +324,10 @@
         <p class="app-slogan">记录生活的点点滴滴，对话式日记与记账的全新体验。</p>
       </div>
     </header>
-
     <section class="downloads">
       <div class="dl-btn" onclick="openAppStore()">
         <div class="dl-left">
-          <div class="dl-icon"></div>
+          <div class="dl-icon"></div>
           <div class="dl-text-group">
             <div class="dl-text-main">App Store 下载</div>
             <div class="dl-text-sub">iOS 专属纯净体验</div>
@@ -359,7 +335,7 @@
         </div>
         <div class="dl-action">获取</div>
       </div>
-      
+
       <div class="dl-btn dl-android-main" onclick="handleAndroidDownload()">
         <div class="dl-left">
           <div class="dl-icon">🤖</div>
@@ -370,7 +346,7 @@
         </div>
         <div class="dl-action">下载</div>
       </div>
-      
+
       <div class="dl-btn dl-android-alt" onclick="handleLanzouDownload()">
         <div class="dl-left">
           <div class="dl-icon">☁️</div>
@@ -388,12 +364,11 @@
         <div class="dl-action">进入</div>
       </div>
     </section>
-
     <!-- 核心理念 (图文混排 Bento Box) -->
     <section>
       <h2 class="section-title">重新定义记录方式</h2>
       <div class="bento-grid">
-        
+
         <div class="bento-card span-2 card-hz">
           <div class="bento-content">
             <div class="icon-wrapper c-blue">✨</div>
@@ -404,7 +379,6 @@
             <img class="mockup-img" src="./images/jz.PNG" alt="极速记账魔法界面" loading="lazy">
           </div>
         </div>
-
         <div class="bento-card">
           <div class="bento-content">
             <div class="icon-wrapper c-pink">📖</div>
@@ -415,7 +389,6 @@
             <img class="mockup-img" src="./images/rj.PNG" alt="时光日记本界面" loading="lazy">
           </div>
         </div>
-
         <div class="bento-card">
           <div class="bento-content">
             <div class="icon-wrapper c-purple">📊</div>
@@ -426,7 +399,6 @@
             <img class="mockup-img" src="./images/kb.PNG" alt="多维洞察看板界面" loading="lazy">
           </div>
         </div>
-
         <div class="bento-card">
           <div class="bento-content">
             <div class="icon-wrapper c-orange">📦</div>
@@ -437,7 +409,6 @@
             <img class="mockup-img" src="./images/wp.PNG" alt="物品与资产雷达界面" loading="lazy">
           </div>
         </div>
-
         <div class="bento-card">
           <div class="bento-content">
             <div class="icon-wrapper c-teal">🔔</div>
@@ -448,7 +419,6 @@
             <img class="mockup-img" src="./images/bw.PNG" alt="全场景生活备忘界面" loading="lazy">
           </div>
         </div>
-
         <div class="bento-card span-2 card-hz-rev">
           <div class="bento-content">
             <div class="icon-wrapper c-green">🛡️</div>
@@ -459,10 +429,8 @@
             <img class="mockup-img" src="./images/bf.PNG" alt="数据备份安全界面" loading="lazy">
           </div>
         </div>
-
       </div>
     </section>
-
     <!-- 页脚与联系方式 -->
     <footer class="footer">
       <div class="contact-info">
@@ -478,10 +446,8 @@
       <p>© <span id="dynamic-year"></span> 鸡毛蒜皮 App. All rights reserved.</p>
     </footer>
   </div>
-
   <script>
-    var CURRENT_PAGE_BUILD = '20260818_2';
-
+    var CURRENT_PAGE_BUILD = '20260907_1';
     var appConfig = {
       version: 'v1.3.8(2)',
       androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.4.8/app-release.apk',
@@ -489,6 +455,9 @@
       lanzouPwd: '95si',
       iosAppStoreUrl: 'https://apps.apple.com/cn/app/id6762100023'
     };
+    // 同一个 buildTime 只允许触发一次强制刷新，防止 index.html 缓存未及时更新时
+    // 与 version.json 的 buildTime 永远对不上，从而无限 reload / 页面闪烁。
+    var REFRESH_GUARD_KEY = 'jmsp_refresh_attempted_build';
 
     function fetchLatestConfig() {
       fetch('./version.json?t=' + Date.now(), { cache: 'no-store' })
@@ -499,10 +468,41 @@
         .then(function(data) {
           if (data) {
             if (data.buildTime && data.buildTime !== CURRENT_PAGE_BUILD) {
+              var alreadyTriedBuild = null;
+              try {
+                alreadyTriedBuild = sessionStorage.getItem(REFRESH_GUARD_KEY);
+              } catch (e) {
+                // 隐私模式等场景下 sessionStorage 可能不可用，忽略即可
+              }
+
+              if (alreadyTriedBuild === data.buildTime) {
+                // 已经为这个 buildTime 刷新过一次，但页面仍是旧版本
+                // （多半是 index.html 被缓存未更新），不再继续跳转，
+                // 直接用最新配置原地更新内容，避免无限闪烁。
+                console.warn('已尝试刷新到 build ' + data.buildTime + ' 但页面仍为旧版本，改为原地更新数据。');
+                appConfig = Object.assign(appConfig, data);
+                updateUI();
+                return;
+              }
+
+              try {
+                sessionStorage.setItem(REFRESH_GUARD_KEY, data.buildTime);
+              } catch (e) {
+                // 忽略写入失败
+              }
+
               var cleanUrl = window.location.origin + window.location.pathname + '?refresh=' + Date.now();
               window.location.replace(cleanUrl);
               return;
             }
+
+            // 版本号一致，清除刷新标记，为下一次真正的版本更新做准备
+            try {
+              sessionStorage.removeItem(REFRESH_GUARD_KEY);
+            } catch (e) {
+              // 忽略
+            }
+
             appConfig = Object.assign(appConfig, data);
             updateUI();
           }
@@ -512,7 +512,6 @@
           updateUI();
         });
     }
-
     function updateUI() {
       var officialSub = document.getElementById('android-official-sub');
       if (officialSub) {
@@ -523,7 +522,6 @@
         pwdSpan.innerText = appConfig.lanzouPwd;
       }
     }
-
     window.addEventListener('pageshow', function(event) {
       if (event.persisted) {
         window.location.reload();
@@ -531,23 +529,18 @@
         fetchLatestConfig();
       }
     });
-
     document.getElementById('dynamic-year').textContent = new Date().getFullYear();
-
     function isWeChat() {
       return /MicroMessenger/i.test(navigator.userAgent);
     }
-
     function showMask() {
       var mask = document.getElementById('wechat-mask');
       if (mask) mask.style.display = 'block';
     }
-
     function hideMask() {
       var mask = document.getElementById('wechat-mask');
       if (mask) mask.style.display = 'none';
     }
-
     function handleAndroidDownload() {
       if (isWeChat()) {
         showMask();
@@ -555,7 +548,6 @@
         window.location.href = appConfig.androidGiteeUrl;
       }
     }
-
     function handleLanzouDownload() {
       if (isWeChat()) {
         showMask();
@@ -563,7 +555,6 @@
         window.open(appConfig.lanzouUrl, '_blank');
       }
     }
-
     function openAppStore() {
       if (isWeChat()) {
         showMask();
@@ -571,11 +562,10 @@
         window.location.href = appConfig.iosAppStoreUrl;
       }
     }
-
     function copyPassword(event, element) {
       event.stopPropagation();
       var text = String(appConfig.lanzouPwd);
-      
+
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text).then(() => {
           showCopySuccess(element, text);
@@ -586,48 +576,46 @@
         fallbackCopy(text, element);
       }
     }
-
     function fallbackCopy(text, element) {
       var textArea = document.createElement("textarea");
       textArea.value = text;
-      
+
       textArea.style.position = "absolute";
       textArea.style.left = "-99999px";
       textArea.style.top = "-99999px";
       textArea.setAttribute("readonly", "readonly");
-      
+
       document.body.appendChild(textArea);
-      
+
       textArea.focus();
       textArea.select();
       textArea.setSelectionRange(0, 99999);
-      
+
       var successful = false;
       try {
         successful = document.execCommand('copy');
       } catch (err) {
         successful = false;
       }
-      
+
       document.body.removeChild(textArea);
-      
+
       if (successful) {
         showCopySuccess(element, text);
       } else {
         alert("浏览器安全限制导致自动复制失败，请手动记录密码：\n\n" + text);
       }
     }
-
     function showCopySuccess(element, originalText) {
       var textSpan = element.querySelector('#lanzou-pwd');
       var icon = element.querySelector('#copy-icon');
-      
+
       if (textSpan) textSpan.innerText = '已复制';
       if (icon) icon.style.display = 'none';
-      
+
       element.style.color = '#10b981';
       element.style.background = 'rgba(16, 185, 129, 0.1)';
-      
+
       setTimeout(() => {
         if (textSpan) textSpan.innerText = originalText;
         if (icon) icon.style.display = 'block';
@@ -635,7 +623,6 @@
         element.style.background = '';
       }, 1500);
     }
-
     fetchLatestConfig();
   </script>
 </body>
