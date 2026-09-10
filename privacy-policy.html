@@ -107,15 +107,15 @@
 
   <div class="content-padding">
     <div class="meta-info">
-      <p class="zh">更新日期：2026 年 6 月</p>
+      <p class="zh">更新日期：2026 年 9 月</p>
       <p class="zh">生效日期：2026 年 6 月</p>
-      <p class="en">Updated: Jun, 2026</p>
+      <p class="en">Updated: Sep, 2026</p>
       <p class="en">Effective: Jun, 2026</p>
     </div>
 
     <div class="intro-box">
-      <p class="zh">"鸡毛蒜皮"（以下简称"我们"）深知个人信息对您的重要性。作为一款纯本地应用，我们不会强迫您注册账号或将您的私人数据上传至云端，并严格遵循"最小必要"原则。</p>
-      <p class="en">At Trifles Daily ("We"), we respect your privacy. As a strictly local-first application, we do not require account registration or upload your private data to the cloud.</p>
+      <p class="zh">"鸡毛蒜皮"（以下简称"我们"）深知个人信息对您的重要性。本应用以本地优先为核心架构，<strong>无需注册账号即可完整使用</strong>。仅当您在设置中主动开启 Google Drive、百度网盘、OneDrive、iCloud 或 WebDAV 等<strong>可选云备份功能</strong>时，才会在您本人授权下，把备份数据传输到您自己选择、自己管理的云存储账户中。我们始终遵循"最小必要"原则收集与处理信息。</p>
+      <p class="en">At Trifles Daily ("We"), we respect your privacy. The app is built local-first and <strong>works fully without any account registration</strong>. Only if you actively enable an <strong>optional cloud backup channel</strong> (Google Drive, Baidu Netdisk, OneDrive, iCloud, or WebDAV) in Settings will your backup data be transmitted, under your own authorization, to the cloud storage account you personally choose and control. We always follow the principle of data minimization.</p>
     </div>
 
     <!-- Section 1 -->
@@ -138,8 +138,34 @@
 
     <!-- Section 2 -->
     <section>
-      <h3 class="zh">二、 第三方 AI 服务与数据共享说明</h3>
-      <h3 class="en">2. Third-Party AI Services &amp; Data Sharing</h3>
+      <h3 class="zh">二、 可选云备份服务与您的数据访问权限</h3>
+      <h3 class="en">2. Optional Cloud Backup Services &amp; Data Access</h3>
+      <ul class="zh">
+        <li>本应用提供多种<strong>可选、需由您主动开启</strong>的云备份/恢复功能，用于把本机数据额外同步一份到您自己名下的云存储账户，防止误删或换机后数据丢失。除非您主动点击"登录并授权"，否则不会发起任何云端连接，我们也不会读取您云盘中的其他内容。</li>
+        <li><strong>Google Drive：</strong> 连接 Google Drive 时，我们仅请求 <code>drive.file</code> 这一最小权限范围——该权限只允许本应用访问<strong>由本应用自己创建、存放在您 Drive 中的专属备份文件</strong>，无法读取、修改或删除您 Drive 中的任何其他文件。授权完成后，备份文件（如账目与笔记数据、您选择同步的图片）由您的设备直接上传至您本人的 Google Drive 账户，<strong>全程不经过我们的服务器，我们也无法看到这些内容</strong>。用于换取登录凭证的一次性授权码，会经过我们的一个无状态云函数转发给 Google 完成 OAuth 令牌交换，该函数不存储、不记录您的任何备份数据；换回的访问令牌仅保存在您本机设备上。</li>
+        <li><strong>百度网盘：</strong> 授权范围为账号基本信息与网盘读写（basic、netdisk），同样只用于将备份文件上传/下载到您百度网盘账户下的应用专属目录，流程与 Google Drive 一致：令牌交换经由我们的云函数完成，文件内容由设备直连百度服务器，不经过我们。</li>
+        <li><strong>OneDrive：</strong> 授权范围为 <code>Files.ReadWrite.AppFolder</code>，即微软 Graph 提供的"应用专属文件夹"，同样只能访问该专属文件夹，不会触碰您 OneDrive 中的其他文件。</li>
+        <li><strong>iCloud：</strong> 使用 iOS 系统原生的 iCloud 容器能力，数据直接在您的设备与您的 iCloud 账户之间同步，全程由 iOS 系统管理，我们同样无法访问。</li>
+        <li><strong>WebDAV：</strong> 由您自行提供服务器地址与账号密码，应用直接连接您指定的 WebDAV 服务器，凭证仅保存在您的设备本地，不会发送给我们。</li>
+        <li><strong>撤销与删除：</strong> 您可以随时在应用内"断开连接"以停止某项云备份并清除本机保存的授权令牌；如需彻底撤销授权，也可以前往对应服务商的账号管理页面手动移除，例如 Google 账号可前往 <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">https://myaccount.google.com/permissions</a> 撤销对"鸡毛蒜皮"的访问权限。断开授权或删除云端备份文件，均不会影响您设备本地保存的数据。</li>
+        <li><strong>合规声明：</strong> 我们对通过 Google API 获取的用户数据的使用与传输，严格遵循 <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>（含其中的 Limited Use 要求）——仅用于向您提供本节所述的备份/恢复功能本身，不用于广告投放，不用于训练机器学习或人工智能模型，也不会向任何第三方出售或转让。</li>
+      </ul>
+      <ul class="en">
+        <li>This app offers several <strong>optional, opt-in</strong> cloud backup/restore channels that keep an extra copy of your local data in a cloud account you own, protecting against accidental deletion or device loss. No cloud connection is ever initiated unless you actively tap "Sign in &amp; Authorize," and we never read anything else in your cloud storage beyond what is described below.</li>
+        <li><strong>Google Drive:</strong> When you connect Google Drive, we request only the <code>drive.file</code> scope — the narrowest permission available, which lets the app access <strong>only the backup file(s) it creates itself inside your Drive</strong>, and nothing else in your Drive. Once authorized, your backup file (your accounting/notes data and any images you choose to sync) is uploaded directly from your device to your own Google Drive account; <strong>this never passes through our servers, and we cannot see its contents</strong>. The one-time authorization code used to obtain your credentials is relayed through a stateless cloud function we run solely to complete the OAuth token exchange with Google; it stores none of your backup data. The resulting access token is kept only on your own device.</li>
+        <li><strong>Baidu Netdisk:</strong> We request basic account info and netdisk read/write scopes (basic, netdisk), used only to upload/download your backup file to an app-specific folder in your Baidu Netdisk account. The flow mirrors Google Drive: token exchange goes through our cloud function, while file content is transferred directly between your device and Baidu's servers.</li>
+        <li><strong>OneDrive:</strong> We request the <code>Files.ReadWrite.AppFolder</code> scope, Microsoft Graph's "app folder" permission, which likewise only reaches that dedicated folder and none of your other OneDrive files.</li>
+        <li><strong>iCloud:</strong> Uses iOS's native iCloud container capability; data syncs directly between your device and your iCloud account, entirely managed by iOS. We have no access to it either.</li>
+        <li><strong>WebDAV:</strong> You supply your own server address and credentials; the app connects directly to the WebDAV server you specify. Credentials are stored only on your device and are never sent to us.</li>
+        <li><strong>Revocation &amp; Deletion:</strong> You can disconnect any cloud backup channel at any time within the app, which clears the locally stored authorization token. To fully revoke access, you can also visit the provider's own account management page — for example, Google account holders can revoke this app's access at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">https://myaccount.google.com/permissions</a>. Disconnecting or deleting a cloud backup never affects the data stored locally on your device.</li>
+        <li><strong>Compliance:</strong> Our use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements — this data is used solely to provide the backup/restore feature described here, is never used for advertising, is never used to train machine learning or AI models, and is never sold or transferred to any other party.</li>
+      </ul>
+    </section>
+
+    <!-- Section 3 -->
+    <section>
+      <h3 class="zh">三、 第三方 AI 服务与数据共享说明</h3>
+      <h3 class="en">3. Third-Party AI Services &amp; Data Sharing</h3>
       <ul class="zh">
         <li>本应用采用离线优先架构，默认不收集您的任何数据。当且仅当您主动在应用设置中填入并开启了"第三方 AI 引擎"时，即表示您同意我们收集并共享特定数据以提供智能解析与总结服务：</li>
         <li><strong>1. 收集与共享哪些数据及方式：</strong> 我们仅会收集您主动发送的<strong>单条记账自然语言文本</strong>，或在您主动触发总结功能时提取的<strong>局部数据分析片段</strong>，并将其作为网络请求发送。</li>
@@ -158,36 +184,40 @@
       </ul>
     </section>
 
-    <!-- Section 3 -->
-    <section>
-      <h3 class="zh">三、 数据存储</h3>
-      <h3 class="en">3. Data Storage</h3>
-      <ul class="zh">
-        <li><strong>完全本地化：</strong> 您的所有文本、账单、图片等业务数据均<strong>仅以加密形式保存在您的设备本地</strong>。我们没有任何云端服务器用于存储您的这些数据，我们的人员也绝对无法查看您的记录。</li>
-      </ul>
-      <ul class="en">
-        <li><strong>100% Local:</strong> All your notes, accounts, and media are <strong>stored exclusively on your local device</strong>. We do not have servers hosting your data, and we cannot access your content.</li>
-      </ul>
-    </section>
-
     <!-- Section 4 -->
     <section>
-      <h3 class="zh">四、 您的权利</h3>
-      <h3 class="en">4. Your Rights</h3>
+      <h3 class="zh">四、 数据存储</h3>
+      <h3 class="en">4. Data Storage</h3>
       <ul class="zh">
-        <li><strong>撤回授权：</strong> 您可以随时通过手机系统设置关闭摄像头、相册或位置权限，但这可能导致相应功能无法使用。</li>
-        <li><strong>数据删除：</strong> 由于数据纯本地存储，您可以随时在应用内删除单条记录，或通过卸载应用的方式彻底擦除所有数据。</li>
+        <li><strong>本地优先：</strong> 默认情况下，您的所有文本、账单、图片等业务数据均<strong>仅以加密形式保存在您的设备本地</strong>。我们没有任何云端服务器用于存储这些数据，我们的人员也绝对无法查看您的记录。</li>
+        <li><strong>可选云端副本：</strong> 若您按上一节说明主动开启了 Google Drive、百度网盘、OneDrive、iCloud 或 WebDAV 中的某项云备份功能，对应的备份副本会额外存储在您本人的云存储账户中，其安全性与保留策略由相应服务商与您自己掌控，不由我们负责。</li>
       </ul>
       <ul class="en">
-        <li><strong>Revoke Permissions:</strong> You can disable Camera, Photos, or Location access at any time via your device settings.</li>
-        <li><strong>Data Deletion:</strong> Since all data is local, you can delete individual records within the app, or completely erase everything by uninstalling the application.</li>
+        <li><strong>Local-First:</strong> By default, all your notes, accounts, and media are <strong>stored exclusively, in encrypted form, on your local device</strong>. We operate no server that hosts this data, and we cannot access your content.</li>
+        <li><strong>Optional Cloud Copy:</strong> If you actively enable a cloud backup channel described in the section above (Google Drive, Baidu Netdisk, OneDrive, iCloud, or WebDAV), the corresponding backup copy is additionally stored in the cloud account you personally control; its security and retention are governed by that provider and by you, not by us.</li>
       </ul>
     </section>
 
     <!-- Section 5 -->
     <section>
-      <h3 class="zh">五、 联系我们</h3>
-      <h3 class="en">5. Contact Us</h3>
+      <h3 class="zh">五、 您的权利</h3>
+      <h3 class="en">5. Your Rights</h3>
+      <ul class="zh">
+        <li><strong>撤回授权：</strong> 您可以随时通过手机系统设置关闭摄像头、相册或位置权限，但这可能导致相应功能无法使用。</li>
+        <li><strong>数据删除：</strong> 由于本地数据纯本地存储，您可以随时在应用内删除单条记录，或通过卸载应用的方式彻底擦除设备上的所有数据。</li>
+        <li><strong>云备份撤销与删除：</strong> 如果您开启过任意一项云备份服务，可以随时在应用内断开连接，或直接前往对应服务商（Google、百度、微软）的账号管理页面撤销对本应用的授权、并删除已上传的备份文件。</li>
+      </ul>
+      <ul class="en">
+        <li><strong>Revoke Permissions:</strong> You can disable Camera, Photos, or Location access at any time via your device settings.</li>
+        <li><strong>Data Deletion:</strong> Since local data is stored exclusively on-device, you can delete individual records within the app, or completely erase everything on the device by uninstalling the application.</li>
+        <li><strong>Cloud Backup Revocation &amp; Deletion:</strong> If you have connected any cloud backup service, you can disconnect it at any time in the app, or go directly to that provider's account management page (Google, Baidu, Microsoft) to revoke this app's access and delete any uploaded backup files.</li>
+      </ul>
+    </section>
+
+    <!-- Section 6 -->
+    <section>
+      <h3 class="zh">六、 联系我们</h3>
+      <h3 class="en">6. Contact Us</h3>
       <ul class="zh">
         <li>如果您对隐私保护有任何疑问或意见，请联系我们：</li>
         <li>邮箱：<strong>ming@woabc.com</strong></li>
