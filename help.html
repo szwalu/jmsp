@@ -422,17 +422,38 @@
           </li>
         </ul>
       </div>
-      <div class="help-section" id="sec-security">
-        <div class="section-header">
-          <div class="icon-wrap bg-green">🛡️</div>
-          <h3>数据安全与隐私</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>离线优先：</strong>无网环境（如飞机、高铁）依然极速记账和写日记。</li>
-          <li><strong>应用锁：</strong>支持 4 位数字密码、面容 ID 及指纹解锁，可设“离开几分钟后锁定”。</li>
-          <li><strong>多端备份：</strong>支持 iCloud、WebDAV（请自行前往 <strong>坚果云</strong> 或 <strong>Infini-cloud</strong> 等服务商免费申请 WebDAV 网盘）、百度网盘以及Google drive的增量无感备份。若有新数据则约每6小时自动备份一次(💡 注：退至手机桌面即可触发静默备份，请勿直接划掉清理应用。)。随时可导出全量数据的 <code>JSON</code> 或含图片的 <code>PDF</code>和<code>ZIP</code> 备份包。</li>
-        </ul>
-      </div>
+       <div class="help-section" id="sec-backup">
+            <div class="section-header">
+              <div class="icon-wrap bg-indigo"><UploadCloud :size="18" /></div>
+              <h3>数据备份与恢复</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>五大网盘随心选：</strong>支持 iCloud、WebDAV（请自行前往 <strong>坚果云</strong> 或 <strong>Infini-cloud</strong> 等服务商免费申请 WebDAV 网盘，<span
+      @click="jumpToWebDavTutorial"
+      style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;"
+    >点击查看详细配置指南👆</span>）、百度网盘、Google Drive 以及 OneDrive，全部支持增量无感备份，想用哪个网盘、用几个，完全由你决定。</li>
+              <li><strong>日常自动备份：</strong>只要有新数据，每个已连接的网盘都会按各自的节奏自动静默备份（打开 App、回到前台或退到后台都可能触发）。💡 注：App 保持在前台使用时才会静默备份，头像旁云朵图标闪烁代表正在备份中，此时<strong></strong>请勿划掉清理应用</strong>。</li>
+              <li><strong>手动导出与恢复：</strong>在“设置 - 备份与恢复”中，随时可以导出全量数据的 <code>JSON</code> 文件，或含图片的 <code>PDF</code>、<code>ZIP</code> 备份包保存到本地；换机或重装后，也可以直接选择某个已连接的网盘一键恢复，或者导入本地的备份文件。</li>
+              <li><strong>多端实时同步——不止是备份，更是"随身账本"：</strong>如果你有不止一台设备（比如手机 + 平板，或者正在新旧手机之间过渡），打开这个开关就能让编辑在设备之间近乎实时地互相追平，而不用等日常备份的自然节奏慢慢同步过去。</li>
+              <li><strong>新设备自动识别已有主盘：</strong>如果你的其它设备已经设置过主盘，在新设备上打开这个开关时会自动检测到，并提示你是否保持一致——不用每台设备都重新决定一遍。</li>
+              <li><strong>💡 新用法：和家人共用一本账：</strong>如果你和家人（比如夫妻）愿意共用同一份账本视角，可以在两台手机上登录<strong>同一个网盘账号</strong>（比如同一个百度网盘或 Google Drive 账号），把这个网盘设成同一个主盘，再各自打开“多端实时同步”——这样无论谁在自己手机上记了一笔账、写了一篇日记，很快就能在对方手机上看到，几乎就像两人在共用同一本账。</li>
+              <li><strong>进阶选项——多网盘实时镜像 / 立即强推全部网盘：</strong>如果你希望每个已连接的网盘都尽量保持实时更新（而不只是主盘优先），可以在“多端实时同步”的高级选项里打开“多网盘实时镜像”；也可以随时点一下“立即强推全部网盘”，手动触发一次全量同步。这两个属于进阶选项，会明显增加请求频率，日常使用一般用不到，默认关闭即可。</li>
+            </ul>
+          </div>
+
+          <div class="help-section" id="sec-security">
+            <div class="section-header">
+              <div class="icon-wrap bg-green"><ShieldCheck :size="18" /></div>
+              <h3>数据安全与隐私</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>离线优先：</strong>无网环境（如飞机、高铁）依然极速记账和写日记，所有功能不依赖网络才能使用。</li>
+              <li><strong>本地为先，数据自主：</strong>你的账单和日记默认只加密保存在手机本地，官方不运营任何读取你数据的中心化服务器；云端备份用的是你自己名下的网盘账号，数据始终掌握在你自己手里。</li>
+              <li><strong>授权与传输安全：</strong>连接 iCloud、WebDAV、百度网盘、Google Drive、OneDrive 时，均通过各家官方标准的加密协议直连你自己的账号，登录凭证只保存在本机，不会经过任何第三方服务器中转。</li>
+              <li><strong>应用锁：</strong>支持 4 位数字密码、面容 ID 及指纹解锁，可设“离开几分钟后锁定”，防止旁人随意翻看。</li>
+              <li><strong>权限按需申请：</strong>定位、相册、通知等系统权限均在你主动使用相关功能（如日记环境感知、备忘提醒）时才会用到，不会在后台无授权采集。</li>
+            </ul>
+          </div>
       <div class="help-section" id="sec-faq">
         <div class="section-header">
           <div class="icon-wrap" style="background: #475569;">❓</div>
