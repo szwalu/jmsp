@@ -1,433 +1,807 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-  <title>使用指南 - 鸡毛蒜皮</title>
-  <style>
-    :root {
-      --theme-primary: #6366f1;
-      --bg-color: #f8fafc;
-      --content-bg: #f8fafc;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --header-border: rgba(0,0,0,0.04);
-      --card-bg: #ffffff;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-color: #0f172a;
-        --content-bg: #111827;
-        --text-main: #f8fafc;
-        --text-muted: #94a3b8;
-        --header-border: rgba(255,255,255,0.06);
-        --card-bg: #1e293b;
-      }
-    }
-    body, html {
-      margin: 0; padding: 0;
-      background-color: var(--bg-color);
-      font-family: -apple-system, system-ui, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      overflow: hidden;
-    }
-    .sub-page-content {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100vw;
-      background-color: var(--content-bg);
-      box-sizing: border-box;
-      padding-top: env(safe-area-inset-top);
-    }
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 16px 12px;
-      background-color: var(--content-bg);
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      border-bottom: 1px solid var(--header-border);
-    }
-    .back-btn {
-      display: flex; align-items: center; justify-content: center;
-      background: transparent; border: none;
-      color: var(--theme-primary); cursor: pointer;
-      padding: 8px; margin: -8px;
-    }
-    .title {
-      font-size: 17px; font-weight: 600; color: var(--text-main);
-    }
-    .scroll-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px 16px calc(40px + env(safe-area-inset-bottom)) 16px;
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-    }
-    .toc-btn {
-      display: flex; align-items: center; justify-content: center;
-      background: transparent; border: none;
-      color: var(--text-muted); cursor: pointer;
-      padding: 8px; margin: -8px; border-radius: 50%;
-      transition: all 0.2s ease;
-    }
-    .toc-btn.toc-active { color: var(--theme-primary); background: rgba(99, 102, 241, 0.1); }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>使用指南 - 鸡毛蒜皮</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
 
-    .toc-dropdown-overlay {
-      position: absolute; top: calc(56px + env(safe-area-inset-top));
-      left: 0; right: 0; bottom: 0; z-index: 20;
-      display: none;
-    }
-    .toc-dropdown-overlay.show { display: block; }
+  .page-content {
+    position: relative;
+    min-height: 100dvh;
+    width: 100%;
+    overflow-x: hidden;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top);
+  }
 
-    .toc-dropdown {
-      position: absolute; top: 8px; right: 16px;
-      background: var(--card-bg);
-      border-radius: 16px;
-      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15);
-      padding: 8px 0; width: 160px;
-      border: 1px solid var(--header-border);
-      animation: dropDown 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-      transform-origin: top right;
-   /* 新增以下三行以支持滚动 */
-  max-height: calc(100vh - 120px); /* 限制最大高度，防止超出屏幕底部 */
-  overflow-y: auto;                /* 内容溢出时允许垂直滚动 */
-  -webkit-overflow-scrolling: touch; /* 保证在 iOS 等触屏设备上的平滑滚动 */
-}
+  /* ==================== 头部 ==================== */
+  .header-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background-color: #f8fafc;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
 
-    .toc-item {
-      padding: 12px 18px; font-size: 14px; color: var(--text-muted); cursor: pointer; position: relative;
-    }
-    .toc-item.active {
-      color: var(--theme-primary); font-weight: 600; background: rgba(99, 102, 241, 0.06);
-    }
-    .toc-item.active::before {
-      content: ''; position: absolute; left: 0; top: 10%; bottom: 10%;
-      width: 3px; background-color: var(--theme-primary); border-radius: 0 4px 4px 0;
-    }
-    .help-hero { text-align: center; margin-bottom: 20px; padding: 24px 0 4px; }
-    .hero-icon { margin-bottom: 16px; display: flex; align-items: center; justify-content: center; }
-    .hero-title { font-size: 1.3em; font-weight: 700; color: var(--text-main); margin: 0 0 12px 0; }
-    .handwriting-brand {
-      font-family: 'Wawati SC', 'STKaiti', 'KaiTi', 'Songti SC', 'STSong', 'SimSun', serif;
-      color: var(--theme-primary); font-style: italic; display: inline; font-weight: 600; margin: 0 4px;
-    }
-    .hero-desc { font-size: 0.85em; color: var(--text-muted); line-height: 1.6; margin: 0; text-align: left; }
-    .top-action-group {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; padding: 0 4px;
-    }
-    .top-action-card {
-      display: flex; align-items: center; justify-content: center;
-      padding: 10px 2px; border-radius: 10px; border: none; cursor: pointer; transition: transform 0.2s;
-    }
-    .top-action-card:active { transform: scale(0.96); }
-    .card-icon { font-size: 15px; margin-right: 4px; line-height: 1; }
-    .card-text { font-size: 13px; font-weight: 600; white-space: nowrap; }
-    .website-card { background: rgba(14, 165, 233, 0.08); color: #0284c7; }
-    .share-card { background: rgba(16, 185, 129, 0.08); color: #10b981; }
-    .secondary-card { background: rgba(99, 102, 241, 0.08); color: var(--theme-primary); }
-    @media (prefers-color-scheme: dark) {
-      .website-card { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
-      .share-card { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-      .secondary-card { background: rgba(129, 140, 248, 0.15) !important; color: #818cf8 !important; }
-      .secondary-card .card-text, .secondary-card .card-icon { color: #818cf8 !important; }
-      .handwriting-brand { color: #818cf8; text-shadow: 0 0 8px rgba(129, 140, 248, 0.3); }
-    }
-    .help-section {
-      scroll-margin-top: 76px;
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 16px;
-      border: 1px solid var(--header-border);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-    }
-    .section-header { display: flex; align-items: center; margin-bottom: 16px; }
-    .icon-wrap {
-      width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: #ffffff; font-size: 16px;
+  .header-bar { display: flex; align-items: center; padding: 14px 16px 6px; gap: 8px; }
+
+  .back-btn {
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none; color: var(--theme-primary, #6366f1);
+    cursor: pointer; padding: 8px; margin: -8px; flex-shrink: 0;
+  }
+  .back-btn svg { stroke: currentColor !important; }
+
+  .header-spacer { width: 24px; flex-shrink: 0; }
+
+  .title-group { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }
+  .title { font-size: 17px; font-weight: 600; color: #1e293b; }
+  .page-indicator { font-size: 11px; color: #94a3b8; margin-top: 1px; font-variant-numeric: tabular-nums; }
+
+  .toolbar-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 12px 10px; }
+
+  .toolbar-chip {
+    display: flex; align-items: center; gap: 6px;
+    border: none; background: rgba(100, 116, 139, 0.1); color: #64748b;
+    font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 999px;
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .toolbar-chip.chip-active { background: rgba(99, 102, 241, 0.14); color: var(--theme-primary, #6366f1); }
+  .toolbar-chip:active { transform: scale(0.96); }
+
+  /* ==================== 分页容器 ==================== */
+  .pager-viewport { flex: 1; position: relative; overflow: hidden; }
+  .pager-track { display: flex; height: 100%; width: 100%; transform: translateX(0); }
+  .pager-track.no-anim { transition: none !important; }
+
+  .page-slide { flex: 0 0 100%; width: 100%; min-width: 0; }
+
+  .page-scroll {
+    height: calc(100dvh - 92px);
+    overflow-y: auto;
+    padding: 20px 16px calc(40px + env(safe-area-inset-bottom)) 16px;
+    -webkit-overflow-scrolling: touch;
+    outline: none;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+  }
+
+  /* ==================== 目录下拉 ==================== */
+  .toc-backdrop { position: fixed; inset: 0; z-index: 20; background: transparent; }
+
+  .toc-dropdown {
+    position: absolute; top: 100%; left: 12px; margin-top: 8px; background: #ffffff; border-radius: 16px;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    padding: 8px 0; width: 200px; max-height: 60vh; overflow-y: auto; border: 1px solid rgba(0,0,0,0.04);
+    z-index: 31;
+  }
+
+  .toc-item {
+    padding: 12px 18px; font-size: 14px; color: #475569; cursor: pointer; transition: all 0.2s ease; position: relative;
+    display: flex; align-items: center;
+  }
+  .toc-idx {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%; margin-right: 8px; flex-shrink: 0;
+    background: rgba(100,116,139,.12); color: #64748b; font-size: 11px;
+  }
+  .toc-item.active { color: var(--theme-primary, #6366f1); font-weight: 600; background: rgba(99, 102, 241, 0.06); }
+  .toc-item.active .toc-idx { background: rgba(99,102,241,.15); color: var(--theme-primary, #6366f1); }
+  .toc-item.active::before {
+    content: ''; position: absolute; left: 0; top: 10%; bottom: 10%; width: 3px;
+    background-color: var(--theme-primary, #6366f1); border-top-right-radius: 4px; border-bottom-right-radius: 4px;
+  }
+  .toc-item:active { background: rgba(0,0,0,0.03); }
+
+  /* ==================== 搜索 ==================== */
+  .search-bar-inline {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    background: rgba(100, 116, 139, 0.1); border-radius: 10px; padding: 9px 12px; min-width: 0;
+  }
+  .search-bar-inline .search-icon { color: #94a3b8; flex-shrink: 0; }
+
+  .search-input {
+    flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+    font-size: 16px; color: #1e293b;
+    font-family: -apple-system, system-ui, sans-serif;
+  }
+  .search-input::placeholder { color: #94a3b8; }
+
+  .search-clear {
+    border: none; background: #cbd5e1; color: #ffffff; width: 20px; height: 20px; border-radius: 50%;
+    font-size: 14px; line-height: 1; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+
+  .search-cancel-btn {
+    border: none; background: transparent; color: var(--theme-primary, #6366f1);
+    font-size: 15px; font-weight: 500; padding: 8px 2px 8px 8px; margin: -8px 0;
+    cursor: pointer; flex-shrink: 0; white-space: nowrap;
+  }
+
+  .search-results-view {
+    height: calc(100dvh - 62px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 10px 16px calc(24px + env(safe-area-inset-bottom)) 16px;
+    box-sizing: border-box;
+  }
+
+  .search-hit { padding: 14px 12px; border-radius: 14px; cursor: pointer; transition: background 0.2s ease; margin-bottom: 2px; }
+  .search-hit:active { background: rgba(99, 102, 241, 0.08); }
+  .hit-title { font-size: 14px; color: var(--theme-primary, #6366f1); font-weight: 600; margin-bottom: 4px; }
+  .hit-snippet { font-size: 15px; color: #475569; line-height: 1.6; }
+
+  .search-hint, .search-empty { padding: 44px 24px; text-align: center; color: #94a3b8; font-size: 14px; line-height: 1.7; }
+
+  .hit-snippet mark { background: rgba(99, 102, 241, 0.22); color: inherit; border-radius: 3px; padding: 0 2px; }
+
+  /* ==================== 章节正文 ==================== */
+  .help-section { background: #ffffff; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+
+  .section-header { display: flex; align-items: center; margin-bottom: 16px; }
+  .icon-wrap { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: #ffffff; flex-shrink: 0; }
+
+  .bg-blue { background: #3b82f6; }
+  .bg-orange { background: #f97316; }
+  .bg-pink { background: #ec4899; }
+  .bg-indigo { background: #6366f1; }
+  .bg-purple { background: #a855f7; }
+  .bg-green { background: #10b981; }
+  .bg-teal { background: #14b8a6; }
+  .bg-amber { background: #f59e0b; }
+
+  .section-header h3 { margin: 0; font-size: 15px; font-weight: 600; color: #1e293b; }
+  .help-list { margin: 0; padding: 0 0 0 18px; color: #475569; font-size: 14px; line-height: 1.7; }
+  .help-list li { margin-bottom: 12px; }
+  .help-list li:last-child { margin-bottom: 0; }
+  .help-list li.keep-gap:last-child { margin-bottom: 12px; }
+  .help-list strong { color: #334155; font-weight: 600; }
+
+  .help-screenshot {
+    display: block; width: 100%; border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06); border: 1px solid rgba(0, 0, 0, 0.03); margin: 0 0 16px 0;
+  }
+
+  .shortcut-link {
+    color: var(--theme-primary, #6366f1); text-decoration: none; font-weight: 600;
+    padding: 2px 4px; background: rgba(99, 102, 241, 0.08); border-radius: 6px; transition: all 0.2s;
+    display: inline-block; cursor: pointer;
+    -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .shortcut-link:active { background: rgba(99, 102, 241, 0.15); transform: scale(0.95); }
+
+  .video-tip-line { display: flex; align-items: center; gap: 6px; margin: 4px 0 12px 0; color: #475569; font-size: 14px; }
+  .video-icon-inline {
+    width: 14px; height: 14px; flex-shrink: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'/%3E%3Crect x='2' y='6' width='14' height='12' rx='2'/%3E%3C/svg%3E");
+    background-size: contain; background-repeat: no-repeat;
+  }
+
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: monospace; color: #3b82f6; }
+
+  .faq-container details { margin: 10px 0; padding: 12px 14px; border-radius: 12px; background: rgba(99,102,241,.06); cursor: pointer; transition: background 0.2s ease; }
+  .faq-container details:hover { background: rgba(99,102,241,.1); }
+  .faq-container summary { font-weight: 600; font-size: 14px; color: #334155; outline: none; list-style-position: inside; }
+  .faq-container p { margin: 10px 0 0 0; font-size: 14px; color: #64748b; line-height: 1.6; }
+
+  /* ==================== 章节末尾导航 ==================== */
+  .chapter-nav-footer { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; margin-top: 4px; }
+  .nav-btn {
+    flex: 1; display: flex; align-items: center; gap: 8px; padding: 14px 14px;
+    background: #ffffff; border-radius: 14px; cursor: pointer; transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02); color: var(--theme-primary, #6366f1); min-width: 0;
+  }
+  .nav-btn:active { background: rgba(99, 102, 241, 0.08); transform: scale(0.98); }
+  .nav-next { justify-content: flex-end; }
+  .nav-text { display: flex; flex-direction: column; min-width: 0; }
+  .nav-text-right { align-items: flex-end; }
+  .nav-label { font-size: 11px; color: #94a3b8; }
+  .nav-name { font-size: 13px; font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .nav-disabled { flex: 1; display: flex; align-items: center; justify-content: center; color: #cbd5e1; font-size: 13px; background: transparent; padding: 14px; }
+
+  @media (prefers-color-scheme: dark) {
+    html, body { background-color: #111827; }
+    .page-content { background-color: #111827; }
+    .header-wrap { background-color: #111827; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .title { color: #f8fafc; }
+    .page-indicator { color: #64748b; }
+    .toolbar-chip { background: rgba(148, 163, 184, 0.12); color: #94a3b8; }
+    .toolbar-chip.chip-active { background: rgba(129, 140, 248, 0.2); color: #818cf8; }
+    .help-section { background: #1e293b; box-shadow: none; border: 1px solid rgba(255,255,255,0.05); }
+    .section-header h3 { color: #f8fafc; }
+    .help-list { color: #cbd5e1; }
+    .help-list strong { color: #f1f5f9; }
+    .help-screenshot { border-color: rgba(255,255,255,0.08); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    code { background: #334155; color: #60a5fa; }
+    .faq-container details { background: rgba(165,180,252,.1); }
+    .faq-container details:hover { background: rgba(165,180,252,.15); }
+    .faq-container summary { color: #f1f5f9; }
+    .faq-container p { color: #cbd5e1; }
+
+    .shortcut-link { color: #818cf8; background: rgba(129, 140, 248, 0.15); }
+    .video-tip-line { color: #cbd5e1; }
+    .video-icon-inline {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'/%3E%3Crect x='2' y='6' width='14' height='12' rx='2'/%3E%3C/svg%3E");
     }
 
-    .bg-blue { background: #3b82f6; }
-    .bg-orange { background: #f97316; }
-    .bg-pink { background: #ec4899; }
-    .bg-indigo { background: #6366f1; }
-    .bg-teal { background: #14b8a6; }
-    .bg-amber { background: #f59e0b; }
-    .bg-purple { background: #a855f7; }
-    .bg-green { background: #10b981; }
-    .section-header h3 { margin: 0; font-size: 0.95em; font-weight: 600; color: var(--text-main); }
-    .help-list { margin: 0; padding: 0 0 0 18px; color: var(--text-muted); font-size: 0.85em; line-height: 1.7; }
-    .help-list li { margin-bottom: 12px; }
-    .help-list strong { color: var(--text-main); font-weight: 600; }
-    code { background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px; font-size: 0.75em; font-family: monospace; color: #3b82f6; }
-    @media (prefers-color-scheme: dark) { code { background: #334155; color: #60a5fa; } }
-    .faq-container details { margin: 10px 0; padding: 12px 14px; border-radius: 12px; background: rgba(99,102,241,.06); cursor: pointer; transition: background 0.2s ease; }
-    .faq-container details:hover { background: rgba(99,102,241,.1); }
-    .faq-container summary { font-weight: 600; font-size: 0.85em; color: var(--text-main); outline: none; }
-    .faq-container p { margin: 10px 0 0 0; font-size: 0.85em; color: var(--text-muted); line-height: 1.6; }
-    @media (prefers-color-scheme: dark) {
-      .faq-container details { background: rgba(165,180,252,.1); }
-      .faq-container details:hover { background: rgba(165,180,252,.15); }
-    }
-    @keyframes dropDown { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  </style>
+    .toc-dropdown { background: #1e293b; border-color: rgba(255,255,255,0.06); box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6); }
+    .toc-item { color: #cbd5e1; }
+    .toc-item.active { color: #818cf8; background: rgba(129, 140, 248, 0.12); }
+    .toc-idx { background: rgba(148,163,184,.15); color: #94a3b8; }
+    .toc-item.active .toc-idx { background: rgba(129,140,248,.25); color: #818cf8; }
+    .toc-item.active::before { background-color: #818cf8; }
+    .toc-item:active { background: rgba(255,255,255,0.05); }
+
+    .search-bar-inline { background: rgba(148, 163, 184, 0.15); }
+    .search-input { color: #f1f5f9; }
+    .search-input::placeholder { color: #64748b; }
+    .search-clear { background: #334155; color: #cbd5e1; }
+    .search-cancel-btn { color: #818cf8; }
+    .search-hint, .search-empty { color: #64748b; }
+    .search-hit:active { background: rgba(129, 140, 248, 0.12); }
+    .hit-title { color: #818cf8; }
+    .hit-snippet { color: #cbd5e1; }
+    .hit-snippet mark { background: rgba(129, 140, 248, 0.35); }
+
+    .nav-btn { background: #1e293b; color: #818cf8; box-shadow: none; border: 1px solid rgba(255,255,255,0.05); }
+    .nav-btn:active { background: rgba(129, 140, 248, 0.12); }
+    .nav-name { color: #f1f5f9; }
+    .nav-label { color: #64748b; }
+    .nav-disabled { color: #475569; }
+  }
+</style>
 </head>
 <body>
-  <div class="sub-page-content">
+<div class="page-content">
 
-    <div class="header-bar">
-      <button class="back-btn" onclick="window.location.href='./index.html'">
+  <div class="header-wrap">
+    <div class="header-bar" id="headerBarNormal">
+      <button class="back-btn" onclick="goBack()" aria-label="返回">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       </button>
-      <div class="title">使用指南</div>
+      <div class="title-group">
+        <div class="title">使用指南</div>
+        <div class="page-indicator" id="pageIndicator">1 / 14</div>
+      </div>
+      <div class="header-spacer" aria-hidden="true"></div>
+    </div>
 
-      <button class="toc-btn" id="tocToggleBtn" onclick="toggleToc()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line>
-          <line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line>
+    <div class="header-bar" id="headerBarSearch" style="display:none;">
+      <div class="search-bar-inline">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
+        <input id="searchInput" class="search-input" type="text" inputmode="search" enterkeyhint="search" placeholder="搜索使用指南的全部内容…" />
+        <button id="searchClearBtn" class="search-clear" style="display:none;" onclick="clearSearch()">×</button>
+      </div>
+      <button class="search-cancel-btn" onclick="closeSearch()">取消</button>
+    </div>
+
+    <div class="toolbar-row" id="toolbarRow">
+      <button class="toolbar-chip" id="tocChip" onclick="toggleToc()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="14" y2="18"></line>
         </svg>
+        <span>目录</span>
+      </button>
+      <button class="toolbar-chip" onclick="openSearch()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
+        <span>搜索</span>
       </button>
     </div>
-    <div class="toc-dropdown-overlay" id="tocOverlay" onclick="toggleToc()">
-      <div class="toc-dropdown" onclick="event.stopPropagation()">
-        <div class="toc-item" onclick="scrollToSec('sec-ai', this)">极速记账魔法</div>
-        <div class="toc-item" onclick="scrollToSec('sec-manual', this)">精打细算记账</div>
-        <div class="toc-item" onclick="scrollToSec('sec-diary', this)">时光日记本</div>
-        <div class="toc-item" onclick="scrollToSec('sec-stats', this)">全能首页看板</div>
-        <div class="toc-item" onclick="scrollToSec('sec-savings', this)">存钱计划与目标</div>
-        <div class="toc-item" onclick="scrollToSec('sec-budget', this)">精细化预算管理</div>
-        <div class="toc-item" onclick="scrollToSec('sec-recurring', this)">周期与分期管理</div>
-        <div class="toc-item" onclick="scrollToSec('sec-reimburse', this)">报销追踪管理</div>
-        <div class="toc-item" onclick="scrollToSec('sec-reminder', this)">贴心备忘提醒</div>
-        <div class="toc-item" onclick="scrollToSec('sec-assets', this)">资产与物品</div>
-        <div class="toc-item" onclick="scrollToSec('sec-backup', this)">数据备份与恢复</div>
-        <div class="toc-item" onclick="scrollToSec('sec-security', this)">安全与隐私</div>
-        <div class="toc-item" onclick="scrollToSec('sec-advanced', this)">进阶玩法</div>
-        <div class="toc-item" onclick="scrollToSec('sec-faq', this)">常见问题 (FAQ)</div>
-      </div>
+
+    <div class="toc-dropdown" id="tocDropdown" style="display:none;">
+          <div class="toc-item active" data-idx="0" onclick="goToChapter(0)"><span class="toc-idx">1</span>极速记账魔法</div>
+          <div class="toc-item" data-idx="1" onclick="goToChapter(1)"><span class="toc-idx">2</span>精打细算记账</div>
+          <div class="toc-item" data-idx="2" onclick="goToChapter(2)"><span class="toc-idx">3</span>时光日记本</div>
+          <div class="toc-item" data-idx="3" onclick="goToChapter(3)"><span class="toc-idx">4</span>全能首页看板</div>
+          <div class="toc-item" data-idx="4" onclick="goToChapter(4)"><span class="toc-idx">5</span>存钱计划与目标</div>
+          <div class="toc-item" data-idx="5" onclick="goToChapter(5)"><span class="toc-idx">6</span>精细化预算管理</div>
+          <div class="toc-item" data-idx="6" onclick="goToChapter(6)"><span class="toc-idx">7</span>周期与分期管理</div>
+          <div class="toc-item" data-idx="7" onclick="goToChapter(7)"><span class="toc-idx">8</span>报销追踪管理</div>
+          <div class="toc-item" data-idx="8" onclick="goToChapter(8)"><span class="toc-idx">9</span>贴心备忘提醒</div>
+          <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>资产与物品</div>
+          <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>数据备份与恢复</div>
+          <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>安全与隐私</div>
+          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>进阶玩法</div>
+          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>常见问题 (FAQ)</div>
     </div>
-    <div class="scroll-container" id="scrollArea">
+  </div>
 
-      <div class="help-hero">
-        <div class="hero-icon">
-          <img src="./images/主题.png" alt="鸡毛蒜皮 Logo" style="height: 72px; width: 72px; border-radius: 16px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.08);" onerror="this.src='https://api.iconify.design/fluent-emoji-flat:feather.svg'" />
-        </div>
-        <h2 class="hero-title">欢迎来到“<span class="handwriting-brand">鸡毛蒜皮</span>”</h2>
-        <p class="hero-desc">
-          在这里，<strong>“鸡毛”</strong>是轻盈的羽毛笔，陪你记录生活点滴与情绪；<strong>“蒜皮”</strong>是精打细算的算盘，帮你理清每一笔财务账单。无论是柴米油盐，还是风花雪月，这里都能完美装下。
-        </p>
-      </div>
+  <div class="toc-backdrop" id="tocBackdrop" style="display:none;" onclick="closeToc()"></div>
 
-      <div class="top-action-group">
-        <button class="top-action-card website-card" onclick="window.location.href='./index.html'">
-          <span class="card-icon">🌐</span>
-          <span class="card-text">逛官网</span>
-        </button>
-        <button class="top-action-card share-card" onclick="shareApp()">
-          <span class="card-icon">🚀</span>
-          <span class="card-text">分享APP</span>
-        </button>
-        <button class="top-action-card secondary-card" onclick="rateApp()">
-          <span class="card-icon">⭐</span>
-          <span class="card-text">给好评</span>
-        </button>
-      </div>
-      <div class="help-section" id="sec-ai">
-        <div class="section-header">
-          <div class="icon-wrap bg-blue">⚡️</div>
-          <h3>极速记账与 AI 魔法</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>Siri 与一句话记账：</strong>支持免触控！对 Siri 说“用鸡毛蒜皮记账”即可语音落库。主页输入框（或语音）支持智能识别：
-            <br>• 基础：输入“打车 25”直接保存。
-            <br>• 指定账户：输入“打车 25 支付宝”自动分类。
-            <br>• 指定日期：输入“昨天打车 25”自动生成昨天的账单并滚动到昨天的日期位置。并支持具体日期如“2026年8月1日打车 25”。
-            <br>• 转账：输入“微信转账支付宝 100”自动生成转账。
-          </li>
-          <li><strong>AI 大模型解析：</strong>在设置中填入 API Key 激活。支持极度口语化长句，如“去超市买 50 块排骨，给大宝充 100 话费”，AI 会像管家一样精准拆分多笔账单！</li>
-          <li><strong>专属关键词小抄：</strong>给二级分类添加关键词（如给“餐饮”加“麦当劳”）。输入包含关键词的句子，系统将强行精准分类，绝不误判。</li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-manual">
-        <div class="section-header">
-          <div class="icon-wrap bg-orange">🧮</div>
-          <h3>精打细算的手工记账</h3>
-        </div>
-        <ul class="help-list">
-          <li>
-            <strong>多账本自由切换：</strong>支持创建“家庭”、“个人”、“公司”等多个独立账本，点击顶部账本名称即可极速切换，不同账本的账目与统计完全独立互不干扰，让公私账目、多重身份的财务空间都能井井有条。
-          </li>
-          <li>
-            <strong>自动截屏与极速记账：</strong>（iOS端专属）我们为你准备了强大的 iOS 专属极速能力！前往“设置 - 极速记账指南”，即可快速配置 Siri 语音指令与双击背面截屏记账。支持微信支付与支付宝账单自动识别金额和分类。
-          </li>
-          <li><strong>手工记账与计算器：</strong>点击底部的
-            <span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="8" y2="10"></line><line x1="12" y1="10" x2="12" y2="10"></line><line x1="16" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="16" y1="14" x2="16" y2="14"></line></svg>
-            </span>进入手工记账，<strong>请先在“日期时间”按钮左边确认或切换资金来源的账户</strong>。金额键盘自带 <code>+ - × ÷</code>，多件物品直接算，点击 <code>=</code> 自动出总价。
-          </li>
-          <li><strong>智能高频记账胶囊：</strong>当触碰“写备注...”时，下方会根据你<strong>近三个月</strong>的记账记录，自动洗牌、合流并吐出一排快捷模板。轻轻一戳模板，不仅自动帮你代入备注，还会把当时的<strong>金额、分类和扣款账户一并全自动填满</strong>！免去你每月度固定账单重复打字的繁琐。</li>
-          <li><strong>转账与不计入收支：</strong>左上角切换“转账”可生成不污染总统计的流水。特殊资金可记入专属的“不计入收支”账户。</li>
-          <li><strong>账单退款：</strong>网购退货、押金退还等场景，选择账单详情里的“退款”即可，系统会自动冲抵对应分类的支出，让统计数据真实反映净支出，不再被退款污染消费报表。</li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-diary">
-        <div class="section-header">
-          <div class="icon-wrap bg-pink">📖</div>
-          <h3>时光日记本与回忆</h3>
-        </div>
-        <ul class="help-list">
-          <li>
-            <strong>Siri 语音闪念胶囊：</strong>对着手机说“Siri，在鸡毛蒜皮记录”，即可免触控写日记！<br>
-            💡 <strong>避坑指南：</strong>Siri 听写时只要停顿超过 0.8 秒就会自动挂断，所以它最适合记录走在路上、开车时<strong>转瞬即逝的灵感或短情绪</strong>。
-          </li>
-          <li>
-            <strong>长篇语音与沉浸模式：</strong>如果你想边思考边长篇大论，请点击底部
-            <span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 20h9"></path>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-              </svg>
-            </span>
-            （或打字超 40 字）进入全屏日记。此时点击<strong>输入框右下角的
-            <span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px; margin: 0 2px;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                <line x1="12" y1="19" x2="12" y2="22"></line>
-              </svg>
-            </span>
-            麦克风图标</strong>进行听写，说完还能一键 AI 轻润色！
-          </li>
-          <li><strong>图文与环境感知：</strong>支持最多 20 张高清图与 10 个专属标签，更能为你盖上专属的心情印章。系统会在后台默默感知天气与定位，将彼时的环境与情绪，一并封存为珍贵的时光印记。</li>
-          <li><strong>那年今日：</strong>当首页出现回忆小横幅，或日历图标闪烁 ✨ 时，说明今天有回忆！直接点击小横幅（或进入日历点击<code>那年今日</code>），即可像翻书一样左右滑动重温往日时光，还可以补记五年内今天的日记。<code>那年今日</code>按钮右上角红色数字是历史日记条数，右下角小相机角标代表这天有历年照片。如果相册里正好有历年今天拍的照片，页面顶部会自动出现一条照片提示，点开就是按年份分类的完整相册，选中照片还能直接生成那一年这天的日记。</li>
-          <li><strong>摇一摇随机漫游：</strong>在日历中点击<code>随机漫游</code>，即可进入无尽的时光探索模式。此时只需<strong>用力摇晃手机</strong>，伴随着清脆的震动反馈，系统会瞬间为你重新洗牌，随机抽取全新的过往时光，带来盲盒般的惊喜！</li>
-          <li><strong>足迹地图：</strong>在日历页面点击 <code>足迹地图</code>，即可在一张专属地图上重走你的记忆路线。跳动的数字光圈代表着该地留下的日记数量，点击任意光圈将升起「此地回忆」画廊，让你沉浸式翻阅在此地发生的所有故事。</li>
-          <li><strong>💡 相册找图神技：</strong>在回顾编辑“那年今日”、随机漫游或补记旧日记时，只要点击添加图片，系统会自动将那一天的日期复制到剪贴板。<strong>在手机相册搜索框直接粘贴，即可一秒找出当天的老照片！</strong></li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-stats">
-        <div class="section-header">
-          <div class="icon-wrap bg-indigo">📊</div>
-          <h3>全能首页看板与统计</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>三模首页看板：</strong>主页顶部的浮动看板支持<strong>左右滑动</strong>，无缝切换“日记看板”、“收支看板”和“资产看板”。点击看板即可深入对应的全屏统计页面。</li>
-          <li><strong>AI 时光总结与月首提醒：</strong>应用引入了高级 Map-Reduce 自适应分流算法。<strong>每月 1 号</strong>，主页顶端会灵动唤醒精致的记忆胶囊提醒（阅后即焚）。AI 抽取你整月的悲欢离合生成治愈的『时光信件』；跨年之际更会智能提炼 12 个月的线索，为你送上宏观的『年度时光报告』！如果错过了胶囊，也可以在日记统计页的【月】/【年】视图下随时召唤或直接利用本地缓存 0 消耗免流秒速查看。</li>
-          <li><strong>时光回音（日记模式）：</strong>不再是冷冰冰的数字，专属的打卡模块为你汇总连续记录天数、累计字数与照片。当有“那年今日”的回戏时，还会触发灵动的悬浮提醒与日历星光。</li>
-          <li><strong>隐私收支（记账模式）：</strong>直观展示当月的支出、收入与结余。贴心增加了<strong>隐私小眼睛</strong>，一键隐藏敏感金额，在公共场合也能安心浏览。</li>
-          <li><strong>AI 智能消费洞察（记账模式）：</strong>在记账统计页点击“智能消费洞察”横幅，系统召唤大模型进行多维智能复盘！为您奉上包含<strong>主要特征发现、潜在财务风险提示、结构优化方案及人文关怀鼓励</strong>的专业级财务诊断报告。右上角「刷新重写」按钮支持随时以最新流水打破旧账，重塑良性消费格局。</li>
-          <li><strong>多维度透视：</strong>进入统计页后，支持按周、月、年、全部或自定义时间段查看报表，自动计算日均/月均开销，消费趋势一目了然。</li>
-          <li><strong>预算管理与超支预警：</strong>可为月度总支出或单个分类单独设置预算金额，统计页实时显示预算进度条一目了然。当消费接近或超出预算时，主页会温馨浮现预警提醒，帮你悬崖勒马、理性消费。</li>
-          <li><strong>多币种自动折算：</strong>无论是哪国货币的账户花销和资产，系统都会自动根据你设定的<strong>本位币</strong>和最新汇率进行无感折算并汇总。</li>
-          <li><strong>净资产实时追踪：</strong>在首页看板点击“资产看板”或在设置中点击“资产账户”，一眼看清你的总资产、总负债与净资产，支持长按拖拽给你的账户卡片自由排序。</li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-savings">
-        <div class="section-header">
-          <div class="icon-wrap bg-pink">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.5-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z"></path><path d="M2 9v1c0 1.1.9 2 2 2h1"></path><path d="M16 11h.01"></path></svg>
-          </div>
-          <h3>存钱计划与目标</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>四大存钱法随心选：</strong> 内置“灵活存钱（随存随取）”、“定额存钱”、“52周存钱”以及“365天存钱”四种经典模式。无论是买车大计还是旅行基金，总有一款适合你。</li>
-          <li><strong>真实转账联动，无缝记账：</strong> 打卡或存入金额时，系统会在后台全自动生成一笔从“扣款账户”到“存入账户”的真实内部转账流水。如果两个账户币种不同，还会智能按当前汇率折算，保证资产分毫不差。</li>
-          <li><strong>自动打卡与进度跟踪：</strong> 列表进度条实时呈现“已存金额”与“剩余未存”。完成一期打卡，不仅会有满屏撒花动画，还会自动推算下一期日期。</li>
-          <li><strong>灵活存取与归档：</strong> 灵活模式下支持随时“存入”与“取钱”（资金原路退回）。完成目标后的计划会自动变身为已达成状态；对于暂时搁置的计划，支持一键“归档”隐藏。</li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-budget">
-        <div class="section-header">
-          <div class="icon-wrap bg-green">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
-          </div>
-          <h3>精细化预算管理</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>三维周期看板：</strong> 支持按“周”、“月”、“年”独立查看预算和结余。主进度条自带颜色预警：花销达到 80% 会变为橙色，超出 100% 会变为醒目的红色。</li>
-          <li><strong>主次分级预算：</strong> 不仅可以设置总额，还能点击列表中的各主分类或二级子分类（如单独为“餐饮-咖啡”设置上限），精确掌控每一笔细分开销。</li>
-          <li><strong>退款智能抵扣与过滤：</strong> 预算引擎极其严谨——“内部转账”、“余额调整”以及“不计入预算”的账单会自动被剔除。如果某笔消费发生了退款，系统会智能按净支出计算，把退回来的钱实时补充回可用预算里。</li>
-          <li><strong>一键设为默认：</strong> 每月预算金额大同小异？在月度预算看板点击顶部的“设为默认”，未来的每个月都会自动套用这套模板，省去重复填写的烦恼。</li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-recurring">
-        <div class="section-header">
-          <div class="icon-wrap bg-indigo">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l-5.41 5.41"></path></svg>
-          </div>
-          <h3>周期记账与分期管理</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>双管齐下的自动化账单：</strong> 面板顶部支持在“周期记账”与“分期管理”两大模块间无缝切换，集中打理你的自动化财务流水。</li>
-          <li><strong>周期记账（自动扣费）：</strong> 面对房租、水电、软件订阅等固定开销，只需设置好频率（每天/周/月/季/年）与结束条件（指定日期或次数）。时间一到，系统自动为你默默记上一笔账。</li>
-          <li><strong>分期管理（信用卡/花呗）：</strong> 买大件用了分期？输入总金额与期数（如 6、12 期），系统会自动生成“还款计划表明细”。支持四种手续费模式（无/总手续费/每期手续费/月费率），每一期需还本金与利息一目了然。</li>
-          <li><strong>提前结清与随时暂停：</strong> 如果中途手头宽裕，支持对分期计划“提前结清”；或者随时“暂停”某项周期记账。执行这些操作后，后续将不再生成新账单，但已生成的历史账单不受任何影响，绝对安全。</li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-reimburse">
-        <div class="section-header">
-          <div class="icon-wrap bg-amber">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
-          </div>
-          <h3>报销追踪管理</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>待办与已结双看板：</strong> 记账时只要打开“是否报销”开关，这笔钱就会自动流入此处。看板清晰划分为“未报销”与“已报销”两大专区，帮你盯紧每一笔垫付的钱。</li>
-          <li><strong>支持分次与部分报销：</strong> 一笔大额差旅可以分多次报下来！系统底层使用严谨的计算模型，会自动根据该账单的“净额”扣减“已报销金额”，精确算出还剩多少没报完，防止重复计算待报销金额。</li>
-          <li><strong>万能搜索定位：</strong> 列表自带强大的搜索引擎。输入分类名称、账单备注、具体金额，甚至是你打的自定义标签（如 <code>#出差</code>），即可从海量记录中瞬间定位需要对账的那一笔。</li>
-          <li><strong>外币自动统一折算：</strong> 在月份汇总金额时，无论你垫付时用了哪国的货币，系统都会调取账单快照，将它们精准折算为统一的“本位币”呈现，直观展示月度总报销金额。</li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-reminder">
-        <div class="section-header">
-          <div class="icon-wrap bg-teal">🔔</div>
-          <h3>贴心的备忘与提醒</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>全场景的生活管家：</strong>涵盖生日、缴费、车辆保养、习惯打卡、吃药就医等十几种分类，为你打理生活中容易遗忘的琐事。完美支持<strong>公历与农历</strong>精准推算。</li>
-          <li><strong>超灵活的循环周期：</strong>除了每天、每周、每月，系统还特意为你定制了<strong>“每两个月（交水电燃气）”、“每三个月”、“每半年（洗牙/车辆保养）”</strong>等生活长线周期，一次设定，终身受用。</li>
-          <li><strong>主页胶囊与日历联动：</strong>当天到期的重要备忘，会化身为精致的蓝色胶囊，优雅地悬挂在主页顶端提醒你（点击查看后阅后即焚）。同时，所有未来的提醒都会在日历格子中亮起专属小图标。</li>
-          <li><strong>系统级强力推送：</strong>采用“极客级”的纯本地智能排期引擎。哪怕 App 被彻底退出、在无网环境下，只要时间一到，依然能通过手机系统底层准时弹出横幅通知，绝不漏发。</li>
-        </ul>
-      </div>
-      <div class="help-section" id="sec-assets">
-        <div class="section-header">
-          <div class="icon-wrap bg-amber">📦</div>
-          <h3>资产盘点与物品清单</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>物品数字化：</strong>从昂贵的数码电器，到药箱里的常备药、冰箱里的生鲜囤货，皆可手写入库。支持录入数量、购买日期与价格，全方位梳理你的实体生活资产。</li>
-          <li><strong>多维分栏高效管理：</strong>支持一键在“物品清单（全量瀑布流）”、“分类”与“空间”三个选项卡之间无缝切换。</li>
-          <li><strong>7天精准过期雷达：</strong>针对食品、保健品、化妆品等带有生命周期的物品，支持录入过期时间。当有物品在7天内即将到期或已过期时，主页顶端会灵动浮现物品到期小横幅！</li>
-          <li><strong>自定义字典扩容：</strong>在“分类”与“空间”界面的最后方，提供了专属的 <code>+</code> 虚线按钮，支持拓展全新的空间名字或特定物品分类。</li>
-        </ul>
-      </div>
-     
-       <div class="help-section" id="sec-backup">
+  <div class="search-results-view" id="searchResultsView" style="display:none;">
+    <div class="search-hint">输入关键词，可搜索指南全部 14 个章节与常见问题中的任意内容</div>
+  </div>
+
+  <div class="pager-viewport" id="pagerViewport">
+    <div class="pager-track" id="pagerTrack">
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-0" tabindex="-1">
+            <div class="help-section" id="sec-ai">
             <div class="section-header">
-              <div class="icon-wrap bg-indigo">☁️</div>
+              <div class="icon-wrap bg-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></svg></div>
+              <h3>极速记账与 AI 魔法</h3>
+            </div>
+
+            <ul class="help-list">
+              <li class="keep-gap"><strong>Siri 与一句话记账：</strong>支持免触控！对 Siri 说“用鸡毛蒜皮记账”即可语音落库。主页输入框（或语音）支持智能识别：
+  <br>• 基础：输入“打车 25”直接保存。
+  <br>• 指定账户：输入“打车 25 支付宝”自动分类。
+  <br>• 指定日期：输入“昨天打车 25”自动生成昨天的账单并滚动到昨天的日期位置。并支持具体日期如“2026年8月1日打车 25”。
+  <br>• 转账：输入“微信转账支付宝 100”自动生成转账。
+</li>
+            </ul>
+
+            <div class="video-tip-line">
+              <span class="video-icon-inline" aria-hidden="true"></span>
+              <strong>观看视频：</strong>
+              <span class="shortcut-link" role="button" tabindex="0" onclick="openVideoTutorial()">点击观看</span>
+            </div>
+
+            <ul class="help-list">
+              <li><strong>AI 大模型解析：</strong>在“我的-AI引擎”中填入 API Key 激活。支持极度口语化长句，如“去超市买 50 块排骨，给大宝充 100 话费”，AI 会像管家一样精准拆分多笔账单！</li>
+              <li><strong>专属关键词小抄：</strong>在“我的-分类管理”给二级分类添加关键词（如给“餐饮”加“麦当劳”），这样在输入框输入包含关键词的句子时，系统将给账单精准分类。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-disabled"><span>已是第一章</span></div>
+              <div class="nav-btn nav-next" onclick="goToChapter(1)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">精打细算记账</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-1" tabindex="-1">
+            <div class="help-section" id="sec-manual">
+            <div class="section-header">
+              <div class="icon-wrap bg-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="16" x2="16" y1="14" y2="18" /><path d="M16 10h.01" /><path d="M12 10h.01" /><path d="M8 10h.01" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M12 18h.01" /><path d="M8 18h.01" /></svg></div>
+              <h3>精打细算的手工记账</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>多账本自由切换：</strong>支持创建“家庭”、“个人”、“公司”等多个独立账本，在“我的”-“账本管理”选择账本名称即可极速切换，不同账本的账目与统计完全独立互不干扰，让公私账目、多重身份的财务空间都能井井有条。</li>
+              <li>
+                <strong>自动截屏与极速记账：</strong>我们为你准备了强大的 iOS 专属极速能力！前往“我的 - 极速记账指南”，即可快速配置 Siri 语音指令与双击背面截屏记账。支持微信支付与支付宝账单自动识别金额和分类。
+              </li>
+              <li><strong>手工记账与计算器：</strong>点击底部的
+<span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="8" y2="10"></line><line x1="12" y1="10" x2="12" y2="10"></line><line x1="16" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="16" y1="14" x2="16" y2="14"></line></svg>
+</span>进入手工记账，<strong>请先在“日期时间”按钮左边确认或切换资金来源的账户</strong>。金额键盘自带 <code>+ - × ÷</code>，多件物品直接算，点击 <code>=</code> 自动出总价。</li>
+<li><strong>智能高频记账胶囊：</strong>当触碰“写备注...”时，下方会根据你<strong>近三个月</strong>的记账记录，自动洗牌、合流并吐出一排快捷模板。轻轻一戳模板，不仅自动帮你代入备注，还会把当时的<strong>金额、分类和扣款账户一并全自动填满</strong>！免去你每月度固定账单重复打字的繁琐。</li>
+<li><strong>转账与不计入收支：</strong>左上角切换“转账”可生成不污染总统计的流水。特殊资金可记入专属的“不计入收支”账户。</li>
+<li><strong>账单退款：</strong>网购退货、押金退还等场景，选择账单详情里的“退款”即可，系统会自动冲抵对应分类的支出，让统计数据真实反映净支出，不再被退款污染消费报表。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(0)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">极速记账魔法</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(2)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">时光日记本</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-2" tabindex="-1">
+            <div class="help-section" id="sec-diary">
+  <div class="section-header">
+    <div class="icon-wrap bg-pink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /><path d="M8.62 9.8A2.25 2.25 0 1 1 12 6.836a2.25 2.25 0 1 1 3.38 2.966l-2.626 2.856a.998.998 0 0 1-1.507 0z" /></svg></div>
+    <h3>时光日记本与回忆</h3>
+  </div>
+  <ul class="help-list">
+    <li>
+                <strong>Siri 语音闪念胶囊：</strong>对着手机说“Siri，在鸡毛蒜皮记录”，即可免触控写日记！<br>
+                💡 <strong>避坑指南：</strong>Siri 听写时只要停顿超过 0.8 秒就会自动挂断，所以它最适合记录走在路上、开车时<strong>转瞬即逝的灵感或短情绪</strong>。
+              </li>
+              <li>
+  <strong>长篇语音与沉浸模式：</strong>如果你想边思考边长篇大论，请点击底部
+  <span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20h9"></path>
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+    </svg>
+  </span>
+  （或打字超 40 字）进入全屏日记。此时点击<strong>输入框右下角的
+  <span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px; margin: 0 2px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+      <line x1="12" y1="19" x2="12" y2="22"></line>
+    </svg>
+  </span>
+  麦克风图标</strong>进行听写，说完还能一键 AI 轻润色！
+</li>
+
+    <li><strong>图文与环境感知：</strong>支持最多 20 张高清图与 10 个专属标签，更能为你盖上专属的心情印章。系统会在后台默默感知天气与定位，将彼时的环境与情绪，一并封存为珍贵的时光印记。</li>
+    <li><strong>那年今日：</strong>当首页出现回忆小横幅，或日历图标闪烁 ✨ 时，说明今天有回忆！直接点击小横幅（或进入日历点击<code>那年今日</code>），即可像翻书一样左右滑动重温往日时光，还可以补记五年内今天的日记。<code>那年今日</code>按钮右上角红色数字是历史日记条数，右下角小相机角标代表这天有历年照片。如果相册里正好有历年今天拍的照片，页面顶部会自动出现一条照片提示，点开就是按年份分类的完整相册，选中照片还能直接生成那一年这天的日记。</li>
+    <li><strong>摇一摇随机漫游：</strong>在日历中点击<code>随机漫游</code>，即可进入无尽的时光探索模式。此时只需<strong>用力摇晃手机</strong>，伴随着清脆的震动反馈，系统会瞬间为你重新洗牌，随机抽取全新的过往时光，带来盲盒般的惊喜！</li>
+    <li><strong>足迹地图：</strong>在日历页面点击 <code>足迹地图</code>，即可在一张专属地图上重走你的记忆路线。跳动的数字光圈代表着该地留下的日记数量，点击任意光圈将升起「此地回忆」画廊，让你沉浸式翻阅在此地发生的所有故事。</li>
+    <li><strong>💡 相册找图神技：</strong>在回顾编辑“那年今日”、随机漫游或补记旧日记时，只要点击添加图片，系统会自动将那一天的日期复制到剪贴板。<strong>在手机相册搜索框直接粘贴，即可一秒找出当天的老照片！</strong></li>
+  </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(1)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">精打细算记账</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(3)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">全能首页看板</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-3" tabindex="-1">
+            <div class="help-section" id="sec-stats">
+            <div class="section-header">
+              <div class="icon-wrap bg-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z" /><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /></svg></div>
+              <h3>全能首页看板与统计</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>三模首页看板：</strong>主页顶部的浮动看板支持<strong>左右滑动</strong>，无缝切换“日记看板”、“收支看板”和“资产看板”。点击看板即可深入对应的全屏统计页面。</li>
+              <li><strong>AI 时光总结与月首提醒：</strong>应用引入了高级 Map-Reduce 自适应分流算法。<strong>每月 1 号</strong>，主页顶端会灵动唤醒精致的记忆胶囊提醒（阅后即焚）。AI 抽取你整月的悲欢离合生成治愈的『时光信件』；跨年之际更会智能提炼 12 个月的线索，为你送上宏观的『年度时光报告』！如果错过了胶囊，也可以在日记统计页的【月】/【年】视图下随时召唤或直接利用本地缓存 0 消耗免流秒速查看。</li>
+              <li><strong>时光回音（日记模式）：</strong>不再是冷冰冰的数字，专属的打卡模块为你汇总连续记录天数、累计字数与照片。当有“那年今日”的回戏时，还会触发灵动的悬浮提醒与日历星光。</li>
+              <li><strong>隐私收支（记账模式）：</strong>直观展示当月的支出、收入与结余。贴心增加了<strong>隐私小眼睛</strong>，一键隐藏敏感金额，在公共场合也能安心浏览。</li>
+              <li><strong>AI 智能消费洞察（记账模式）：</strong>在记账统计页点击“智能消费洞察”横幅，系统召唤大模型进行多维智能复盘！为您奉上包含<strong>主要特征发现、潜在财务风险提示、结构优化方案及人文关怀鼓励</strong>的专业级财务诊断报告。右上角「刷新重写」按钮支持随时以最新流水打破旧账，重塑良性消费格局。</li>
+              <li><strong>多维度透视：</strong>进入统计页后，支持按周、月、年、全部或自定义时间段查看报表，自动计算日均/月均开销，消费趋势一目了然。</li>
+              <li><strong>预算管理与超支预警：</strong>可为月度总支出或单个分类单独设置预算金额，统计页实时显示预算进度条一目了然。当消费接近或超出预算时，主页会温馨浮现预警提醒，帮你悬崖勒马、理性消费。</li>
+              <li><strong>多币种自动折算：</strong>无论是哪国货币的账户花销和资产，系统都会自动根据你设定的<strong>本位币</strong>和最新汇率进行无感折算并汇总。</li>
+              <li><strong>净资产实时追踪：</strong>在首页看板点击“资产看板”或在“我的-资产账户”，一眼看清你的总资产、总负债与净资产，支持长按拖拽给你的账户卡片自由排序。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(2)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">时光日记本</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(4)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">存钱计划与目标</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-4" tabindex="-1">
+            <div class="help-section" id="sec-savings">
+            <div class="section-header">
+              <div class="icon-wrap bg-pink">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.5-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z"></path><path d="M2 9v1c0 1.1.9 2 2 2h1"></path><path d="M16 11h.01"></path></svg>
+              </div>
+              <h3>存钱计划与目标</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>四大存钱法随心选：</strong> 内置“灵活存钱（随存随取）”、“定额存钱”、“52周存钱”以及“365天存钱”四种经典模式。无论是买车大计还是旅行基金，总有一款适合你。</li>
+              <li><strong>真实转账联动，无缝记账：</strong> 打卡或存入金额时，系统会在后台全自动生成一笔从“扣款账户”到“存入账户”的真实内部转账流水。如果两个账户币种不同，还会智能按当前汇率折算，保证资产分毫不差。</li>
+              <li><strong>自动打卡与进度跟踪：</strong> 列表进度条实时呈现“已存金额”与“剩余未存”。完成一期打卡，不仅会有满屏撒花动画，还会自动推算下一期日期。</li>
+              <li><strong>灵活存取与归档：</strong> 灵活模式下支持随时“存入”与“取钱”（资金原路退回）。完成目标后的计划会自动变身为已达成状态；对于暂时搁置的计划，支持一键“归档”隐藏。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(3)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">全能首页看板</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(5)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">精细化预算管理</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-5" tabindex="-1">
+            <div class="help-section" id="sec-budget">
+            <div class="section-header">
+              <div class="icon-wrap bg-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+              </div>
+              <h3>精细化预算管理</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>三维周期看板：</strong> 支持按“周”、“月”、“年”独立查看预算和结余。主进度条自带颜色预警：花销达到 80% 会变为橙色，超出 100% 会变为醒目的红色。</li>
+              <li><strong>主次分级预算：</strong> 不仅可以设置总额，还能点击列表中的各主分类或二级子分类（如单独为“餐饮-咖啡”设置上限），精确掌控每一笔细分开销。</li>
+              <li><strong>退款智能抵扣与过滤：</strong> 预算引擎极其严谨——“内部转账”、“余额调整”以及“不计入预算”的账单会自动被剔除。如果某笔消费发生了退款，系统会智能按净支出计算，把退回来的钱实时补充回可用预算里。</li>
+              <li><strong>一键设为默认：</strong> 每月预算金额大同小异？在月度预算看板点击顶部的“设为默认”，未来的每个月都会自动套用这套模板，省去重复填写的烦恼。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(4)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">存钱计划与目标</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(6)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">周期与分期管理</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-6" tabindex="-1">
+            <div class="help-section" id="sec-recurring">
+            <div class="section-header">
+              <div class="icon-wrap bg-indigo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l-5.41 5.41"></path></svg>
+              </div>
+              <h3>周期记账与分期管理</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>双管齐下的自动化账单：</strong> 面板顶部支持在“周期记账”与“分期管理”两大模块间无缝切换，集中打理你的自动化财务流水。</li>
+              <li><strong>周期记账（自动扣费）：</strong> 面对房租、水电、软件订阅等固定开销，只需设置好频率（每天/周/月/季/年）与结束条件（指定日期或次数）。时间一到，系统自动为你默默记上一笔账。</li>
+              <li><strong>分期管理（信用卡/花呗）：</strong> 买大件用了分期？输入总金额与期数（如 6、12 期），系统会自动生成“还款计划表明细”。支持四种手续费模式（无/总手续费/每期手续费/月费率），每一期需还本金与利息一目了然。</li>
+              <li><strong>提前结清与随时暂停：</strong> 如果中途手头宽裕，支持对分期计划“提前结清”；或者随时“暂停”某项周期记账。执行这些操作后，后续将不再生成新账单，但已生成的历史账单不受任何影响，绝对安全。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(5)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">精细化预算管理</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(7)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">报销追踪管理</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-7" tabindex="-1">
+            <div class="help-section" id="sec-reimburse">
+            <div class="section-header">
+              <div class="icon-wrap bg-amber">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+              </div>
+              <h3>报销追踪管理</h3>
+            </div>
+            <ul class="help-list">
+              <li class="keep-gap"><strong>待办与已结双看板：</strong> 记账时只要点选“报销”开关，这笔钱就会自动流入此处。看板清晰划分为“未报销”与“已报销”两大专区，帮你盯紧每一笔垫付的钱。</li>
+            </ul>
+
+            
+            <img src="baoxiao.AVIF" alt="报销追踪功能截图" class="help-screenshot" />
+
+            <ul class="help-list">
+              <li><strong>支持分次与部分报销：</strong> 一笔大额差旅可以分多次报下来！系统底层使用严谨的计算模型，会自动根据该账单的“净额”扣减“已报销金额”，精确算出还剩多少没报完，防止重复计算待报销金额。</li>
+              <li><strong>万能搜索定位：</strong> 列表自带强大的搜索引擎。输入分类名称、账单备注、具体金额，甚至是你打的自定义标签（如 <code>#出差</code>），即可从海量记录中瞬间定位需要对账的那一笔。</li>
+              <li><strong>外币自动统一折算：</strong> 在月份汇总金额时，无论你垫付时用了哪国的货币，系统都会调取账单快照，将它们精准折算为统一的“本位币”呈现，直观展示月度总报销金额。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(6)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">周期与分期管理</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(8)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">贴心备忘提醒</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-8" tabindex="-1">
+            <div class="help-section" id="sec-reminder">
+            <div class="section-header">
+              <div class="icon-wrap bg-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0" /><path d="M22 8c0-2.3-.8-4.3-2-6" /><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /><path d="M4 2C2.8 3.7 2 5.7 2 8" /></svg></div>
+              <h3>贴心的备忘与提醒</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>全场景的生活管家：</strong>涵盖生日、缴费、车辆保养、习惯打卡、吃药就医等十几种分类，为你打理生活中容易遗忘的琐事。完美支持<strong>公历与农历</strong>精准推算。</li>
+              <li><strong>超灵活的循环周期：</strong>除了每天、每周、每月，系统还特意为你定制了<strong>“每两个月（交水电燃气）”、“每三个月”、“每半年（洗牙/车辆保养）”</strong>等生活长线周期，一次设定，终身受用。</li>
+              <li><strong>主页胶囊与日历联动：</strong>当天到期的重要备忘，会化身为精致的蓝色胶囊，优雅地悬挂在主页顶端提醒你（点击查看后阅后即焚）。同时，所有未来的提醒都会在日历格子中亮起专属小图标。</li>
+              <li><strong>系统级强力推送：</strong>采用“极客级”的纯本地智能排期引擎。哪怕 App 被彻底退出、在无网环境下，只要时间一到，依然能通过手机系统底层准时弹出横幅通知，绝不漏发。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(7)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">报销追踪管理</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(9)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">资产与物品</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-9" tabindex="-1">
+            <div class="help-section" id="sec-assets">
+            <div class="section-header">
+              <div class="icon-wrap bg-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-9" /><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" /><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" /><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" /></svg></div>
+              <h3>资产盘点与物品清单</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>物品数字化：</strong>从昂贵的数码电器，到药箱里的常备药、冰箱里的生鲜囤货，皆可手写入库。支持录入数量、购买日期与价格，全方位梳理你的实体生活资产。</li>
+              <li><strong>多维分栏高效管理：</strong>支持一键在“物品清单（全量瀑布流）”、“分类”与“空间”三个选项卡之间无缝切换。</li>
+              <li><strong>7天精准过期雷达：</strong>针对食品、保健品、化妆品等带有生命周期的物品，支持录入过期时间。当有物品在7天内即将到期或已过期时，主页顶端会灵动浮现物品到期小横幅！</li>
+              <li><strong>自定义字典扩容：</strong>在“分类”与“空间”界面的最后方，提供了专属的 <code>+</code> 虚线按钮，支持拓展全新的空间名字或特定物品分类。</li>
+            </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(8)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">贴心备忘提醒</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(10)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">数据备份与恢复</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-10" tabindex="-1">
+            <div class="help-section" id="sec-backup">
+            <div class="section-header">
+              <div class="icon-wrap bg-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8" /><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" /><path d="m8 17 4-4 4 4" /></svg></div>
               <h3>数据备份与恢复</h3>
             </div>
             <ul class="help-list">
-              <li><strong>五大网盘随心选：</strong>支持 iCloud、WebDAV（请自行前往 <strong>坚果云</strong> 或 <strong>Infini-cloud</strong> 等服务商免费申请 WebDAV 网盘，<span
-      @click="jumpToWebDavTutorial"
-      style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;"
-    >点击查看详细配置指南👆</span>）、百度网盘、Google Drive 以及 OneDrive，全部支持增量无感备份，想用哪个网盘、用几个，完全由你决定。</li>
+              <li><strong>五大网盘随心选：</strong>支持 iCloud、WebDAV（请自行前往 <strong>坚果云</strong> 或 <strong>Infini-cloud</strong> 等服务商免费申请 WebDAV 网盘，<strong>点击查看详细配置指南👆</strong>）、百度网盘、Google Drive 以及 OneDrive，全部支持增量无感备份，想用哪个网盘、用几个，完全由你决定。</li>
               <li><strong>日常自动备份：</strong>只要有新数据，每个已连接的网盘都会按各自的节奏自动静默备份（打开 App、回到前台或退到后台都可能触发）。💡 注：App 保持在前台使用时才会静默备份，头像旁网盘Logo闪烁代表正在备份中，此时<strong>请勿划掉清理应用</strong>。</li>
-              <li><strong>手动导出与恢复：</strong>在“设置 - 备份与恢复”中，随时可以导出全量数据的 <code>JSON</code> 文件，或含图片的 <code>PDF</code>、<code>ZIP</code> 备份包保存到本地；换机或重装后，也可以直接选择某个已连接的网盘一键恢复，或者导入本地的备份文件。</li>
+              <li><strong>手动导出与恢复：</strong>在“我的 - 备份恢复”中，随时可以导出全量数据的 <code>JSON</code> 文件，或含图片的 <code>PDF</code>、<code>ZIP</code> 备份包保存到本地；换机或重装后，也可以直接选择某个已连接的网盘一键恢复，或者导入本地的备份文件。</li>
               <li><strong>多设备实时同步——不止是备份，更是"随身账本"：</strong>如果你有不止一台设备（比如手机 + 平板，或者正在新旧手机之间过渡），打开这个开关就能让编辑在设备之间近乎实时地互相追平，而不用等日常备份的自然节奏慢慢同步过去。</li>
               <li><strong>新设备自动识别已有主盘：</strong>如果你的其它设备已经设置过主盘，在新设备上打开这个开关时会自动检测到，并提示你是否保持一致——不用每台设备都重新决定一遍。</li>
               <li><strong>💡 新用法：和家人共用一本账：</strong>如果你和家人（比如夫妻）愿意共用同一份账本视角，可以在两台手机上登录<strong>同一个网盘账号</strong>（比如同一个百度网盘或 Google Drive 账号），把这个网盘设成同一个主盘，再各自打开“多设备实时同步”——这样无论谁在自己手机上记了一笔账、写了一篇日记，很快就能在对方手机上看到，几乎就像两人在共用同一本账。</li>
               <li><strong>进阶选项——多网盘实时镜像 / 立即强推全部网盘：</strong>如果你希望每个已连接的网盘都尽量保持实时更新（而不只是主盘优先），可以在“多设备实时同步”的高级选项里打开“多网盘实时镜像”；也可以随时点一下“立即强推全部网盘”，手动触发一次全量同步。这两个属于进阶选项，会明显增加请求频率，日常使用一般用不到，默认关闭即可。</li>
             </ul>
-          </div>
+                
+            </div>
 
-          <div class="help-section" id="sec-security">
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(9)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">资产与物品</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(11)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">安全与隐私</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-11" tabindex="-1">
+            <div class="help-section" id="sec-security">
             <div class="section-header">
-              <div class="icon-wrap bg-green">🛡️</div>
+              <div class="icon-wrap bg-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg></div>
               <h3>数据安全与隐私</h3>
             </div>
             <ul class="help-list">
@@ -437,129 +811,388 @@
               <li><strong>应用锁：</strong>支持 4 位数字密码、面容 ID 及指纹解锁，可设“离开几分钟后锁定”，防止旁人随意翻看。</li>
               <li><strong>权限按需申请：</strong>定位、相册、通知等系统权限均在你主动使用相关功能（如日记环境感知、备忘提醒）时才会用到，不会在后台无授权采集。</li>
             </ul>
-          </div>
- <div class="help-section" id="sec-advanced">
-        <div class="section-header">
-          <div class="icon-wrap bg-purple">✨</div>
-          <h3>进阶玩法</h3>
-        </div>
-        <ul class="help-list">
-          <li><strong>双击放大阅读：</strong>首页双击带文字的气泡，立刻全屏居中放大，方便阅读长篇日记。</li>
-          <li><strong>长按唤出菜单：</strong>长按气泡可唤起菜单进行 编辑、复制、删除、分享、收藏、置顶和朗读 等。</li>
-          <li><strong>多选批量操作：</strong>长按菜单点击“选择”，即可进入多选模式，批量删除或将多天日记<strong>合并复制</strong>。</li>
-          <li><strong>全局万能搜索：</strong>主页右上角的搜索框远比想象中强大！除了常规的文字和标签，你还可以直接搜索<strong>具体金额</strong>（如“25”）、记录过的<strong>地点</strong>，甚至输入自然时间（如“6月1日”或“2026年6月”），系统会瞬间读懂你，为你精准打捞过往的每一处细节！</li>
-          <li><strong>一键返回底部：</strong>当你在主页翻阅历史老记录时，只需<strong>轻点左上角年月选择旁边的X键或点击底部输入框</strong>，就能瞬间回到今天最新的记录位置，无需拼命往下滑！</li>
-          <li><strong>图片双指缩放：</strong>查看图片时支持双指缩放，长按图片可一键保存至手机相册。</li>
-          <li><strong>定时暖心提醒：</strong>前往设置开启。除按时温馨催记外，系统还会在特定时间唤醒“每日回顾”，并在往年今日有回忆时，准时为你发送时光漫游通知，重温过往。</li>
-          <li><strong>一键导出到笔记：</strong>在日历页面点击“全选复制”，系统会把你一整天的日记和账单，自动排版成干净整洁的 Markdown 格式。你可以直接把它粘贴到 Obsidian 或别的笔记软件里，非常方便！</li>
-          <li><strong>随时追加感想：</strong>在日记气泡底部点击“📝 追加感想”，即可在不破坏原文的情况下写下感想或补充后续动态。</li>
-          <li><strong>信用卡还款提醒：</strong>在“资产账户管理”中新建信用账户时，顺手设个还款日吧！系统会在到期前贴心提醒您，帮您避开逾期烦恼。</li>
-          <li><strong>🎁 隐藏彩蛋：</strong>
-          <br><strong>📸 闪电相机：</strong>在主页、日记和手工记账界面，长按“图片”按钮，即可瞬间唤起相机拍照！
-          <br><strong>📝 待办清单：</strong>在写日记时，输入 <code>[]</code> （中英文皆可）能瞬间变出可交互的待办方框，在首页直接点击即可打勾。
-          </li>
-        </ul>
-      </div>
-      
-      <div class="help-section" id="sec-faq">
-        <div class="section-header">
-          <div class="icon-wrap" style="background: #475569;">❓</div>
-          <h3>常见问题与技巧 (FAQ)</h3>
-        </div>
+                
+            </div>
 
-        <div class="faq-container">
-          <details>
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(10)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">数据备份与恢复</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(12)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">进阶玩法</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-12" tabindex="-1">
+            <div class="help-section" id="sec-advanced">
+            <div class="section-header">
+              <div class="icon-wrap bg-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></svg></div>
+              <h3>进阶玩法</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>双击放大阅读：</strong>首页双击带文字的气泡，立刻全屏居中放大，方便阅读长篇日记。</li>
+              <li><strong>长按唤出菜单：</strong>长按气泡可唤起菜单进行 编辑、复制、删除、分享、收藏、置顶和朗读 等。</li>
+              <li><strong>多选批量操作：</strong>长按菜单点击“选择”，即可进入多选模式，批量删除或将多天日记<strong>合并复制</strong>。</li>
+              <li><strong>全局万能搜索：</strong>主页右上角的搜索框远比想象中强大！除了常规的文字和标签，你还可以直接搜索<strong>具体金额</strong>（如“25”）、记录过的<strong>地点</strong>，甚至输入自然时间（如“6月1日”或“2026年6月”），系统会瞬间读懂你，为你精准打捞过往的每一处细节！</li>
+              <li><strong>一键返回底部：</strong>当你在主页翻阅历史老记录时，只需<strong>轻点左上角年月选择旁边的X键或点击底部输入框</strong>，就能瞬间回到今天最新的记录位置，无需拼命往下滑！</li>
+              <li><strong>图片双指缩放：</strong>查看图片时支持双指缩放，长按图片可一键保存至手机相册。</li>
+              <li><strong>定时暖心提醒：</strong>前往设置开启。除按时温馨催记外，系统还会在特定时间唤醒“每日回顾”，并在往年今日有回忆时，准时为你发送时光漫游通知，重温过往。</li>
+              <li><strong>一键导出到笔记：</strong>在日历页面点击“全选复制”，系统会把你一整天的日记和账单，自动排版成干净整洁的 Markdown 格式。你可以直接把它粘贴到 Obsidian 或别的笔记软件里，非常方便！</li>
+              <li><strong>随时追加感想：</strong>在日记气泡底部点击“📝 追加感想”，即可在不破坏原文的情况下写下感想或补充后续动态。</li>
+              <li><strong>信用卡还款提醒：</strong>在“资产账户管理”中新建信用账户时，顺手设个还款日吧！系统会在到期前贴心提醒您，帮您避开逾期烦恼。</li>
+              <li><strong>🎁 隐藏彩蛋：</strong>
+              <br><strong>📸 闪电相机：</strong>在主页、日记和手工记账界面，长按“图片”按钮，即可瞬间唤起相机拍照！
+              <br><strong>📝 待办清单和加粗：</strong>在写日记时，输入 <code>[]</code> （中英文皆可）能瞬间变出可交互的待办方框。输入 <code>**示例**</code>则可让文字加粗。
+              </li>
+
+              </ul>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">安全与隐私</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">常见问题 (FAQ)</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
+        </div>
+        <div class="page-slide">
+          <div class="page-scroll" id="scroll-13" tabindex="-1">
+            <div class="help-section" id="sec-faq">
+            <div class="section-header">
+              <div class="icon-wrap" style="background: #475569;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></svg></div>
+              <h3>常见问题与技巧 (FAQ)</h3>
+            </div>
+
+            <div class="faq-container">
+            <details>
   <summary>1. 如何补写过去的日记或补记以前的账单？</summary>
+
   <p>我们为您提供了两种灵活的补记方式，适用不同场景：</p>
+
   <p><strong>方法一：单笔快速补记（适合顺手修改）</strong><br>
   打开底部的 <code><span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
 </span></code> 日记本，或 <code><span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="8" y2="10"></line><line x1="12" y1="10" x2="12" y2="10"></line><line x1="16" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="16" y1="14" x2="16" y2="14"></line></svg>
 </span></code> 手工记账面板，直接点击最顶部或左边的<strong>“日期时间”</strong>，将其修改为过去的某一天即可。保存后，这条记录会自动归档到该日期下。</p>
+
   <p><strong>方法二：时光机沉浸模式（适合一次性补一整天）</strong><br>
   点击首页左上角的<strong>日历图标</strong>，在日历上选中你想补记的那一天，点击右上角的<strong>“编辑补记”</strong>。
   此时主页顶部会出现“⏳ 正在编辑补记”的横幅。接下来无论是你快捷发送一句话，还是手工记账、写日记，所有的记录都会集体“穿越”到那一天！补记完成后，点击横幅上的“退出”即可回到现在。</p>
-
+  
   <p><strong>另外，记账补记也可以通过主页输入框输入比如：“2025年8月1日打开50”，就可以补记8月1日的账单。</strong></p>
 </details>
-          <details>
-            <summary>2. 如何修改已经发出去的日记或账单？</summary>
-            <p><strong>修改整条记录：</strong>长按主页上的气泡，在弹出的黑色菜单中选择“编辑”即可。<br><br><strong>修改账单里的单笔明细：</strong>如果一条账单里包含了多个分类（比如买菜和打车），你不需要重新记！直接在气泡里<strong>点击对应的那个分类小胶囊</strong>，就能进入编辑面板精准修改这一笔的金额或分类了。</p>
-          </details>
-          <details>
-            <summary>3. 如何精确删除账单里的某一条明细？</summary>
-            <p>点击气泡里的分类小胶囊进入手工编辑面板，点击右上角的 🗑️ 垃圾桶图标，选择“删除明细”即可。如果这一个气泡里所有的明细都被删空且没有包含图片，整个气泡会自动从时间线上消失。</p>
-          </details>
-          <details>
-            <summary>4. 以前的日记和账单太多了，怎么快速查找？</summary>
-            <p>点击首页右上角的 🔍 <strong>放大镜图标</strong>，你可以直接输入关键词搜索任何内容，也可以在下方点击你常用的“#标签”进行快速过滤筛选。其中“日记”和“账单”标签分别筛选出日记和账单。</p>
-          </details>
-          <details>
-            <summary>5. 如何获取和配置 AI API Key？</summary>
-            <p>我们的专属 API 密钥一键获取功能正在快马加鞭开发中，敬请期待后续版本！<br>现阶段，请先前往 <strong>硅基流动 (SiliconFlow)、智谱、DeepSeek</strong> 或 <strong>Groq</strong> 的官网自行注册并免费申请 API Key。<br>获取成功后，前往 App 的“设置 - AI 引擎设置”中填入并保存，即可唤醒强大的 AI 极速记账魔法。</p>
-          </details>
-          <details>
-            <summary>6. 我的账单 and 日记数据保存在哪里？会丢失吗？</summary>
-            <p>“鸡毛蒜皮”采用离线优先架构，你的所有数据默认加密保存在<strong>手机本地</strong>，我们没有任何中心化服务器来窃取你的隐私。请务必前往设置中开启 iCloud、WebDAV、百度网盘、OneDrive和Google drive中的一种或几种方式自动备份，以免手机丢失造成数据损毁。</p>
-          </details>
-          <details>
-            <summary>7. 为什么有时上传图片会提示失败？</summary>
-            <p>为了保证 App 运行极其流畅且不占用过多的手机空间，系统每天限制最多上传 20 张配图，并且会在后台进行无损压缩。超额后请明天再试哦。</p>
-          </details>
 
-          <details>
-            <summary>8. 如何快速查找我已经“收藏”或“置顶”的记录？</summary>
-            <p><strong>关于置顶：</strong>点击主页右上角的“🔍”搜索按钮，在不输入任何字的情况下，搜索页会化身为你的“专属看板”，直接为你展示所有打上“置顶”标签的内容，一眼可见。</p>
-            <p><strong>关于收藏：</strong>同样在搜索页面，下方的快捷标签栏中，固定了“#收藏”标签，点击它即可瞬间筛选出所有你珍藏的回忆与账单。</p>
-          </details>
+              <details>
+                <summary>2. 如何修改已经发出去的日记或账单？</summary>
+                <p><strong>修改整条记录：</strong>长按主页上的气泡，在弹出的黑色菜单中选择“编辑”即可。<br><br><strong>修改账单里的单笔明细：</strong>如果一条账单里包含了多个分类（比如买菜和打车），你不需要重新记！直接在气泡里<strong>点击对应的那个分类小胶囊</strong>标记，就能进入编辑面板精准修改这一笔的金额或分类了。</p>
+              </details>
 
-          <details>
-            <summary>9. “时光回音”里的累计记录天数是怎么计算的？</summary>
-            <p>只要你每天在 App 里留下任何一点痕迹，不管是一笔几块钱的账单，还是只写了一句话的日记，系统都会算你今天打卡成功。每天记一点，看看你的记录能连成多长的线吧！</p>
-          </details>
+              <details>
+                <summary>3. 如何精确删除账单里的某一条明细？</summary>
+                <p>点击气泡里的分类小胶囊进入手工编辑面板，点击右上角的 🗑️ 垃圾桶图标，选择“删除明细”即可。如果这一个气泡里所有的明细都被删空且没有包含图片，整个气泡会自动从时间线上消失。</p>
+              </details>
 
-          <details>
-            <summary>10. 觉得聊天气泡的字体太小，看不清怎么办？</summary>
-            <p>前往“设置 - 主题与外观设置”，打开<strong>“跟随系统字体大小”</strong>开关，App 会完美适配你手机系统里设置的大字号（支持长辈模式）。如果需要更精准的控制，你也可以关闭开关，直接拖动下方的滑块手动调节气泡字号。</p>
-          </details>
+              <details>
+                <summary>4. 以前的日记和账单太多了，怎么快速查找？</summary>
+                <p>点击首页右上角的 🔍 <strong>放大镜图标</strong>，你可以直接输入关键词搜索任何内容，也可以在下方点击你常用的“#标签”进行快速过滤筛选。其中“日记”和“账单”标签分别筛选出日记和账单。</p>
+              </details>
+
+              <details>
+                <summary>5. 如何获取和配置 AI API Key？</summary>
+                <p>我们的专属 API 密钥一键获取功能正在快马加鞭开发中，敬请期待后续版本！<br>现阶段，请先前往 <strong>硅基流动 (SiliconFlow)、智谱、DeepSeek</strong> 或 <strong>Groq</strong> 的官网自行注册并免费申请 API Key。<br>获取成功后，前往 App 的“我的 - AI引擎”中填入并保存，即可唤醒强大的 AI 极速记账魔法。</p>
+              </details>
+
+              <details>
+                <summary>6. 我的账单 and 日记数据保存在哪里？会丢失吗？</summary>
+                <p>“鸡毛蒜皮”采用离线优先架构，你的所有数据默认加密保存在<strong>手机本地</strong>，我们没有任何中心化服务器来窃取你的隐私。请务必前往设置中开启 iCloud、WebDAV、百度网盘、OneDrive和Google drive中的一种或几种方式自动备份，以免手机丢失造成数据损毁。</p>
+              </details>
+
+              <details>
+                <summary>7. 为什么有时上传图片会提示失败？</summary>
+                <p>为了保证 App 运行极其流畅且不占用过多的手机空间，系统每天限制最多上传 20 张配图，并且会在后台进行无损压缩。超额后请明天再试哦。</p>
+              </details>
+
+              <details>
+                <summary>8. 如何快速查找我已经“收藏”或“置顶”的记录？</summary>
+                <p><strong>关于置顶：</strong>点击主页右上角的“🔍”搜索按钮，在不输入任何字的情况下，搜索页会化身为你的“专属看板”，直接为你展示所有打上“置顶”标签的内容，一眼可见。</p>
+                <p><strong>关于收藏：</strong>同样在搜索页面，下方的快捷标签栏中，固定了“#收藏”标签，点击它即可瞬间筛选出所有你珍藏的回忆与账单。</p>
+              </details>
+
+              <details>
+                <summary>9. “时光回音”里的累计记录天数是怎么计算的？</summary>
+                <p>只要你每天在 App 里留下任何一点痕迹，不管是一笔几块钱的账单，还是只写了一句话的日记，系统都会算你今天打卡成功。每天记一点，看看你的记录能连成多长的线吧！</p>
+              </details>
+
+              <details>
+                <summary>10. 觉得聊天气泡的字体太小，看不清怎么办？</summary>
+                <p>前往“我的 - 主题个性”，打开<strong>“跟随系统字体大小”</strong>开关，App 会完美适配你手机系统里设置的大字号（支持长辈模式）。如果需要更精准的控制，你也可以关闭开关，直接拖动下方的滑块手动调节气泡字号。</p>
+              </details>
+            </div>
+                
+            </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">进阶玩法</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-disabled"><span>已是最后一章</span></div>
+            
+            </div>
+
+            <div style="height: 24px;"></div>
+          </div>
         </div>
-      </div>
-
-      <div style="height: 32px;"></div>
     </div>
   </div>
-  <script>
-    function toggleToc() {
-      const overlay = document.getElementById('tocOverlay');
-      const btn = document.getElementById('tocToggleBtn');
-      if (overlay.classList.contains('show')) {
-        overlay.classList.remove('show');
-        btn.classList.remove('toc-active');
+
+</div>
+
+<script>
+  var tocList = [{"id": "sec-ai", "title": "极速记账魔法"}, {"id": "sec-manual", "title": "精打细算记账"}, {"id": "sec-diary", "title": "时光日记本"}, {"id": "sec-stats", "title": "全能首页看板"}, {"id": "sec-savings", "title": "存钱计划与目标"}, {"id": "sec-budget", "title": "精细化预算管理"}, {"id": "sec-recurring", "title": "周期与分期管理"}, {"id": "sec-reimburse", "title": "报销追踪管理"}, {"id": "sec-reminder", "title": "贴心备忘提醒"}, {"id": "sec-assets", "title": "资产与物品"}, {"id": "sec-backup", "title": "数据备份与恢复"}, {"id": "sec-security", "title": "安全与隐私"}, {"id": "sec-advanced", "title": "进阶玩法"}, {"id": "sec-faq", "title": "常见问题 (FAQ)"}];
+  var currentIndex = 0;
+  var showToc = false;
+  var showSearch = false;
+
+  var pagerTrack = document.getElementById('pagerTrack');
+  var pageIndicator = document.getElementById('pageIndicator');
+  var tocDropdown = document.getElementById('tocDropdown');
+  var tocBackdrop = document.getElementById('tocBackdrop');
+  var searchResultsView = document.getElementById('searchResultsView');
+  var pagerViewport = document.getElementById('pagerViewport');
+  var headerBarNormal = document.getElementById('headerBarNormal');
+  var headerBarSearch = document.getElementById('headerBarSearch');
+  var toolbarRow = document.getElementById('toolbarRow');
+  var searchInput = document.getElementById('searchInput');
+  var searchClearBtn = document.getElementById('searchClearBtn');
+  var tocChip = document.getElementById('tocChip');
+
+  function updatePagerTransform(offsetPx, animate) {
+    offsetPx = offsetPx || 0;
+    pagerTrack.classList.toggle('no-anim', animate === false);
+    pagerTrack.style.transform = 'translateX(calc(' + (-currentIndex * 100) + '% + ' + offsetPx + 'px))';
+  }
+
+  function updateTocActive() {
+    var items = tocDropdown.querySelectorAll('.toc-item');
+    items.forEach(function (el, i) {
+      el.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  function goToChapter(idx) {
+    closeToc();
+    if (idx < 0 || idx >= tocList.length || idx === currentIndex) return;
+    currentIndex = idx;
+    updatePagerTransform();
+    pageIndicator.textContent = (currentIndex + 1) + ' / ' + tocList.length;
+    updateTocActive();
+    var scrollEl = document.getElementById('scroll-' + idx);
+    if (scrollEl) scrollEl.scrollTop = 0;
+  }
+
+  function renderVisibility() {
+    tocDropdown.style.display = showToc ? 'block' : 'none';
+    tocBackdrop.style.display = showToc ? 'block' : 'none';
+    tocChip.classList.toggle('chip-active', showToc);
+    headerBarNormal.style.display = showSearch ? 'none' : 'flex';
+    headerBarSearch.style.display = showSearch ? 'flex' : 'none';
+    toolbarRow.style.display = showSearch ? 'none' : 'flex';
+    searchResultsView.style.display = showSearch ? 'block' : 'none';
+    pagerViewport.style.display = showSearch ? 'none' : 'block';
+  }
+
+  function toggleToc() {
+    showToc = !showToc;
+    showSearch = false;
+    renderVisibility();
+  }
+  function closeToc() {
+    if (!showToc) return;
+    showToc = false;
+    renderVisibility();
+  }
+
+  function openSearch() {
+    showToc = false;
+    showSearch = true;
+    renderVisibility();
+    setTimeout(function () { searchInput.focus(); }, 0);
+  }
+  function closeSearch() {
+    showSearch = false;
+    renderVisibility();
+    searchInput.blur();
+  }
+  function clearSearch() {
+    searchInput.value = '';
+    onSearchInput();
+    searchInput.focus();
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+  function makeSnippet(text, lowerQuery) {
+    var lower = text.toLowerCase();
+    var pos = lower.indexOf(lowerQuery);
+    if (pos === -1) return text.slice(0, 46).replace(/\s+/g, ' ').trim() + '…';
+    var start = Math.max(0, pos - 14);
+    var end = Math.min(text.length, pos + lowerQuery.length + 28);
+    var body = text.slice(start, end).replace(/\s+/g, ' ').trim();
+    return (start > 0 ? '…' : '') + body + (end < text.length ? '…' : '');
+  }
+  function highlightSnippet(snippet, query) {
+    var escaped = escapeHtml(snippet);
+    var q = query.trim();
+    if (!q) return escaped;
+    var escapedQ = escapeHtml(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var re = new RegExp(escapedQ, 'ig');
+    return escaped.replace(re, function (m) { return '<mark>' + m + '</mark>'; });
+  }
+
+  function onSearchInput() {
+    var q = searchInput.value.trim();
+    searchClearBtn.style.display = searchInput.value ? 'flex' : 'none';
+    if (!q) {
+      searchResultsView.innerHTML = '<div class="search-hint">输入关键词，可搜索指南全部 14 个章节与常见问题中的任意内容</div>';
+      return;
+    }
+    var lowerQ = q.toLowerCase();
+    var hits = [];
+    tocList.forEach(function (item, idx) {
+      var secEl = document.getElementById(item.id);
+      var text = secEl ? secEl.innerText.trim() : '';
+      var titleHit = item.title.toLowerCase().indexOf(lowerQ) !== -1;
+      var textHit = text.toLowerCase().indexOf(lowerQ) !== -1;
+      if (titleHit || textHit) {
+        hits.push({ idx: idx, title: item.title, snippet: makeSnippet(text, lowerQ) });
+      }
+    });
+    if (hits.length === 0) {
+      searchResultsView.innerHTML = '<div class="search-empty">没有找到与“' + escapeHtml(q) + '”相关的内容，换个关键词试试～</div>';
+    } else {
+      searchResultsView.innerHTML = hits.map(function (hit) {
+        return '<div class="search-hit" onclick="selectSearchHit(' + hit.idx + ')">' +
+          '<div class="hit-title">' + escapeHtml(hit.title) + '</div>' +
+          '<div class="hit-snippet">' + highlightSnippet(hit.snippet, q) + '</div>' +
+          '</div>';
+      }).join('');
+    }
+  }
+  searchInput.addEventListener('input', onSearchInput);
+  searchInput.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSearch(); });
+
+  function selectSearchHit(idx) {
+    closeSearch();
+    goToChapter(idx);
+  }
+
+  function goBack() {
+    if (window.history.length > 1) { window.history.back(); }
+  }
+
+  var HELP_VIDEO_URL = 'https://mp.weixin.qq.com/s/VJ84eQqEPck5qfWfq8JDWw';
+  function openVideoTutorial() {
+    window.open(HELP_VIDEO_URL, '_blank');
+  }
+
+  /* ==================== 章节横滑翻页手势 ==================== */
+  var chapterStartX = 0, chapterStartY = 0, chapterDragging = false, chapterAxisLocked = null, chapterDragOffset = 0;
+
+  pagerViewport.addEventListener('touchstart', onChapterTouchStart, { passive: true });
+  pagerViewport.addEventListener('touchmove', onChapterTouchMove, { passive: false });
+  pagerViewport.addEventListener('touchend', onChapterTouchEnd);
+  pagerViewport.addEventListener('touchcancel', onChapterTouchCancel);
+
+  function onChapterTouchStart(e) {
+    var sel = window.getSelection();
+    if (sel && sel.toString().length > 0) return;
+    chapterStartX = e.touches[0].clientX;
+    chapterStartY = e.touches[0].clientY;
+    chapterDragging = true;
+    chapterDragOffset = 0;
+    chapterAxisLocked = null;
+  }
+  function onChapterTouchMove(e) {
+    if (!chapterDragging) return;
+    var sel = window.getSelection();
+    if (sel && sel.toString().length > 0) return;
+    var dx = e.touches[0].clientX - chapterStartX;
+    var dy = e.touches[0].clientY - chapterStartY;
+    if (!chapterAxisLocked) {
+      if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+      chapterAxisLocked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+    }
+    if (chapterAxisLocked === 'y') return;
+    if (chapterAxisLocked === 'x') e.preventDefault();
+    var offset = dx;
+    var atFirst = currentIndex === 0;
+    var atLast = currentIndex === tocList.length - 1;
+    if ((atFirst && dx > 0) || (atLast && dx < 0)) offset = dx * 0.3;
+    chapterDragOffset = offset;
+    updatePagerTransform(chapterDragOffset, false);
+  }
+  function onChapterTouchEnd() {
+    if (!chapterDragging) return;
+    chapterDragging = false;
+    var threshold = 60;
+    if (chapterAxisLocked === 'x') {
+      if (chapterDragOffset <= -threshold && currentIndex < tocList.length - 1) {
+        goToChapter(currentIndex + 1);
+      } else if (chapterDragOffset >= threshold && currentIndex > 0) {
+        goToChapter(currentIndex - 1);
       } else {
-        overlay.classList.add('show');
-        btn.classList.add('toc-active');
+        updatePagerTransform();
       }
     }
-    function scrollToSec(id, el) {
-      document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-      document.querySelectorAll('.toc-item').forEach(item => item.classList.remove('active'));
-      el.classList.add('active');
-      toggleToc();
-    }
-    function shareApp() {
-      const shareUrl = 'https://apps.apple.com/cn/app/id6762100023';
-      const shareText = '推荐给你一款超好用的聊天式日记记账APP「鸡毛蒜皮」，快来试试吧！';
-      if (navigator.share) {
-        navigator.share({ title: '鸡毛蒜皮', text: shareText, url: shareUrl })
-          .catch((error) => console.log('分享失败', error));
-      } else {
-        alert('请复制链接分享：\n' + shareUrl);
-      }
-    }
-    function rateApp() {
-      window.open('https://apps.apple.com/cn/app/id6762100023', '_blank');
-    }
-  </script>
+    chapterDragOffset = 0;
+    chapterAxisLocked = null;
+  }
+  function onChapterTouchCancel() {
+    chapterDragging = false;
+    chapterDragOffset = 0;
+    chapterAxisLocked = null;
+    updatePagerTransform();
+  }
+
+  /* ==================== 初始化 ==================== */
+  renderVisibility();
+  updatePagerTransform(0, false);
+</script>
 </body>
 </html>
