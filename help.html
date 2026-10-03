@@ -169,6 +169,8 @@
   .help-list li:last-child { margin-bottom: 0; }
   .help-list li.keep-gap:last-child { margin-bottom: 12px; }
   .help-list strong { color: #334155; font-weight: 600; }
+  .help-subtitle { margin: 18px 0 10px; font-size: 15px; font-weight: 600; color: #1e293b; }
+  ::highlight(help-search-hit) { background-color: rgba(255, 196, 0, 0.55); color: inherit; }
 
   .help-screenshot {
     display: block; width: 100%; border-radius: 12px;
@@ -224,6 +226,8 @@
     .section-header h3 { color: #f8fafc; }
     .help-list { color: #cbd5e1; }
     .help-list strong { color: #f1f5f9; }
+    .help-subtitle { color: #f8fafc; }
+    ::highlight(help-search-hit) { background-color: rgba(255, 196, 0, 0.4); }
     .help-screenshot { border-color: rgba(255,255,255,0.08); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
     code { background: #334155; color: #60a5fa; }
     .faq-container details { background: rgba(165,180,252,.1); }
@@ -274,7 +278,7 @@
       </button>
       <div class="title-group">
         <div class="title">使用指南</div>
-        <div class="page-indicator" id="pageIndicator">1 / 14</div>
+        <div class="page-indicator" id="pageIndicator">1 / 15</div>
       </div>
       <div class="header-spacer" aria-hidden="true"></div>
     </div>
@@ -309,29 +313,34 @@
           <div class="toc-item" data-idx="2" onclick="goToChapter(2)"><span class="toc-idx">3</span>时光日记本</div>
           <div class="toc-item" data-idx="3" onclick="goToChapter(3)"><span class="toc-idx">4</span>全能首页看板</div>
           <div class="toc-item" data-idx="4" onclick="goToChapter(4)"><span class="toc-idx">5</span>存钱计划与目标</div>
-          <div class="toc-item" data-idx="5" onclick="goToChapter(5)"><span class="toc-idx">6</span>精细化预算管理</div>
-          <div class="toc-item" data-idx="6" onclick="goToChapter(6)"><span class="toc-idx">7</span>周期与分期管理</div>
-          <div class="toc-item" data-idx="7" onclick="goToChapter(7)"><span class="toc-idx">8</span>报销追踪管理</div>
-          <div class="toc-item" data-idx="8" onclick="goToChapter(8)"><span class="toc-idx">9</span>贴心备忘提醒</div>
-          <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>资产与物品</div>
-          <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>数据备份与恢复</div>
-          <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>安全与隐私</div>
-          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>进阶玩法</div>
-          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>常见问题 (FAQ)</div>
+          <div class="toc-item" data-idx="5" onclick="goToChapter(5)"><span class="toc-idx">6</span>借贷往来</div>
+          <div class="toc-item" data-idx="6" onclick="goToChapter(6)"><span class="toc-idx">7</span>精细化预算管理</div>
+          <div class="toc-item" data-idx="7" onclick="goToChapter(7)"><span class="toc-idx">8</span>周期与分期管理</div>
+          <div class="toc-item" data-idx="8" onclick="goToChapter(8)"><span class="toc-idx">9</span>报销追踪管理</div>
+          <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>贴心备忘提醒</div>
+          <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>资产与物品</div>
+          <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>数据备份与恢复</div>
+          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>安全与隐私</div>
+          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>进阶玩法</div>
+          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>常见问题 (FAQ)</div>
     </div>
   </div>
 
   <div class="toc-backdrop" id="tocBackdrop" style="display:none;" onclick="closeToc()"></div>
 
   <div class="search-results-view" id="searchResultsView" style="display:none;">
-    <div class="search-hint">输入关键词，可搜索指南全部 14 个章节与常见问题中的任意内容</div>
+    <div class="search-hint">输入关键词，可搜索指南全部 15 个章节与常见问题中的任意内容</div>
   </div>
 
   <div class="pager-viewport" id="pagerViewport">
     <div class="pager-track" id="pagerTrack">
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-0" tabindex="-1">
-            <div class="help-section" id="sec-ai">
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-0"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-ai">
             <div class="section-header">
               <div class="icon-wrap bg-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></svg></div>
               <h3>极速记账与 AI 魔法</h3>
@@ -356,8 +365,7 @@
               <li><strong>AI 大模型解析：</strong>在“我的-AI引擎”中填入 API Key 激活。支持极度口语化长句，如“去超市买 50 块排骨，给大宝充 100 话费”，AI 会像管家一样精准拆分多笔账单！</li>
               <li><strong>专属关键词小抄：</strong>在“我的-分类管理”给二级分类添加关键词（如给“餐饮”加“麦当劳”），这样在输入框输入包含关键词的句子时，系统将给账单精准分类。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
               <div class="nav-btn nav-disabled"><span>已是第一章</span></div>
@@ -368,15 +376,19 @@
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-1" tabindex="-1">
-            <div class="help-section" id="sec-manual">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-1"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-manual">
             <div class="section-header">
               <div class="icon-wrap bg-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="16" x2="16" y1="14" y2="18" /><path d="M16 10h.01" /><path d="M12 10h.01" /><path d="M8 10h.01" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M12 18h.01" /><path d="M8 18h.01" /></svg></div>
               <h3>精打细算的手工记账</h3>
@@ -392,11 +404,10 @@
 </span>进入手工记账，<strong>请先在“日期时间”按钮左边确认或切换资金来源的账户</strong>。金额键盘自带 <code>+ - × ÷</code>，多件物品直接算，点击 <code>=</code> 自动出总价。</li>
 <li><strong>智能高频记账胶囊：</strong>当触碰“写备注...”时，下方会根据你<strong>近三个月</strong>的记账记录，自动洗牌、合流并吐出一排快捷模板。轻轻一戳模板，不仅自动帮你代入备注，还会把当时的<strong>金额、分类和扣款账户一并全自动填满</strong>！免去你每月度固定账单重复打字的繁琐。</li>
 <li><strong>转账与不计入收支：</strong>左上角切换“转账”可生成不污染总统计的流水。特殊资金可记入专属的“不计入收支”账户。</li>
-<li><strong>账单退款：</strong>网购退货、押金退还等场景，选择账单详情里的“退款”即可，系统会自动冲抵对应分类的支出，让统计数据真实反映净支出，不再被退款污染消费报表。</li>
-<li><strong>借贷往来：</strong>借出、借入、收付押金定金都不算收支。在“资产账户”新建账户时选择“应收账户”或“应付账户”，填写对方、金额和收付款账户，可附借条照片。之后在账户详情里点“收款”“还款”即可在账户间流转；押金转租金、坏账收不回时，点“转为收入”“坏账核销”才计入统计，不会重复记账。</li>
+<li><strong>账单退款：</strong>网购退货、商品退款等场景，选择账单详情里的“退款”即可，系统会自动冲抵对应分类的支出，让统计数据真实反映净支出，不再被退款污染消费报表。</li>
+<li><strong>借贷往来：</strong>借出、借入、收付押金定金等往来款不算收支，单独用往来账户记录，详见「借贷往来」一章。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
               <div class="nav-btn nav-prev" onclick="goToChapter(0)">
@@ -413,15 +424,19 @@
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-2" tabindex="-1">
-            <div class="help-section" id="sec-diary">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-2"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-diary">
   <div class="section-header">
     <div class="icon-wrap bg-pink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /><path d="M8.62 9.8A2.25 2.25 0 1 1 12 6.836a2.25 2.25 0 1 1 3.38 2.966l-2.626 2.856a.998.998 0 0 1-1.507 0z" /></svg></div>
     <h3>时光日记本与回忆</h3>
@@ -447,8 +462,11 @@
       <line x1="12" y1="19" x2="12" y2="22"></line>
     </svg>
   </span>
-  麦克风图标</strong>进行听写，说完还能一键 AI 轻润色！
+  「录音」按钮</strong>，就能为这篇日记录一段声音；写完文字后还能一键 AI 轻润色！想把说的话直接变成文字，可以用输入法自带的语音输入。
 </li>
+    <li><strong>🎙️ 日记录音：</strong>在全屏日记里点底部的<strong>「录音」</strong>按钮，从底部升起录音面板，可随时暂停/继续，点「完成」即保存。每段最长 <strong>5 分钟</strong>（最后 30 秒有倒计时，到点自动保存），每篇日记 1 段，每天最多 4 段。录好后可以试听、删除；在首页、日历、那年今日和搜索结果里都能直接播放，支持 1.5 倍速。录音中切到后台或来电时会自动暂停，回来可以继续。录音和图片一样会随网盘自动备份、换机恢复，导出 ZIP 时也会一并带上；搜索时选「含录音」可以快速找到所有带录音的日记。</li>
+    <li><strong>🗂 日记草稿：</strong>在全屏日记里写到一半想先离开，点左上角退出时选<strong>「保存草稿」</strong>即可存起来；万一还没保存就直接关掉了 App，下次打开时也会自动存为草稿。有草稿时，全屏日记右上角（打勾按钮下方）会出现<strong>「草稿」</strong>，右上角数字是草稿数量；首页右下角"写日记"按钮上也会显示草稿数。点「草稿」可以查看全部草稿，点一篇继续编辑，保存成日记后它会自动从草稿里移除。草稿只保存在本机、不参与网盘备份，最多 20 篇；编辑已经保存过的日记时不使用草稿。</li>
+    <li><strong>📝 录音转文字（iPhone）：</strong>在全屏日记里，录音条上有一个<strong>「转文字」</strong>按钮，点一下即可把录音识别成文字，识别完可以先修改再保存。转出的文字显示在录音条下方，带「录音转文字」小标签，和正文区分开，不会混进正文；之后也可以随时编辑或删除，录音本身不受影响。识别完全在手机本地进行，录音不会上传；转写的文字同样能被搜索到，并随日记一起备份。如提示设备不支持离线识别，可在 iPhone「设置 - 通用 - 键盘」中开启「听写」后再试。</li>
 
     <li><strong>图文与环境感知：</strong>支持最多 20 张高清图与 10 个专属标签，更能为你盖上专属的心情印章。系统会在后台默默感知天气与定位，将彼时的环境与情绪，一并封存为珍贵的时光印记。</li>
     <li><strong>那年今日：</strong>当首页出现回忆小横幅，或日历图标闪烁 ✨ 时，说明今天有回忆！直接点击小横幅（或进入日历点击<code>那年今日</code>），即可像翻书一样左右滑动重温往日时光，还可以补记五年内今天的日记。<code>那年今日</code>按钮右上角红色数字是历史日记条数，右下角小相机角标代表这天有历年照片。如果相册里正好有历年今天拍的照片，页面顶部会自动出现一条照片提示，点开就是按年份分类的完整相册，选中照片还能直接生成那一年这天的日记。</li>
@@ -456,8 +474,7 @@
     <li><strong>足迹地图：</strong>在日历页面点击 <code>足迹地图</code>，即可在一张专属地图上重走你的记忆路线。跳动的数字光圈代表着该地留下的日记数量，点击任意光圈将升起「此地回忆」画廊，让你沉浸式翻阅在此地发生的所有故事。</li>
     <li><strong>💡 相册找图神技：</strong>在回顾编辑“那年今日”、随机漫游或补记旧日记时，只要点击添加图片，系统会自动将那一天的日期复制到剪贴板。<strong>在手机相册搜索框直接粘贴，即可一秒找出当天的老照片！</strong></li>
   </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
               <div class="nav-btn nav-prev" onclick="goToChapter(1)">
@@ -474,15 +491,19 @@
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-3" tabindex="-1">
-            <div class="help-section" id="sec-stats">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-3"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-stats">
             <div class="section-header">
               <div class="icon-wrap bg-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z" /><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /></svg></div>
               <h3>全能首页看板与统计</h3>
@@ -495,11 +516,10 @@
               <li><strong>AI 智能消费洞察（记账模式）：</strong>在记账统计页点击“智能消费洞察”横幅，系统召唤大模型进行多维智能复盘！为您奉上包含<strong>主要特征发现、潜在财务风险提示、结构优化方案及人文关怀鼓励</strong>的专业级财务诊断报告。右上角「刷新重写」按钮支持随时以最新流水打破旧账，重塑良性消费格局。</li>
               <li><strong>多维度透视：</strong>进入统计页后，支持按周、月、年、全部或自定义时间段查看报表，自动计算日均/月均开销，消费趋势一目了然。</li>
               <li><strong>预算管理与超支预警：</strong>可为月度总支出或单个分类单独设置预算金额，统计页实时显示预算进度条一目了然。当消费接近或超出预算时，主页会温馨浮现预警提醒，帮你悬崖勒马、理性消费。</li>
-              <li><strong>多币种自动折算：</strong>无论是哪国货币的账户花销和资产，系统都会自动根据你设定的<strong>本位币</strong>和最新汇率进行无感折算并汇总。</li>
+              <li><strong>多币种自动折算：</strong>无论是哪国货币的账户花销和资产，系统都会自动根据你设定的<strong>本位币</strong>和最新汇率进行无感折算并汇总。本位币可在“我的 → 资产账户”页面右上角点击“本位币 ▾”切换，切换后所有历史账单会按最新汇率重新折算。</li>
               <li><strong>净资产实时追踪：</strong>在首页看板点击“资产看板”或在“我的-资产账户”，一眼看清你的总资产、总负债与净资产，支持长按拖拽给你的账户卡片自由排序。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
               <div class="nav-btn nav-prev" onclick="goToChapter(2)">
@@ -516,15 +536,19 @@
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-4" tabindex="-1">
-            <div class="help-section" id="sec-savings">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-4"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-savings">
             <div class="section-header">
               <div class="icon-wrap bg-pink">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.5-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z"></path><path d="M2 9v1c0 1.1.9 2 2 2h1"></path><path d="M16 11h.01"></path></svg>
@@ -532,13 +556,20 @@
               <h3>存钱计划与目标</h3>
             </div>
             <ul class="help-list">
-              <li><strong>四大存钱法随心选：</strong> 内置“灵活存钱（随存随取）”、“定额存钱”、“52周存钱”以及“365天存钱”四种经典模式。无论是买车大计还是旅行基金，总有一款适合你。</li>
+              <li><strong>五种存钱方式随心选：</strong> 内置“灵活存钱（随存随取）”、“定额存钱”、“52周存钱”、“365天存钱”四种经典模式，以及专门记录银行定期的“定期存款”。无论是买车大计还是旅行基金，总有一款适合你。</li>
               <li><strong>真实转账联动，无缝记账：</strong> 打卡或存入金额时，系统会在后台全自动生成一笔从“扣款账户”到“存入账户”的真实内部转账流水。如果两个账户币种不同，还会智能按当前汇率折算，保证资产分毫不差。</li>
               <li><strong>自动打卡与进度跟踪：</strong> 列表进度条实时呈现“已存金额”与“剩余未存”。完成一期打卡，不仅会有满屏撒花动画，还会自动推算下一期日期。</li>
               <li><strong>灵活存取与归档：</strong> 灵活模式下支持随时“存入”与“取钱”（资金原路退回）。完成目标后的计划会自动变身为已达成状态；对于暂时搁置的计划，支持一键“归档”隐藏。</li>
             </ul>
-                
-            </div>
+
+            <h4 class="help-subtitle">🏦 定期存款</h4>
+            <ul class="help-list">
+              <li><strong>新建：</strong> 选择“定期存款”，填写名称、所属账户（存在哪张卡下）、起存日、本金、期限（日/月/年）、利率（年/月/日利率）、派息方式和到期方式，底部会实时算出到期日和预计利息。</li>
+              <li><strong>所属账户：</strong> 定期视为挂在这张卡下，起存和转入活期都不生成转账，只记利息收入。跨卡或换汇请先用“转账”记一笔再新建。</li>
+              <li><strong>派息与利息：</strong> 支持一次性还本付息、按日、按月、按季度、按年派息。利息到账时记一笔“投资-理财收益”收入；按日派息每天累计，可随时一次性入账。</li>
+              <li><strong>到期处理：</strong> 3 天内到期或已到期时，“我的”页“存钱”入口亮红点。到期可选转入活期账户、本金续存或本息续存，确认一次即生成账单；未到期可提前支取，最近一次处理可撤销。</li>
+            </ul>
+                </div>
 
             <div class="chapter-nav-footer">
               <div class="nav-btn nav-prev" onclick="goToChapter(3)">
@@ -551,33 +582,39 @@
               <div class="nav-btn nav-next" onclick="goToChapter(5)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
-                  <span class="nav-name">精细化预算管理</span>
+                  <span class="nav-name">借贷往来</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-5" tabindex="-1">
-            <div class="help-section" id="sec-budget">
-            <div class="section-header">
-              <div class="icon-wrap bg-green">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+                <div style="height: 24px;"></div>
               </div>
-              <h3>精细化预算管理</h3>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-5"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-debt">
+            <div class="section-header">
+              <div class="icon-wrap bg-teal">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path></svg>
+              </div>
+              <h3>借贷往来</h3>
             </div>
             <ul class="help-list">
-              <li><strong>三维周期看板：</strong> 支持按“周”、“月”、“年”独立查看预算和结余。主进度条自带颜色预警：花销达到 80% 会变为橙色，超出 100% 会变为醒目的红色。</li>
-              <li><strong>主次分级预算：</strong> 不仅可以设置总额，还能点击列表中的各主分类或二级子分类（如单独为“餐饮-咖啡”设置上限），精确掌控每一笔细分开销。</li>
-              <li><strong>退款智能抵扣与过滤：</strong> 预算引擎极其严谨——“内部转账”、“余额调整”以及“不计入预算”的账单会自动被剔除。如果某笔消费发生了退款，系统会智能按净支出计算，把退回来的钱实时补充回可用预算里。</li>
-              <li><strong>一键设为默认：</strong> 每月预算金额大同小异？在月度预算看板点击顶部的“设为默认”，未来的每个月都会自动套用这套模板，省去重复填写的烦恼。</li>
+              <li><strong>为什么要单独记：</strong> 借钱给朋友、交房租押金，钱并没有花掉，只是暂时在别人那里，将来还会回来。所以借贷用单独的“往来账户”来记，<strong>不计入收支统计和预算</strong>；别人欠你的计入总资产，你欠别人的计入总负债，净资产始终准确。</li>
+              <li><strong>四种类型：</strong> 应收有<strong>“借出”</strong>（钱借给了谁）和<strong>“其他应收”</strong>（付出的押金、替人垫付待收回的钱）；应付有<strong>“借入”</strong>（向谁借了钱）和<strong>“其他应付”</strong>（收到的押金、预收的定金）。</li>
+              <li><strong>怎么新建：</strong> 点“我的 → 借贷”，或“资产账户 → 借贷往来”，再点“记一笔借出”等按钮。填写对方、金额、日期和约定还款日，还可以附上借条或转账截图。选了<strong>资金账户</strong>，钱会从这个账户转出（或转入），余额同步变化；不选则只登记这笔借贷、不影响其他账户，适合补记以前的旧账。</li>
+              <li><strong>后续怎么记：</strong> 在单笔详情里操作。<strong>“收款 / 还款 / 收回 / 退还”</strong>可以分几次，都不计入收支；<strong>“追加”</strong>记又借出或借入的一笔；<strong>“利息收入 / 利息支出”</strong>计入收支，不影响本金；<strong>“坏账核销”</strong>（收不回来了，计入支出、不占预算）和<strong>“债务减免”</strong>（对方说不用还了，计入收入）；押金抵了房租、定金转成货款时，用<strong>“转为支出 / 转为收入”</strong>。</li>
+              <li><strong>自动结清：</strong> 待收或待还金额归零，就自动算作结清，从资产首页隐藏，可在总览的“已结清”里找到；再追加一笔会自动重新开启。</li>
+              <li><strong>总览与提醒：</strong> 总览分“应收 / 应付”两个页签，每个页签下可按“未结清 / 已结清 / 按人”查看，一眼看清谁欠你多少、你欠谁多少。有借贷<strong>已逾期或 3 天内到期</strong>时，“我的”页的“借贷”按钮右上角会亮起红点。</li>
+              <li><strong>举个例子：</strong> 小王借走 2000 元、分三次还清：新建一笔“借出”，之后他每次还钱就点“收款”，还清后自动结清。租房交了 3000 元押金、退房时被扣 500 元：新建“其他应收”，退房时“收回”2500 元，剩下的 500 元用“转为支出”记到房租或维修。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
               <div class="nav-btn nav-prev" onclick="goToChapter(4)">
@@ -590,19 +627,65 @@
               <div class="nav-btn nav-next" onclick="goToChapter(6)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
+                  <span class="nav-name">精细化预算管理</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-6"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-budget">
+            <div class="section-header">
+              <div class="icon-wrap bg-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+              </div>
+              <h3>精细化预算管理</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>三维周期看板：</strong> 支持按“周”、“月”、“年”独立查看预算和结余。主进度条自带颜色预警：花销达到 80% 会变为橙色，超出 100% 会变为醒目的红色。</li>
+              <li><strong>主次分级预算：</strong> 不仅可以设置总额，还能点击列表中的各主分类或二级子分类（如单独为“餐饮-咖啡”设置上限），精确掌控每一笔细分开销。</li>
+              <li><strong>退款智能抵扣与过滤：</strong> 预算引擎极其严谨——“内部转账”、“余额调整”以及“不计入预算”的账单会自动被剔除。如果某笔消费发生了退款，系统会智能按净支出计算，把退回来的钱实时补充回可用预算里。</li>
+              <li><strong>一键设为默认：</strong> 每月预算金额大同小异？在月度预算看板点击顶部的“设为默认”，未来的每个月都会自动套用这套模板，省去重复填写的烦恼。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(5)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">借贷往来</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(7)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
                   <span class="nav-name">周期与分期管理</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-6" tabindex="-1">
-            <div class="help-section" id="sec-recurring">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-7"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-recurring">
             <div class="section-header">
               <div class="icon-wrap bg-indigo">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l-5.41 5.41"></path></svg>
@@ -615,33 +698,36 @@
               <li><strong>分期管理（信用卡/花呗）：</strong> 买大件用了分期？输入总金额与期数（如 6、12 期），系统会自动生成“还款计划表明细”。支持四种手续费模式（无/总手续费/每期手续费/月费率），每一期需还本金与利息一目了然。</li>
               <li><strong>提前结清与随时暂停：</strong> 如果中途手头宽裕，支持对分期计划“提前结清”；或者随时“暂停”某项周期记账。执行这些操作后，后续将不再生成新账单，但已生成的历史账单不受任何影响，绝对安全。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(5)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(6)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">精细化预算管理</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(7)">
+              <div class="nav-btn nav-next" onclick="goToChapter(8)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">报销追踪管理</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-7" tabindex="-1">
-            <div class="help-section" id="sec-reimburse">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-8"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-reimburse">
             <div class="section-header">
               <div class="icon-wrap bg-amber">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
@@ -652,7 +738,6 @@
               <li class="keep-gap"><strong>待办与已结双看板：</strong> 记账时只要点选“报销”开关，这笔钱就会自动流入此处。看板清晰划分为“未报销”与“已报销”两大专区，帮你盯紧每一笔垫付的钱。</li>
             </ul>
 
-            
             <img src="baoxiao.AVIF" alt="报销追踪功能截图" class="help-screenshot" />
 
             <ul class="help-list">
@@ -660,33 +745,36 @@
               <li><strong>万能搜索定位：</strong> 列表自带强大的搜索引擎。输入分类名称、账单备注、具体金额，甚至是你打的自定义标签（如 <code>#出差</code>），即可从海量记录中瞬间定位需要对账的那一笔。</li>
               <li><strong>外币自动统一折算：</strong> 在月份汇总金额时，无论你垫付时用了哪国的货币，系统都会调取账单快照，将它们精准折算为统一的“本位币”呈现，直观展示月度总报销金额。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(6)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(7)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">周期与分期管理</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(8)">
+              <div class="nav-btn nav-next" onclick="goToChapter(9)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">贴心备忘提醒</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-8" tabindex="-1">
-            <div class="help-section" id="sec-reminder">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-9"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-reminder">
             <div class="section-header">
               <div class="icon-wrap bg-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0" /><path d="M22 8c0-2.3-.8-4.3-2-6" /><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /><path d="M4 2C2.8 3.7 2 5.7 2 8" /></svg></div>
               <h3>贴心的备忘与提醒</h3>
@@ -697,33 +785,36 @@
               <li><strong>主页胶囊与日历联动：</strong>当天到期的重要备忘，会化身为精致的蓝色胶囊，优雅地悬挂在主页顶端提醒你（点击查看后阅后即焚）。同时，所有未来的提醒都会在日历格子中亮起专属小图标。</li>
               <li><strong>系统级强力推送：</strong>采用“极客级”的纯本地智能排期引擎。哪怕 App 被彻底退出、在无网环境下，只要时间一到，依然能通过手机系统底层准时弹出横幅通知，绝不漏发。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(7)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(8)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">报销追踪管理</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(9)">
+              <div class="nav-btn nav-next" onclick="goToChapter(10)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">资产与物品</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-9" tabindex="-1">
-            <div class="help-section" id="sec-assets">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-10"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-assets">
             <div class="section-header">
               <div class="icon-wrap bg-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-9" /><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" /><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" /><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" /></svg></div>
               <h3>资产盘点与物品清单</h3>
@@ -734,33 +825,36 @@
               <li><strong>7天精准过期雷达：</strong>针对食品、保健品、化妆品等带有生命周期的物品，支持录入过期时间。当有物品在7天内即将到期或已过期时，主页顶端会灵动浮现物品到期小横幅！</li>
               <li><strong>自定义字典扩容：</strong>在“分类”与“空间”界面的最后方，提供了专属的 <code>+</code> 虚线按钮，支持拓展全新的空间名字或特定物品分类。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(8)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(9)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">贴心备忘提醒</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(10)">
+              <div class="nav-btn nav-next" onclick="goToChapter(11)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">数据备份与恢复</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-10" tabindex="-1">
-            <div class="help-section" id="sec-backup">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-11"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-backup">
             <div class="section-header">
               <div class="icon-wrap bg-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8" /><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" /><path d="m8 17 4-4 4 4" /></svg></div>
               <h3>数据备份与恢复</h3>
@@ -769,38 +863,51 @@
               <li><strong>五大网盘随心选：</strong>支持 iCloud、WebDAV（请自行前往 <strong>坚果云</strong> 或 <strong>Infini-cloud</strong> 等服务商免费申请 WebDAV 网盘，<strong>点击查看详细配置指南👆</strong>）、百度网盘、Google Drive 以及 OneDrive，全部支持增量无感备份，想用哪个网盘、用几个，完全由你决定。</li>
               <li><strong>日常自动备份：</strong>只要有新数据，每个已连接的网盘都会按各自的节奏自动静默备份（打开 App、回到前台或退到后台都可能触发）。💡 注：App 保持在前台使用时才会静默备份，头像旁网盘Logo闪烁代表正在备份中，此时<strong>请勿划掉清理应用</strong>。</li>
               <li><strong>手动导出与恢复：</strong>在“我的 - 备份恢复”中，随时可以导出全量数据的 <code>JSON</code> 文件，或含图片的 <code>PDF</code>、<code>ZIP</code> 备份包保存到本地；换机或重装后，也可以直接选择某个已连接的网盘一键恢复，或者导入本地的备份文件。</li>
+              <li><strong>导入第三方日记应用：</strong>在“我的 - 备份恢复 - 导出导入”中点击“导入第三方日记应用”：<strong>Day One</strong> 选择它导出的压缩包（Day One 设置 → 「导入/导出」→「导出 Day One JSON [ZIP]」），日记连同照片、时间、地点和天气一起导入；<strong>一本日记</strong> 选择它导出的 <code>.txt</code> 文件，按日期自动拆分成一篇篇日记（TXT 不含照片）；<strong>一叶日记</strong> 选择「设置 → 数据管理 → 导出Markdown」得到的 zip 压缩包，文字、时间、地址和图片一起导入。重复导入同一个文件不会产生重复日记。</li>
               <li><strong>多设备实时同步——不止是备份，更是"随身账本"：</strong>如果你有不止一台设备（比如手机 + 平板，或者正在新旧手机之间过渡），打开这个开关就能让编辑在设备之间近乎实时地互相追平，而不用等日常备份的自然节奏慢慢同步过去。</li>
               <li><strong>新设备自动识别已有主盘：</strong>如果你的其它设备已经设置过主盘，在新设备上打开这个开关时会自动检测到，并提示你是否保持一致——不用每台设备都重新决定一遍。</li>
               <li><strong>💡 新用法：和家人共用一本账：</strong>如果你和家人（比如夫妻）愿意共用同一份账本视角，可以在两台手机上登录<strong>同一个网盘账号</strong>（比如同一个百度网盘或 Google Drive 账号），把这个网盘设成同一个主盘，再各自打开“多设备实时同步”——这样无论谁在自己手机上记了一笔账、写了一篇日记，很快就能在对方手机上看到，几乎就像两人在共用同一本账。</li>
               <li><strong>进阶选项——多网盘实时镜像 / 立即强推全部网盘：</strong>如果你希望每个已连接的网盘都尽量保持实时更新（而不只是主盘优先），可以在“多设备实时同步”的高级选项里打开“多网盘实时镜像”；也可以随时点一下“立即强推全部网盘”，手动触发一次全量同步。这两个属于进阶选项，会明显增加请求频率，日常使用一般用不到，默认关闭即可。</li>
             </ul>
-                
-            </div>
+
+            <h4 class="help-subtitle">📱 换机指南</h4>
+            <ul class="help-list">
+              <li><strong>方式一：网盘备份 → 新手机恢复（推荐）：</strong>旧手机在“我的 - 备份恢复”中选一个已连接的网盘，点一次备份，等头像旁的网盘 Logo 停止闪烁即表示完成；新手机安装鸡毛蒜皮后，连接<strong>同一个网盘账号</strong>，点“从 XX 恢复”即可把文字、图片和设置一起拉回来。无需传文件，iPhone 与安卓之间也能互换。💡 注：iCloud 只能在苹果设备之间使用，iPhone 换安卓请选 WebDAV、百度网盘、Google Drive 或 OneDrive。</li>
+              <li><strong>方式二：导出备份包 → 传到新手机 → 导入：</strong>不想用网盘或没有网络时适用。旧手机进入“我的 - 备份恢复 - 导出导入”，选“备份包 (ZIP)”后点“导出数据”，在弹出的分享面板里把压缩包发到新手机；新手机进入同一页面，点“点击选择「鸡毛蒜皮」备份文件”选中压缩包，再点“导入数据”。</li>
+              <li><strong>怎么把压缩包传到新手机：</strong>iPhone 之间用<strong>隔空投送</strong>最方便；安卓之间可用 <strong>Quick Share（快速分享）</strong>、华为分享，或小米 / OPPO / vivo 等品牌自带的“互传”；iPhone 与安卓之间可以两台都安装免费的 <strong>LocalSend</strong> 互传，也可以借助网盘或电脑中转。微信 / QQ 对文件大小有限制，照片较多的备份包不建议用它们传。</li>
+              <li><strong>分卷备份包：</strong>照片较多时，导出会自动拆成多个小包，请<strong>全部</strong>传到新手机，导入时一次多选所有分卷一起导入，缺少任何一个都会丢失部分图片。</li>
+              <li><strong>放心重复操作：</strong>恢复和导入都是与新手机上已有的数据<strong>合并</strong>，不会清空现有内容；同一份数据重复恢复或导入也不会产生重复记录。换机完成后，建议先在新手机上核对一下账户余额和最近的日记，确认无误再清理旧手机。</li>
+            </ul>
+                </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(9)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(10)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">资产与物品</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(11)">
+              <div class="nav-btn nav-next" onclick="goToChapter(12)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">安全与隐私</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-11" tabindex="-1">
-            <div class="help-section" id="sec-security">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-12"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-security">
             <div class="section-header">
               <div class="icon-wrap bg-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg></div>
               <h3>数据安全与隐私</h3>
@@ -812,33 +919,36 @@
               <li><strong>应用锁：</strong>支持 4 位数字密码、面容 ID 及指纹解锁，可设“离开几分钟后锁定”，防止旁人随意翻看。</li>
               <li><strong>权限按需申请：</strong>定位、相册、通知等系统权限均在你主动使用相关功能（如日记环境感知、备忘提醒）时才会用到，不会在后台无授权采集。</li>
             </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(10)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">数据备份与恢复</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(12)">
+              <div class="nav-btn nav-next" onclick="goToChapter(13)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">进阶玩法</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-12" tabindex="-1">
-            <div class="help-section" id="sec-advanced">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-13"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-advanced">
             <div class="section-header">
               <div class="icon-wrap bg-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></svg></div>
               <h3>进阶玩法</h3>
@@ -851,42 +961,48 @@
               <li><strong>一键返回底部：</strong>当你在主页翻阅历史老记录时，只需<strong>轻点左上角年月选择旁边的X键或点击底部输入框</strong>，就能瞬间回到今天最新的记录位置，无需拼命往下滑！</li>
               <li><strong>图片双指缩放：</strong>查看图片时支持双指缩放，长按图片可一键保存至手机相册。</li>
               <li><strong>定时暖心提醒：</strong>前往设置开启。除按时温馨催记外，系统还会在特定时间唤醒“每日回顾”，并在往年今日有回忆时，准时为你发送时光漫游通知，重温过往。</li>
-              <li><strong>一键导出到笔记：</strong>在日历页面点击“全选复制”，系统会把你一整天的日记和账单，自动排版成干净整洁的 Markdown 格式。你可以直接把它粘贴到 Obsidian 或别的笔记软件里，非常方便！</li>
+              <li><strong>今日小票：</strong>在日历页面点击“今日小票”（选中其它日期时显示“当日小票”），会把这一天的账单排成一张热敏纸风格的小票：明细、分类汇总、支出/收入合计、结余和日记篇数一目了然，还可以切换只看支出或收入、修改副标题，一键分享或保存到相册。</li>
               <li><strong>随时追加感想：</strong>在日记气泡底部点击“📝 追加感想”，即可在不破坏原文的情况下写下感想或补充后续动态。</li>
               <li><strong>信用卡还款提醒：</strong>在“资产账户管理”中新建信用账户时，顺手设个还款日吧！系统会在到期前贴心提醒您，帮您避开逾期烦恼。</li>
+              <li><strong>📱 iPhone 桌面小组件：</strong>长按桌面空白处 → 左上角“+” → 搜索“鸡毛蒜皮”，即可添加：<strong>收支概览</strong>、<strong>快捷记录</strong>（记一笔 / 写日记）、<strong>那年今日</strong>、<strong>随机漫游</strong>、<strong>备忘提醒</strong>。
+              <br><strong>🔒 锁屏小组件：</strong>长按锁屏 → 自定义 → 锁屏 → 点时间下方的区域，搜索“鸡毛蒜皮”。
+              </li>
               <li><strong>🎁 隐藏彩蛋：</strong>
               <br><strong>📸 闪电相机：</strong>在主页、日记和手工记账界面，长按“图片”按钮，即可瞬间唤起相机拍照！
               <br><strong>📝 待办清单和加粗：</strong>在写日记时，输入 <code>[]</code> （中英文皆可）能瞬间变出可交互的待办方框。输入 <code>**示例**</code>则可让文字加粗。
               </li>
 
               </ul>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">安全与隐私</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+              <div class="nav-btn nav-next" onclick="goToChapter(14)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">常见问题 (FAQ)</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-        <div class="page-slide">
-          <div class="page-scroll" id="scroll-13" tabindex="-1">
-            <div class="help-section" id="sec-faq">
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-14"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-faq">
             <div class="section-header">
               <div class="icon-wrap" style="background: #475569;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></svg></div>
               <h3>常见问题与技巧 (FAQ)</h3>
@@ -958,11 +1074,10 @@
                 <p>前往“我的 - 主题个性”，打开<strong>“跟随系统字体大小”</strong>开关，App 会完美适配你手机系统里设置的大字号（支持长辈模式）。如果需要更精准的控制，你也可以关闭开关，直接拖动下方的滑块手动调节气泡字号。</p>
               </details>
             </div>
-                
-            </div>
+                </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
@@ -970,19 +1085,18 @@
                 </div>
               </div>
               <div class="nav-btn nav-disabled"><span>已是最后一章</span></div>
-            
             </div>
 
-            <div style="height: 24px;"></div>
-          </div>
-        </div>
-    </div>
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+</div>
   </div>
 
 </div>
 
 <script>
-  var tocList = [{"id": "sec-ai", "title": "极速记账魔法"}, {"id": "sec-manual", "title": "精打细算记账"}, {"id": "sec-diary", "title": "时光日记本"}, {"id": "sec-stats", "title": "全能首页看板"}, {"id": "sec-savings", "title": "存钱计划与目标"}, {"id": "sec-budget", "title": "精细化预算管理"}, {"id": "sec-recurring", "title": "周期与分期管理"}, {"id": "sec-reimburse", "title": "报销追踪管理"}, {"id": "sec-reminder", "title": "贴心备忘提醒"}, {"id": "sec-assets", "title": "资产与物品"}, {"id": "sec-backup", "title": "数据备份与恢复"}, {"id": "sec-security", "title": "安全与隐私"}, {"id": "sec-advanced", "title": "进阶玩法"}, {"id": "sec-faq", "title": "常见问题 (FAQ)"}];
+  var tocList = [{"id": "sec-ai", "title": "极速记账魔法"}, {"id": "sec-manual", "title": "精打细算记账"}, {"id": "sec-diary", "title": "时光日记本"}, {"id": "sec-stats", "title": "全能首页看板"}, {"id": "sec-savings", "title": "存钱计划与目标"}, {"id": "sec-debt", "title": "借贷往来"}, {"id": "sec-budget", "title": "精细化预算管理"}, {"id": "sec-recurring", "title": "周期与分期管理"}, {"id": "sec-reimburse", "title": "报销追踪管理"}, {"id": "sec-reminder", "title": "贴心备忘提醒"}, {"id": "sec-assets", "title": "资产与物品"}, {"id": "sec-backup", "title": "数据备份与恢复"}, {"id": "sec-security", "title": "安全与隐私"}, {"id": "sec-advanced", "title": "进阶玩法"}, {"id": "sec-faq", "title": "常见问题 (FAQ)"}];
   var currentIndex = 0;
   var showToc = false;
   var showSearch = false;
@@ -1090,7 +1204,7 @@
     var q = searchInput.value.trim();
     searchClearBtn.style.display = searchInput.value ? 'flex' : 'none';
     if (!q) {
-      searchResultsView.innerHTML = '<div class="search-hint">输入关键词，可搜索指南全部 14 个章节与常见问题中的任意内容</div>';
+      searchResultsView.innerHTML = '<div class="search-hint">输入关键词，可搜索指南全部 15 个章节与常见问题中的任意内容</div>';
       return;
     }
     var lowerQ = q.toLowerCase();
@@ -1119,8 +1233,66 @@
   searchInput.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSearch(); });
 
   function selectSearchHit(idx) {
+    var q = searchInput.value.trim();
     closeSearch();
     goToChapter(idx);
+    setTimeout(function () { scrollToKeyword(idx, q); }, 0);
+  }
+
+  var HIGHLIGHT_NAME = 'help-search-hit';
+  var highlightTimer = null;
+  function clearKeywordHighlight() {
+    if (highlightTimer) { clearTimeout(highlightTimer); highlightTimer = null; }
+    try { if (window.CSS && CSS.highlights) CSS.highlights.delete(HIGHLIGHT_NAME); } catch (e) {}
+  }
+  function findKeywordRange(root, query) {
+    var lowerQ = query.toLowerCase();
+    if (!lowerQ) return null;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var nodes = [], starts = [], full = '', n;
+    while ((n = walker.nextNode())) { nodes.push(n); starts.push(full.length); full += n.data; }
+    var lowerFull = full.toLowerCase();
+    function locate(offset, isEnd) {
+      for (var i = nodes.length - 1; i >= 0; i--) {
+        if (starts[i] < offset || (!isEnd && starts[i] === offset)) return [nodes[i], offset - starts[i]];
+      }
+      return null;
+    }
+    var from = 0;
+    for (var guard = 0; guard < 50; guard++) {
+      var pos = lowerFull.indexOf(lowerQ, from);
+      if (pos === -1) return null;
+      var a = locate(pos, false), b = locate(pos + lowerQ.length, true);
+      if (a && b) {
+        var range = document.createRange();
+        range.setStart(a[0], a[1]);
+        range.setEnd(b[0], b[1]);
+        var rect = range.getBoundingClientRect();
+        if (rect.width > 0 || rect.height > 0) return range;
+      }
+      from = pos + 1;
+    }
+    return null;
+  }
+  function scrollToKeyword(idx, query) {
+    clearKeywordHighlight();
+    if (!query) return;
+    var secEl = document.getElementById(tocList[idx].id);
+    var scrollEl = document.getElementById('scroll-' + idx);
+    if (!secEl || !scrollEl) return;
+    var range = null;
+    try { range = findKeywordRange(secEl, query); } catch (e) { range = null; }
+    if (!range) return;
+    var rangeRect = range.getBoundingClientRect();
+    var boxRect = scrollEl.getBoundingClientRect();
+    var target = scrollEl.scrollTop + (rangeRect.top - boxRect.top) - boxRect.height * 0.3;
+    scrollEl.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+    try {
+      if (window.Highlight && window.CSS && CSS.highlights) {
+        CSS.highlights.set(HIGHLIGHT_NAME, new Highlight(range));
+        highlightTimer = setTimeout(clearKeywordHighlight, 3000);
+      }
+    } catch (e) {}
   }
 
   function goBack() {
