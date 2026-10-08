@@ -119,6 +119,7 @@
 
     .dl-left { display: flex; align-items: center; gap: 18px; flex: 1; min-width: 0; }
     .dl-icon { font-size: 32px; line-height: 1; flex-shrink: 0; width: 36px; text-align: center; display: inline-block; }
+    .dl-icon-img { width: 32px; height: 32px; display: block; margin: 0 auto; object-fit: contain; }
     .dl-text-group { display: flex; flex-direction: column; justify-content: center; flex: 1; min-width: 0; }
 
     .dl-text-main { font-size: 18px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -327,7 +328,7 @@
     <section class="downloads">
       <div class="dl-btn" onclick="openAppStore()">
         <div class="dl-left">
-          <div class="dl-icon"></div>
+          <div class="dl-icon"><img class="dl-icon-img" src="./images/App%20Store.svg" alt="App Store"></div>
           <div class="dl-text-group">
             <div class="dl-text-main">App Store 下载</div>
             <div class="dl-text-sub">iOS 专属纯净体验</div>
