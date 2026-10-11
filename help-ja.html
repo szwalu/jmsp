@@ -1,0 +1,1415 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>使い方ガイド - 雞毛蒜皮</title>
+<link rel="alternate" hreflang="zh-CN" href="/help.html">
+<link rel="alternate" hreflang="zh-Hant" href="/help-zh-TW.html">
+<link rel="alternate" hreflang="en" href="/help-en.html">
+<link rel="alternate" hreflang="ja" href="/help-ja.html">
+<link rel="alternate" hreflang="x-default" href="/help.html">
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background-color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  .page-content {
+    position: relative;
+    min-height: 100dvh;
+    width: 100%;
+    overflow-x: hidden;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* ==================== 头部 ==================== */
+  .header-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background-color: #f8fafc;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .header-bar { display: flex; align-items: center; padding: 14px 16px 6px; gap: 8px; }
+
+  .back-btn {
+    display: flex; align-items: center; justify-content: center;
+    background: transparent; border: none; color: var(--theme-primary, #6366f1);
+    cursor: pointer; padding: 8px; margin: -8px; flex-shrink: 0;
+  }
+  .back-btn svg { stroke: currentColor !important; }
+
+  .header-spacer { width: 24px; flex-shrink: 0; }
+
+  .title-group { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }
+  .title { font-size: 17px; font-weight: 600; color: #1e293b; }
+  .page-indicator { font-size: 11px; color: #94a3b8; margin-top: 1px; font-variant-numeric: tabular-nums; }
+
+  .toolbar-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 12px 10px; }
+
+  .toolbar-chip {
+    display: flex; align-items: center; gap: 6px;
+    border: none; background: rgba(100, 116, 139, 0.1); color: #64748b;
+    font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 999px;
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .toolbar-chip.chip-active { background: rgba(99, 102, 241, 0.14); color: var(--theme-primary, #6366f1); }
+  .toolbar-chip:active { transform: scale(0.96); }
+
+  /* ==================== 分页容器 ==================== */
+  .pager-viewport { flex: 1; position: relative; overflow: hidden; }
+  .pager-track { display: flex; height: 100%; width: 100%; transform: translateX(0); }
+  .pager-track.no-anim { transition: none !important; }
+
+  .page-slide { flex: 0 0 100%; width: 100%; min-width: 0; }
+
+  .page-scroll {
+    height: calc(100dvh - 92px);
+    overflow-y: auto;
+    padding: 20px 16px calc(40px + env(safe-area-inset-bottom)) 16px;
+    -webkit-overflow-scrolling: touch;
+    outline: none;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+    box-sizing: border-box;
+  }
+
+  /* ==================== 目录下拉 ==================== */
+  .toc-backdrop { position: fixed; inset: 0; z-index: 20; background: transparent; }
+
+  .toc-dropdown {
+    position: absolute; top: 100%; left: 12px; margin-top: 8px; background: #ffffff; border-radius: 16px;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    padding: 8px 0; width: 200px; max-height: 60vh; overflow-y: auto; border: 1px solid rgba(0,0,0,0.04);
+    z-index: 31;
+  }
+
+  .toc-item {
+    padding: 12px 18px; font-size: 14px; color: #475569; cursor: pointer; transition: all 0.2s ease; position: relative;
+    display: flex; align-items: center;
+  }
+  .toc-idx {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 50%; margin-right: 8px; flex-shrink: 0;
+    background: rgba(100,116,139,.12); color: #64748b; font-size: 11px;
+  }
+  .toc-item.active { color: var(--theme-primary, #6366f1); font-weight: 600; background: rgba(99, 102, 241, 0.06); }
+  .toc-item.active .toc-idx { background: rgba(99,102,241,.15); color: var(--theme-primary, #6366f1); }
+  .toc-item.active::before {
+    content: ''; position: absolute; left: 0; top: 10%; bottom: 10%; width: 3px;
+    background-color: var(--theme-primary, #6366f1); border-top-right-radius: 4px; border-bottom-right-radius: 4px;
+  }
+  .toc-item:active { background: rgba(0,0,0,0.03); }
+
+  /* ==================== 搜索 ==================== */
+  .search-bar-inline {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    background: rgba(100, 116, 139, 0.1); border-radius: 10px; padding: 9px 12px; min-width: 0;
+  }
+  .search-bar-inline .search-icon { color: #94a3b8; flex-shrink: 0; }
+
+  .search-input {
+    flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+    font-size: 16px; color: #1e293b;
+    font-family: -apple-system, system-ui, sans-serif;
+  }
+  .search-input::placeholder { color: #94a3b8; }
+
+  .search-clear {
+    border: none; background: #cbd5e1; color: #ffffff; width: 20px; height: 20px; border-radius: 50%;
+    font-size: 14px; line-height: 1; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  }
+
+  .search-cancel-btn {
+    border: none; background: transparent; color: var(--theme-primary, #6366f1);
+    font-size: 15px; font-weight: 500; padding: 8px 2px 8px 8px; margin: -8px 0;
+    cursor: pointer; flex-shrink: 0; white-space: nowrap;
+  }
+
+  .search-results-view {
+    height: calc(100dvh - 62px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 10px 16px calc(24px + env(safe-area-inset-bottom)) 16px;
+    box-sizing: border-box;
+  }
+
+  .search-hit { padding: 14px 12px; border-radius: 14px; cursor: pointer; transition: background 0.2s ease; margin-bottom: 2px; }
+  .search-hit:active { background: rgba(99, 102, 241, 0.08); }
+  .hit-title { font-size: 14px; color: var(--theme-primary, #6366f1); font-weight: 600; margin-bottom: 4px; }
+  .hit-snippet { font-size: 15px; color: #475569; line-height: 1.6; }
+
+  .search-hint, .search-empty { padding: 44px 24px; text-align: center; color: #94a3b8; font-size: 14px; line-height: 1.7; }
+
+  .hit-snippet mark { background: rgba(99, 102, 241, 0.22); color: inherit; border-radius: 3px; padding: 0 2px; }
+
+  /* ==================== 章节正文 ==================== */
+  .help-section { background: #ffffff; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+
+  .section-header { display: flex; align-items: center; margin-bottom: 16px; }
+  .icon-wrap { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; color: #ffffff; flex-shrink: 0; }
+
+  .bg-blue { background: #3b82f6; }
+  .bg-orange { background: #f97316; }
+  .bg-pink { background: #ec4899; }
+  .bg-indigo { background: #6366f1; }
+  .bg-purple { background: #a855f7; }
+  .bg-green { background: #10b981; }
+  .bg-teal { background: #14b8a6; }
+  .bg-amber { background: #f59e0b; }
+
+  .section-header h3 { margin: 0; font-size: 15px; font-weight: 600; color: #1e293b; }
+  .help-list { margin: 0; padding: 0 0 0 18px; color: #475569; font-size: 14px; line-height: 1.7; }
+  .help-list li { margin-bottom: 12px; }
+  .help-list li:last-child { margin-bottom: 0; }
+  .help-list li.keep-gap:last-child { margin-bottom: 12px; }
+  .help-list strong { color: #334155; font-weight: 600; }
+  .help-subtitle { margin: 18px 0 10px; font-size: 15px; font-weight: 600; color: #1e293b; }
+  ::highlight(help-search-hit) { background-color: rgba(255, 196, 0, 0.55); color: inherit; }
+
+  .help-screenshot {
+    display: block; width: 100%; border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06); border: 1px solid rgba(0, 0, 0, 0.03); margin: 0 0 16px 0;
+  }
+
+  .shortcut-link {
+    color: var(--theme-primary, #6366f1); text-decoration: none; font-weight: 600;
+    padding: 2px 4px; background: rgba(99, 102, 241, 0.08); border-radius: 6px; transition: all 0.2s;
+    display: inline-block; cursor: pointer;
+    -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .shortcut-link:active { background: rgba(99, 102, 241, 0.15); transform: scale(0.95); }
+
+  .video-tip-line { display: flex; align-items: center; gap: 6px; margin: 4px 0 12px 0; color: #475569; font-size: 14px; }
+  .video-icon-inline {
+    width: 14px; height: 14px; flex-shrink: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'/%3E%3Crect x='2' y='6' width='14' height='12' rx='2'/%3E%3C/svg%3E");
+    background-size: contain; background-repeat: no-repeat;
+  }
+
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: monospace; color: #3b82f6; }
+
+  .faq-container details { margin: 10px 0; padding: 12px 14px; border-radius: 12px; background: rgba(99,102,241,.06); cursor: pointer; transition: background 0.2s ease; }
+  .faq-container details:hover { background: rgba(99,102,241,.1); }
+  .faq-container summary { font-weight: 600; font-size: 14px; color: #334155; outline: none; list-style-position: inside; }
+  .faq-container p { margin: 10px 0 0 0; font-size: 14px; color: #64748b; line-height: 1.6; }
+
+  /* ==================== 章节末尾导航 ==================== */
+  .chapter-nav-footer { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; margin-top: 4px; }
+  .nav-btn {
+    flex: 1; display: flex; align-items: center; gap: 8px; padding: 14px 14px;
+    background: #ffffff; border-radius: 14px; cursor: pointer; transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02); color: var(--theme-primary, #6366f1); min-width: 0;
+  }
+  .nav-btn:active { background: rgba(99, 102, 241, 0.08); transform: scale(0.98); }
+  .nav-next { justify-content: flex-end; }
+  .nav-text { display: flex; flex-direction: column; min-width: 0; }
+  .nav-text-right { align-items: flex-end; }
+  .nav-label { font-size: 11px; color: #94a3b8; }
+  .nav-name { font-size: 13px; font-weight: 600; color: #334155; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .nav-disabled { flex: 1; display: flex; align-items: center; justify-content: center; color: #cbd5e1; font-size: 13px; background: transparent; padding: 14px; }
+
+  @media (prefers-color-scheme: dark) {
+    html, body { background-color: #111827; }
+    .page-content { background-color: #111827; }
+    .header-wrap { background-color: #111827; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .title { color: #f8fafc; }
+    .page-indicator { color: #64748b; }
+    .toolbar-chip { background: rgba(148, 163, 184, 0.12); color: #94a3b8; }
+    .toolbar-chip.chip-active { background: rgba(129, 140, 248, 0.2); color: #818cf8; }
+    .help-section { background: #1e293b; box-shadow: none; border: 1px solid rgba(255,255,255,0.05); }
+    .section-header h3 { color: #f8fafc; }
+    .help-list { color: #cbd5e1; }
+    .help-list strong { color: #f1f5f9; }
+    .help-subtitle { color: #f8fafc; }
+    ::highlight(help-search-hit) { background-color: rgba(255, 196, 0, 0.4); }
+    .help-screenshot { border-color: rgba(255,255,255,0.08); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    code { background: #334155; color: #60a5fa; }
+    .faq-container details { background: rgba(165,180,252,.1); }
+    .faq-container details:hover { background: rgba(165,180,252,.15); }
+    .faq-container summary { color: #f1f5f9; }
+    .faq-container p { color: #cbd5e1; }
+
+    .shortcut-link { color: #818cf8; background: rgba(129, 140, 248, 0.15); }
+    .video-tip-line { color: #cbd5e1; }
+    .video-icon-inline {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'/%3E%3Crect x='2' y='6' width='14' height='12' rx='2'/%3E%3C/svg%3E");
+    }
+
+    .toc-dropdown { background: #1e293b; border-color: rgba(255,255,255,0.06); box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6); }
+    .toc-item { color: #cbd5e1; }
+    .toc-item.active { color: #818cf8; background: rgba(129, 140, 248, 0.12); }
+    .toc-idx { background: rgba(148,163,184,.15); color: #94a3b8; }
+    .toc-item.active .toc-idx { background: rgba(129,140,248,.25); color: #818cf8; }
+    .toc-item.active::before { background-color: #818cf8; }
+    .toc-item:active { background: rgba(255,255,255,0.05); }
+
+    .search-bar-inline { background: rgba(148, 163, 184, 0.15); }
+    .search-input { color: #f1f5f9; }
+    .search-input::placeholder { color: #64748b; }
+    .search-clear { background: #334155; color: #cbd5e1; }
+    .search-cancel-btn { color: #818cf8; }
+    .search-hint, .search-empty { color: #64748b; }
+    .search-hit:active { background: rgba(129, 140, 248, 0.12); }
+    .hit-title { color: #818cf8; }
+    .hit-snippet { color: #cbd5e1; }
+    .hit-snippet mark { background: rgba(129, 140, 248, 0.35); }
+
+    .nav-btn { background: #1e293b; color: #818cf8; box-shadow: none; border: 1px solid rgba(255,255,255,0.05); }
+    .nav-btn:active { background: rgba(129, 140, 248, 0.12); }
+    .nav-name { color: #f1f5f9; }
+    .nav-label { color: #64748b; }
+    .nav-disabled { color: #475569; }
+  }
+
+  /* 🌐 语言切换 */
+  .lang-switch { position: relative; }
+  .lang-btn { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-family: inherit; }
+  .lang-menu { display: none; position: absolute; top: calc(100% + 8px); min-width: 140px; padding: 6px; border-radius: 14px;
+    background: #ffffff; box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.18); border: 1px solid rgba(15, 23, 42, 0.06); z-index: 60; }
+  .lang-menu.open { display: block; }
+  .lang-menu a { display: block; padding: 9px 12px; border-radius: 10px; color: #334155; text-decoration: none; font-size: 14px; white-space: nowrap; }
+  .lang-menu a:active { background: rgba(99, 102, 241, 0.08); }
+  .lang-menu a.current { color: #6366f1; font-weight: 600; background: rgba(99, 102, 241, 0.06); }
+  @media (prefers-color-scheme: dark) {
+    .lang-menu { background: #1e293b; border-color: rgba(255,255,255,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.6); }
+    .lang-menu a { color: #cbd5e1; }
+    .lang-menu a.current { color: #818cf8; background: rgba(129, 140, 248, 0.12); }
+  }
+</style>
+</head>
+<body>
+<div class="page-content">
+
+  <div class="header-wrap">
+    <div class="header-bar" id="headerBarNormal">
+      <button class="back-btn" onclick="goBack()" aria-label="戻る">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <div class="title-group">
+        <div class="title">使い方ガイド</div>
+        <div class="page-indicator" id="pageIndicator">1 / 15</div>
+      </div>
+      <div class="header-spacer" aria-hidden="true"></div>
+    </div>
+
+    <div class="header-bar" id="headerBarSearch" style="display:none;">
+      <div class="search-bar-inline">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
+        <input id="searchInput" class="search-input" type="text" inputmode="search" enterkeyhint="search" placeholder="ガイド全体を検索…" />
+        <button id="searchClearBtn" class="search-clear" style="display:none;" onclick="clearSearch()">×</button>
+      </div>
+      <button class="search-cancel-btn" onclick="closeSearch()">キャンセル</button>
+    </div>
+
+    <div class="toolbar-row" id="toolbarRow">
+      <button class="toolbar-chip" id="tocChip" onclick="toggleToc()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="14" y2="18"></line>
+        </svg>
+        <span>目次</span>
+      </button>
+      <div style="display:flex; align-items:center; gap:8px;">
+      <div class="lang-switch" id="langSwitch"><button type="button" class="toolbar-chip lang-btn" onclick="toggleLangMenu(event)" aria-haspopup="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span>日本語</span></button><div class="lang-menu" id="langMenu" style="right: 0;"><a href="/help.html" hreflang="zh-CN" lang="zh-CN" onclick="rememberLang('zh-CN')">简体中文</a><a href="/help-zh-TW.html" hreflang="zh-Hant" lang="zh-Hant" onclick="rememberLang('zh-TW')">繁體中文</a><a href="/help-en.html" hreflang="en" lang="en" onclick="rememberLang('en')">English</a><a href="/help-ja.html" hreflang="ja" lang="ja" class="current" onclick="rememberLang('ja')">日本語</a></div></div>
+      <button class="toolbar-chip" onclick="openSearch()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
+        <span>検索</span>
+      </button>
+      </div>
+    </div>
+
+    <div class="toc-dropdown" id="tocDropdown" style="display:none;">
+          <div class="toc-item active" data-idx="0" onclick="goToChapter(0)"><span class="toc-idx">1</span>クイック記録の魔法</div>
+          <div class="toc-item" data-idx="1" onclick="goToChapter(1)"><span class="toc-idx">2</span>しっかり家計簿</div>
+          <div class="toc-item" data-idx="2" onclick="goToChapter(2)"><span class="toc-idx">3</span>日記カレンダー</div>
+          <div class="toc-item" data-idx="3" onclick="goToChapter(3)"><span class="toc-idx">4</span>ホームダッシュボード</div>
+          <div class="toc-item" data-idx="4" onclick="goToChapter(4)"><span class="toc-idx">5</span>貯金プランと目標</div>
+          <div class="toc-item" data-idx="5" onclick="goToChapter(5)"><span class="toc-idx">6</span>貸し借り</div>
+          <div class="toc-item" data-idx="6" onclick="goToChapter(6)"><span class="toc-idx">7</span>きめ細かな予算管理</div>
+          <div class="toc-item" data-idx="7" onclick="goToChapter(7)"><span class="toc-idx">8</span>定期記帳と分割払い</div>
+          <div class="toc-item" data-idx="8" onclick="goToChapter(8)"><span class="toc-idx">9</span>立替精算の管理</div>
+          <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>便利なリマインダー</div>
+          <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>資産と持ち物</div>
+          <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>バックアップと復元</div>
+          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>セキュリティとプライバシー</div>
+          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>便利な使い方</div>
+          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>よくある質問 (FAQ)</div>
+    </div>
+  </div>
+
+  <div class="toc-backdrop" id="tocBackdrop" style="display:none;" onclick="closeToc()"></div>
+
+  <div class="search-results-view" id="searchResultsView" style="display:none;">
+    <div class="search-hint">キーワードを入力すると、全15章とよくある質問をまとめて検索できます</div>
+  </div>
+
+  <div class="pager-viewport" id="pagerViewport">
+    <div class="pager-track" id="pagerTrack">
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-0"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-ai">
+            <div class="section-header">
+              <div class="icon-wrap bg-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></svg></div>
+              <h3>クイック記録と AI の魔法</h3>
+            </div>
+
+            <ul class="help-list">
+              <li class="keep-gap"><strong>Siri とひと言記帳：</strong>手を使わずに記録！Siri に「Daily Trifles で記帳」と話しかけるだけ。ホーム画面の入力欄（または音声）は内容を自動で読み取ります：
+  <br>• 基本：「タクシー 25」と入力するだけで保存。
+  <br>• 口座を指定：「タクシー 25 Alipay」と入力すると自動で分類。
+  <br>• 日付を指定：「昨日 タクシー 25」と入力すると昨日の記録が作成され、その日まで自動でスクロール。「2026年8月1日 タクシー 25」のような日付も使えます。
+  <br>• 振替：「WeChat から Alipay に振替 100」と入力すると振替が作成されます。
+</li>
+            </ul>
+
+            <div class="video-tip-line">
+              <span class="video-icon-inline" aria-hidden="true"></span>
+              <strong>動画を見る：</strong>
+              <span class="shortcut-link" role="button" tabindex="0" onclick="openVideoTutorial()">再生する</span>
+            </div>
+
+            <ul class="help-list">
+              <li><strong>AI による解析：</strong>「マイページ → AI エンジン」で API キーを入力すると有効になります。「スーパーでスペアリブを50円分買って、子どものスマホに100円チャージした」のようなくだけた長文でも、AI が執事のように複数の記録にきっちり分けてくれます！</li>
+              <li><strong>自分専用のキーワード：</strong>「マイページ → カテゴリ管理」でサブカテゴリにキーワードを追加すると（例：「外食」に「マクドナルド」）、そのキーワードを含む文を入力したときに正確に分類されます。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-disabled"><span>最初の章です</span></div>
+              <div class="nav-btn nav-next" onclick="goToChapter(1)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">しっかり家計簿</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-1"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-manual">
+            <div class="section-header">
+              <div class="icon-wrap bg-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="16" x2="16" y1="14" y2="18" /><path d="M16 10h.01" /><path d="M12 10h.01" /><path d="M8 10h.01" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M12 18h.01" /><path d="M8 18h.01" /></svg></div>
+              <h3>しっかり手入力の家計簿</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>複数の帳簿：</strong>「家族」「個人」「仕事」など複数の帳簿を作成し、「マイページ → 帳簿管理」ですばやく切り替えられます。帳簿ごとの記録や統計は完全に独立しているので、公私の家計もすっきり管理できます。</li>
+              <li>
+                <strong>スクショ記帳とクイック記録：</strong>iOS 専用の便利な機能を用意しています！「マイページ → クイック記録ガイド」で、Siri の音声コマンドと背面タップでのスクショ記帳を設定できます。WeChat Pay や Alipay の明細から金額とカテゴリを自動で読み取ります。
+              </li>
+              <li><strong>手入力と電卓：</strong>画面下の
+<span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="8" y2="10"></line><line x1="12" y1="10" x2="12" y2="10"></line><line x1="16" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="16" y1="14" x2="16" y2="14"></line></svg>
+</span>をタップして手入力を開きます。<strong>まず「日時」ボタンの左側で支払い元の口座を確認・変更してください</strong>。金額キーボードには <code>+ - × ÷</code>があるので、複数の品物もそのまま計算できます。 <code>=</code> をタップすると合計が出ます。</li>
+<li><strong>よく使う記帳のショートカット：</strong>「メモを入力...」をタップすると、<strong>過去3か月</strong>の記録をもとに、よく使うテンプレートが下に並びます。テンプレートをタップすると、メモだけでなく当時の<strong>金額・カテゴリ・支払い口座まで自動で入力</strong>されます！毎月の決まった支出を何度も入力する手間が省けます。</li>
+<li><strong>振替と収支対象外：</strong>左上で「振替」に切り替えると、収支の集計に影響しない記録を作成できます。特別な資金は「収支対象外」の口座に記録できます。</li>
+<li><strong>返金：</strong>ネット通販の返品や返金は、記録の詳細で「返金」を選ぶだけ。対応するカテゴリの支出から自動で差し引かれ、統計に実際の純支出が反映されます。</li>
+<li><strong>貸し借り：</strong>貸したお金、借りたお金、敷金や手付金の受け払いは収支に含めず、専用の貸借口座で管理します。詳しくは「貸し借り」の章をご覧ください。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(0)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">クイック記録の魔法</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(2)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">日記カレンダー</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-2"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-diary">
+  <div class="section-header">
+    <div class="icon-wrap bg-pink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /><path d="M8.62 9.8A2.25 2.25 0 1 1 12 6.836a2.25 2.25 0 1 1 3.38 2.966l-2.626 2.856a.998.998 0 0 1-1.507 0z" /></svg></div>
+    <h3>日記と思い出</h3>
+  </div>
+  <ul class="help-list">
+    <li>
+                <strong>Siri で音声メモ：</strong>「Siri、Daily Trifles に記録」と話しかけるだけで、手を使わずに日記が書けます！<br>
+                💡 <strong>注意点：</strong>Siri は音声入力中に0.8秒以上止まると自動で終了するため、歩いているときや運転中の<strong>ふとしたひらめきや短い気持ちの記録に向いています</strong>。
+              </li>
+              <li>
+  <strong>長文の音声と集中モード：</strong>考えながらたっぷり書きたいときは、画面下の
+  <span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20h9"></path>
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+    </svg>
+  </span>
+  をタップ（または40文字以上入力）して全画面の日記を開きます。そこで<strong>入力欄の右下にある
+  <span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px; margin: 0 2px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+      <line x1="12" y1="19" x2="12" y2="22"></line>
+    </svg>
+  </span>
+  「録音」ボタン</strong>をタップすると、この日記に音声を録音できます。文章を書き終えたら AI でワンタップ推敲も！話した内容をそのまま文字にしたいときは、キーボードの音声入力を使ってください。
+</li>
+    <li><strong>🎙️ 日記の録音：</strong>全画面の日記で下の<strong>「録音」</strong>ボタンをタップすると録音パネルが表示されます。いつでも一時停止・再開でき、「完了」で保存。1回の録音は最長 <strong>5分</strong>（残り30秒でカウントダウンが表示され、時間になると自動保存）です。日記1件につき1つ、1日最大4つまで。録音後は再生・削除ができ、ホーム・カレンダー・あの日の今日・検索結果からそのまま再生できます（1.5倍速対応）。録音中にアプリを切り替えたり電話がかかってきたりすると自動で一時停止し、戻ると再開できます。録音は写真と同じくクラウドに自動バックアップされ、機種変更時にも復元され、ZIP エクスポートにも含まれます。検索で「録音あり」を選ぶと、録音付きの日記をすぐに探せます。</li>
+    <li><strong>🗂 日記の下書き：</strong>全画面の日記を書きかけで閉じたいときは、左上の終了ボタンで<strong>「下書きを保存」</strong>を選べば保存されます。保存前にアプリを閉じてしまっても、次回起動時に自動で下書きとして保存されます。下書きがあると、全画面の日記の右上（チェックボタンの下）に<strong>「下書き」</strong>が表示され、右上の数字が下書きの数です。ホーム画面右下の<span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px; margin: 0 2px;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20h9"></path>
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+    </svg>
+  </span>ボタンにも下書きの数が表示されます。「下書き」をタップすると一覧が開き、1件選んで編集を続けられます。日記として保存すると下書きからは自動で削除されます。下書きはこの端末にのみ保存され、クラウドにはバックアップされません（最大20件）。保存済みの日記を編集するときは下書きは使われません。<strong>長押し</strong>すると複数選択でき、まとめて削除できます。</li>
+    <li><strong>📝 録音の文字起こし（iPhone）：</strong>全画面の日記で、録音バーにある<strong>「文字起こし」</strong>ボタンをタップすると録音を文字に変換でき、保存前に修正できます。変換したテキストは録音バーの下に「文字起こし」ラベル付きで表示され、本文とは分けて保存されます。あとから編集・削除しても録音は影響を受けません。認識はすべて端末内で行われ、録音がアップロードされることはありません。文字起こしも検索でき、日記と一緒にバックアップされます。オフライン認識に非対応と表示された場合は、iPhone の「設定 → 一般 → キーボード」で「音声入力」をオンにしてから再度お試しください。</li>
+
+    <li><strong>写真と周囲の情報：</strong>高画質の写真を最大20枚、タグを10個まで追加でき、気分スタンプも押せます。アプリが天気と位置情報をそっと記録し、そのときの空気や気持ちを思い出として残します。</li>
+    <li><strong>📍 場所と天気：</strong>全画面の日記の上部にある「場所・天気」は、それぞれタップして変更できます。<strong>場所</strong>をタップすると「場所を設定」パネルが開き、「市＋区／区／番地」の3段階から選ぶか、手入力できます。右上の<strong>「現在地を取得」</strong>で現在地の住所に切り替えられます。<strong>天気</strong>をタップすると16種類の天気から選べ、温度バーを左右にドラッグして気温を設定できます。<strong>「再取得」</strong>で現在地の天気を再取得します。場所・天気の右にある <strong>✕</strong> で、その項目だけを削除できます。</li>
+    <li><strong>あの日の今日：</strong>ホーム画面に思い出のバナーが出たり、カレンダーのアイコンが ✨ と光ったりしたら、今日の思い出があります！バナーをタップ（またはカレンダーで<code>あの日の今日</code>をタップ）すると、本をめくるように過去の日を振り返れます。過去5年分の今日の日記を書き足すこともできます。<code>あの日の今日</code>ボタン右上の赤い数字は過去の日記の件数、右下の小さなカメラは過去の同じ日の写真があることを示します。写真ライブラリに過去の同じ日に撮った写真があれば、上部に写真のお知らせが表示されます。タップすると年ごとのアルバムが開き、写真を選んでその年のこの日の日記を作成できます。</li>
+    <li><strong>シェイクでランダムに振り返る：</strong>カレンダーで<code>ランダムに振り返る</code>をタップすると、思い出をどこまでも巡れます。<strong>スマホを振る</strong>と、軽やかな振動とともに新しい過去の一日がランダムに選ばれます。まるで福袋のような楽しさ！</li>
+    <li><strong>足あとマップ：</strong>カレンダーで <code>足あとマップ</code>をタップすると、地図の上で思い出の足取りをたどれます。数字の付いた円はその場所で書いた日記の数。タップすると「この場所の思い出」ギャラリーが開き、そこでの出来事をじっくり振り返れます。</li>
+    <li><strong>🖼️ 日記フォト：</strong>「マイページ → 日記フォト」では、日記に添付したすべての写真が日付の新しい順に並び、上部で年・月ごとに絞り込めます。写真をタップすると全画面で表示され、左右にスワイプしてめくれます。写真を長押しすると、その日記を見る・写真アプリに保存・共有ができます。</li>
+    <li><strong>💡 写真をすばやく探すコツ：</strong>「あの日の今日」やランダムに振り返る画面、過去の日記の追記で写真を追加すると、その日の日付が自動でクリップボードにコピーされます。<strong>写真アプリの検索欄に貼り付ければ、その日の写真が一瞬で見つかります！</strong></li>
+  </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(1)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">しっかり家計簿</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(3)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">ホームダッシュボード</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-3"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-stats">
+            <div class="section-header">
+              <div class="icon-wrap bg-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12c.552 0 1.005-.449.95-.998a10 10 0 0 0-8.953-8.951c-.55-.055-.998.398-.998.95v8a1 1 0 0 0 1 1z" /><path d="M21.21 15.89A10 10 0 1 1 8 2.83" /></svg></div>
+              <h3>ホームダッシュボードと統計</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>3つのダッシュボード：</strong>ホーム画面上部のダッシュボードは<strong>左右にスワイプ</strong>して「日記」「収支」「資産」を切り替えられます。タップすると全画面の統計が開きます。</li>
+              <li><strong>AI まとめと月初のお知らせ：</strong>アプリは適応型の Map-Reduce 方式を採用しています。<strong>毎月1日</strong>になると、ホーム画面の上部に思い出カプセルが表示されます（読むと消えます）。AI がひと月の喜怒哀楽から心温まる「時の手紙」を作成し、年末には12か月を振り返る「年間レポート」を届けます！カプセルを見逃しても、日記統計の［月］／［年］表示からいつでも呼び出せ、端末内のキャッシュならコストゼロですぐに表示されます。</li>
+              <li><strong>時の記録（日記モード）：</strong>ただの数字ではありません。連続記録日数・累計文字数・写真の数をまとめて表示します。「あの日の今日」の思い出がある日は、フローティング通知とカレンダーのきらめきでお知らせします。</li>
+              <li><strong>プライバシーに配慮した収支（家計簿モード）：</strong>今月の支出・収入・残高をひと目で表示。<strong>目のアイコン</strong>をタップすると金額を隠せるので、人前でも安心です。</li>
+              <li><strong>AI 支出分析（家計簿モード）：</strong>家計簿の統計画面で「スマート支出分析」バナーをタップすると、AI がさまざまな角度から振り返り、<strong>主な傾向、潜在的なリスク、改善の提案、励ましの言葉</strong>を含む本格的な家計診断レポートを作成します。右上の「再生成」でいつでも最新の記録をもとに作り直せます。</li>
+              <li><strong>多角的な分析：</strong>週・月・年・全期間・期間指定でレポートを表示でき、1日／1か月あたりの平均も自動で計算。支出の傾向がひと目でわかります。</li>
+              <li><strong>予算と予算超過のお知らせ：</strong>月の総支出やカテゴリごとに予算を設定でき、統計画面に予算の進捗バーがリアルタイムで表示されます。予算に近づいたり超えたりすると、ホーム画面にお知らせが表示され、使いすぎを防げます。</li>
+              <li><strong>多通貨の自動換算：</strong>どの通貨の口座の支出や資産も、設定した<strong>基準通貨</strong>と最新の為替レートで自動的に換算・集計されます。基準通貨は「マイページ → 資産口座」の右上にある「基準通貨 ▾」で変更でき、変更後は過去の記録もすべて最新レートで換算し直されます。</li>
+              <li><strong>純資産をリアルタイムで把握：</strong>ホームの「資産」ダッシュボード、または「マイページ → 資産口座」で、総資産・総負債・純資産をひと目で確認できます。口座カードは長押しでドラッグして自由に並べ替えられます。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(2)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">日記カレンダー</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(4)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">貯金プランと目標</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-4"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-savings">
+            <div class="section-header">
+              <div class="icon-wrap bg-pink">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.5-1 2-2h2v-4h-2c0-1-.5-1.5-1-2h0V5z"></path><path d="M2 9v1c0 1.1.9 2 2 2h1"></path><path d="M16 11h.01"></path></svg>
+              </div>
+              <h3>貯金プランと目標</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>5つの貯金方法：</strong> 「自由貯金（いつでも出し入れ）」「定額貯金」「52週貯金」「365日貯金」の4つの定番モードに加え、銀行の定期預金を記録できる「定期預金」も。車の購入資金でも旅行資金でも、ぴったりの方法が見つかります。</li>
+              <li><strong>実際の振替と連動：</strong> チェックインや入金のたびに、「引き落とし口座」から「入金口座」への振替が自動で記録されます。2つの口座の通貨が違う場合も現在のレートで換算されるので、資産は1円単位で正確です。</li>
+              <li><strong>自動チェックインと進捗管理：</strong> 一覧の進捗バーに「貯金済み」と「残り」がリアルタイムで表示されます。1回分を達成すると紙吹雪のアニメーションが流れ、次回の日付も自動で計算されます。</li>
+              <li><strong>自由な出し入れとアーカイブ：</strong> 自由モードではいつでも「入金」「引き出し」ができます（お金は元の口座に戻ります）。目標を達成したプランは自動で達成済みになり、休止中のプランはワンタップで「アーカイブ」して非表示にできます。</li>
+            </ul>
+
+            <h4 class="help-subtitle">🏦 定期預金</h4>
+            <ul class="help-list">
+              <li><strong>作成：</strong> 「定期預金」を選び、名称・所属口座（どのカードに預けるか）・預入日・元本・期間（日／月／年）・利率（年利／月利／日利）・利払い方法・満期時の扱いを入力すると、下部に満期日と予想利息がリアルタイムで表示されます。</li>
+              <li><strong>所属口座：</strong> 定期預金はこのカードに属するものとして扱われるため、預け入れや普通預金への振替では振替記録は作成されず、利息収入のみ記録されます。別のカードや両替が必要な場合は、先に「振替」を記録してから作成してください。</li>
+              <li><strong>利払いと利息：</strong> 満期一括、日ごと、月ごと、四半期ごと、年ごとの利払いに対応。利息を受け取ると「投資 - 運用益」の収入として記録されます。日ごとの利息は毎日積み上がり、いつでもまとめて入金できます。</li>
+              <li><strong>満期時の処理：</strong> 満期まで3日以内、または満期を迎えると、「マイページ」の「貯金」に赤い点が表示されます。満期時は普通預金への振替、元本のみ継続、元利継続から選べ、確認するだけで記録が作成されます。満期前の中途解約や、直前の操作の取り消しもできます。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(3)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">ホームダッシュボード</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(5)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">貸し借り</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-5"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-debt">
+            <div class="section-header">
+              <div class="icon-wrap bg-teal">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path><path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path></svg>
+              </div>
+              <h3>貸し借り</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>別に記録する理由：</strong> 友人にお金を貸したり、家の敷金を払ったりしても、お金を使ったわけではなく一時的に相手のところにあるだけで、いずれ戻ってきます。そのため貸し借りは専用の「貸借口座」で記録し、<strong>収支の統計や予算には含めません</strong>。相手が借りている分は総資産に、自分が借りている分は総負債に計上されるので、純資産は常に正確です。</li>
+              <li><strong>4つの種類：</strong> 受け取る側は<strong>「貸した」</strong>（誰かに貸したお金）と<strong>「その他の未収金」</strong>（支払った敷金や、立て替えて回収待ちのお金）。支払う側は<strong>「借りた」</strong>（誰かから借りたお金）と<strong>「その他の未払金」</strong>（受け取った敷金や前受けの手付金）です。</li>
+              <li><strong>作成方法：</strong> 「マイページ → 貸し借り」または「資産口座 → 貸し借り」を開き、「貸したお金を記録」などのボタンをタップします。相手・金額・日付・返済予定日を入力し、借用書や振込のスクショも添付できます。<strong>資金口座</strong>を選ぶと、その口座からお金が出入りし残高も連動します。選ばなければ貸し借りだけを登録し、ほかの口座には影響しないので、過去の分を記録するのに便利です。</li>
+              <li><strong>その後の記録：</strong> 個別の詳細画面で操作します。<strong>「受け取り／返済／回収／返金」</strong>は何回かに分けられ、いずれも収支には含まれません。<strong>「追加」</strong>は追加で貸した・借りた分を記録します。<strong>「利息収入／利息支出」</strong>は収支に含まれ、元本には影響しません。<strong>「貸し倒れ処理」</strong>（回収できない場合。支出に計上され、予算には含まれません）と<strong>「債務免除」</strong>（返さなくてよいと言われた場合。収入に計上）もあります。敷金を家賃に充てたり、手付金を代金に充てたりするときは<strong>「支出に振替／収入に振替」</strong>。</li>
+              <li><strong>自動完済：</strong> 未回収・未返済の金額がゼロになると自動で完済扱いになり、資産のトップから非表示になります。一覧の「完済済み」から確認でき、追加で記録すると自動で再開されます。</li>
+              <li><strong>一覧とお知らせ：</strong> 一覧は「受け取る／支払う」の2つのタブに分かれ、それぞれ「未完済／完済済み／人別」で表示できるので、誰がいくら借りていて、自分が誰にいくら借りているかがひと目でわかります。貸し借りが<strong>期限切れ、または3日以内に期限</strong>のときは、「マイページ」の「貸し借り」ボタン右上に赤い点が表示されます。</li>
+              <li><strong>例：</strong> 王さんが2,000円を借りて3回に分けて返す場合：「貸した」を作成し、返済のたびに「受け取り」をタップすれば、完済時に自動で完済扱いになります。家の敷金3,000円を払い、退去時に500円差し引かれた場合：「その他の未収金」を作成し、退去時に2,500円を「回収」、残りの500円は「支出に振替」で家賃や修繕費として記録します。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(4)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">貯金プランと目標</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(6)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">きめ細かな予算管理</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-6"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-budget">
+            <div class="section-header">
+              <div class="icon-wrap bg-green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+              </div>
+              <h3>きめ細かな予算管理</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>3つの期間で確認：</strong> 「週」「月」「年」ごとに予算と残額を確認できます。メインの進捗バーは色でお知らせ：80%で橙色、100%を超えると赤色になります。</li>
+              <li><strong>大分類・小分類の予算：</strong> 総額だけでなく、一覧の大分類や小分類をタップして個別に上限を設定できます（例：「外食 - コーヒー」だけ）。細かな支出までしっかり管理できます。</li>
+              <li><strong>返金の自動控除と除外：</strong> 予算の計算はとても厳密です。「振替」「残高調整」「予算に含めない」記録は自動で除外されます。支出に返金があった場合は純支出で計算し、返ってきたお金はすぐに使える予算に戻ります。</li>
+              <li><strong>ワンタップでデフォルトに：</strong> 毎月の予算がほぼ同じなら、月間予算の上部にある「デフォルトに設定」をタップ。今後の各月に自動で適用され、毎回入力する手間が省けます。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(5)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">貸し借り</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(7)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">定期記帳と分割払い</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-7"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-recurring">
+            <div class="section-header">
+              <div class="icon-wrap bg-indigo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l-5.41 5.41"></path></svg>
+              </div>
+              <h3>定期記帳と分割払い</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>2種類の自動記録：</strong> パネル上部で「定期記帳」と「分割払い」を切り替え、自動化された記録をまとめて管理できます。</li>
+              <li><strong>定期記帳（自動引き落とし）：</strong> 家賃・光熱費・サブスクなどの固定費は、頻度（毎日／毎週／毎月／四半期／毎年）と終了条件（日付または回数）を設定するだけ。時期が来ると自動で記録されます。</li>
+              <li><strong>分割払い（クレジットカードなど）：</strong> 大きな買い物を分割払いにしたら、総額と回数（6回、12回など）を入力するだけで「返済スケジュール」が自動で作成されます。手数料は4つの方式（なし／総額／1回ごと／月利）に対応し、各回の元金と利息がひと目でわかります。</li>
+              <li><strong>繰り上げ完済といつでも一時停止：</strong> 途中で余裕ができたら分割払いを「繰り上げ完済」でき、定期記帳はいつでも「一時停止」できます。その後は新しい記録は作成されませんが、作成済みの記録には一切影響しません。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(6)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">きめ細かな予算管理</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(8)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">立替精算の管理</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-8"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-reimburse">
+            <div class="section-header">
+              <div class="icon-wrap bg-amber">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 17.5v-11"></path></svg>
+              </div>
+              <h3>立替精算の管理</h3>
+            </div>
+            <ul class="help-list">
+              <li class="keep-gap"><strong>未精算と精算済みのボード：</strong> 記帳時に「精算対象」をオンにするだけで、ここに自動で表示されます。「未精算」と「精算済み」に分かれていて、立て替えたお金をしっかり管理できます。</li>
+            </ul>
+
+            <img src="baoxiao.AVIF" alt="立替精算の画面" class="help-screenshot" />
+
+            <ul class="help-list">
+              <li><strong>分割・一部精算に対応：</strong> 高額な出張費も何回かに分けて精算できます！記録の「純額」から「精算済み金額」を差し引き、残りがいくらかを正確に計算するので、二重計上の心配はありません。</li>
+              <li><strong>検索ですぐ見つかる：</strong> 一覧には強力な検索機能があります。カテゴリ名・メモ・金額、さらには自分で付けたタグ（例： <code>#出張</code>）を入力すれば、照合したい記録がすぐに見つかります。</li>
+              <li><strong>外貨の自動換算：</strong> 月ごとの合計を出すとき、どの通貨で立て替えても、記録時のレートで「基準通貨」に正確に換算し、月間の精算総額をわかりやすく表示します。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(7)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">定期記帳と分割払い</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(9)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">便利なリマインダー</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-9"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-reminder">
+            <div class="section-header">
+              <div class="icon-wrap bg-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.268 21a2 2 0 0 0 3.464 0" /><path d="M22 8c0-2.3-.8-4.3-2-6" /><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" /><path d="M4 2C2.8 3.7 2 5.7 2 8" /></svg></div>
+              <h3>便利なメモとリマインダー</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>暮らしのアシスタント：</strong>誕生日・支払い・車の点検・習慣・服薬や通院など十数種類のカテゴリで、忘れがちな用事を管理します。<strong>新暦と旧暦</strong>の両方に対応しています。</li>
+              <li><strong>柔軟な繰り返し設定：</strong>毎日・毎週・毎月のほかに、<strong>「2か月ごと（光熱費）」「3か月ごと」「半年ごと（歯のクリーニング／車の点検）」</strong>など暮らしに合った周期も用意。一度設定すればずっと使えます。</li>
+              <li><strong>ホームのカプセルとカレンダー連動：</strong>今日が期限の大事なリマインダーは、ホーム画面上部に青いカプセルとして表示されます（タップして確認すると消えます）。今後のリマインダーもカレンダーに小さなアイコンで表示されます。</li>
+              <li><strong>確実なシステム通知：</strong>スケジュールはすべて端末内で管理されます。アプリを完全に終了していても、オフラインでも、時間になれば通知がきちんと届きます。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(8)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">立替精算の管理</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(10)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">資産と持ち物</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-10"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-assets">
+            <div class="section-header">
+              <div class="icon-wrap bg-amber"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-9" /><path d="M15.17 2.21a1.67 1.67 0 0 1 1.63 0L21 4.57a1.93 1.93 0 0 1 0 3.36L8.82 14.79a1.655 1.655 0 0 1-1.64 0L3 12.43a1.93 1.93 0 0 1 0-3.36z" /><path d="M20 13v3.87a2.06 2.06 0 0 1-1.11 1.83l-6 3.08a1.93 1.93 0 0 1-1.78 0l-6-3.08A2.06 2.06 0 0 1 4 16.87V13" /><path d="M21 12.43a1.93 1.93 0 0 0 0-3.36L8.83 2.2a1.64 1.64 0 0 0-1.63 0L3 4.57a1.93 1.93 0 0 0 0 3.36l12.18 6.86a1.636 1.636 0 0 0 1.63 0z" /></svg></div>
+              <h3>資産と持ち物リスト</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>持ち物をデジタル管理：</strong>高価な家電から、薬箱の常備薬、冷蔵庫の食材まで、何でも登録できます。数量・購入日・価格も記録でき、身の回りの持ち物をまるごと整理できます。</li>
+              <li><strong>タブで効率よく管理：</strong>「持ち物リスト（すべて）」「カテゴリ」「場所」の3つのタブをワンタップで切り替えられます。</li>
+              <li><strong>7日前から期限をお知らせ：</strong>食品・サプリ・化粧品など期限のあるものは、使用期限を登録できます。7日以内に期限が来るものや期限切れのものがあると、ホーム画面上部にバナーが表示されます！</li>
+              <li><strong>自由に追加：</strong>「カテゴリ」と「場所」の画面の最後にある点線の <code>+</code> ボタンから、新しい場所や持ち物のカテゴリを追加できます。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(9)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">便利なリマインダー</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(11)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">バックアップと復元</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-11"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-backup">
+            <div class="section-header">
+              <div class="icon-wrap bg-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 13v8" /><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" /><path d="m8 17 4-4 4 4" /></svg></div>
+              <h3>バックアップと復元</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>5つのクラウドから選べる：</strong>iCloud、WebDAV（ <strong>坚果云（Jianguoyun）</strong>、<strong>InfiniCLOUD</strong> や <strong>Koofr</strong> などで無料の WebDAV を申し込むか、自前の <strong>Nextcloud</strong> や <strong>Synology NAS</strong>，<strong>詳しい設定ガイドを見る👆</strong>に接続することもできます）、Baidu Netdisk、Google Drive、OneDrive に対応し、すべて差分の自動バックアップが可能です。どれを何個使うかは自由です。</li>
+              <li><strong>毎日の自動バックアップ：</strong>新しいデータがあると、接続中の各クラウドがそれぞれのタイミングで自動バックアップします（アプリを開いたとき、前面に戻ったとき、バックグラウンドに移ったときなど）。💡 注：バックアップはアプリを前面で使っているときのみ行われます。アバター横のクラウドのロゴが点滅しているのはバックアップ中なので、<strong>アプリをスワイプして終了しないでください</strong>。</li>
+              <li><strong>手動エクスポートと復元：</strong>「マイページ → バックアップと復元」から、全データを <code>JSON</code> ファイルとして、または画像付きの <code>PDF</code>、<code>ZIP</code> バックアップとしていつでも端末に保存できます。機種変更や再インストール後は、接続済みのクラウドからワンタップで復元するか、端末のバックアップファイルを読み込めます。</li>
+              <li><strong>他の日記アプリから読み込み：</strong>「マイページ → バックアップと復元 → エクスポート／インポート」で「他の日記アプリから読み込む」をタップ：<strong>Day One</strong> は書き出した ZIP（Day One の設定 →「読み込み／書き出し」→「Day One JSON [ZIP] を書き出す」）を選ぶと、写真・時刻・場所・天気ごと読み込まれます。<strong>一本日记</strong> は書き出した <code>.txt</code> ファイルを選ぶと、日付ごとに日記に分割されます（TXT に写真は含まれません）。<strong>一叶日记</strong> は「設定 → データ管理 → Markdown を書き出す」で作成した ZIP を選ぶと、本文・時刻・住所・写真がまとめて読み込まれます。同じファイルを何度読み込んでも重複しません。</li>
+              <li><strong>複数端末のリアルタイム同期 ― バックアップを超えた「持ち歩ける帳簿」：</strong>複数の端末（スマホとタブレット、新旧のスマホなど）を使っているなら、これをオンにすると編集内容がほぼリアルタイムで端末間に反映され、通常のバックアップを待つ必要がありません。</li>
+              <li><strong>新しい端末でメインのクラウドを自動検出：</strong>ほかの端末でメインのクラウドを設定済みなら、新しい端末でこれをオンにしたときに自動で検出し、同じ設定にするか確認します。端末ごとに決め直す必要はありません。</li>
+              <li><strong>💡 新しい使い方：家族で帳簿を共有：</strong>家族（夫婦など）と同じ帳簿を共有したい場合は、2台のスマホで<strong>同じクラウドのアカウント</strong>（同じ Baidu Netdisk や Google Drive のアカウントなど）にログインし、そのクラウドを両方でメインに設定して、それぞれ「複数端末のリアルタイム同期」をオンにします。どちらが記帳しても日記を書いても、すぐに相手のスマホにも表示され、まるで1冊の帳簿を一緒に使っているようになります。</li>
+              <li><strong>上級設定 ― 複数クラウドのリアルタイムミラー／今すぐ全クラウドに送信：</strong>接続中のすべてのクラウドをできるだけリアルタイムで最新にしたい場合（メインのクラウドだけでなく）は、「複数端末のリアルタイム同期」の詳細設定で「複数クラウドのリアルタイムミラー」をオンにします。また「今すぐ全クラウドに送信」をタップすると、いつでも手動で全体を同期できます。どちらも上級者向けで通信回数が大きく増えるため、普段は使わずオフのままで大丈夫です。</li>
+            </ul>
+
+            <h4 class="help-subtitle">📱 機種変更ガイド</h4>
+            <ul class="help-list">
+              <li><strong>方法1：クラウドにバックアップ → 新しいスマホで復元（おすすめ）：</strong>古いスマホで「マイページ → バックアップと復元」から接続済みのクラウドを選び、一度バックアップします。アバター横のクラウドのロゴが点滅しなくなれば完了です。新しいスマホに Daily Trifles をインストールし、<strong>同じクラウドのアカウント</strong>に接続して「XX から復元」をタップすれば、文章・写真・設定がまとめて戻ります。ファイルを送る必要はなく、iPhone と Android の間でも移行できます。💡 注：iCloud は Apple 端末間でのみ使えます。iPhone から Android に移る場合は WebDAV、Baidu Netdisk、Google Drive、OneDrive を選んでください。</li>
+              <li><strong>方法2：バックアップを書き出す → 新しいスマホに送る → 読み込む：</strong>クラウドを使いたくない場合やネットがない場合に。古いスマホで「マイページ → バックアップと復元 → エクスポート／インポート」を開き、「バックアップ (ZIP)」を選んで「データを書き出す」をタップし、共有メニューから新しいスマホに送ります。新しいスマホで同じ画面を開き、「Daily Trifles のバックアップファイルを選択」でファイルを選んで「データを読み込む」をタップします。</li>
+              <li><strong>新しいスマホへの送り方：</strong>iPhone 同士なら<strong>AirDrop</strong>がいちばん簡単です。Android 同士なら <strong>Quick Share</strong>、Huawei Share、Xiaomi / OPPO / vivo などの標準の転送機能が使えます。iPhone と Android の間なら、両方に無料の <strong>LocalSend</strong> をインストールして送るか、クラウドやパソコンを経由してください。WeChat / QQ はファイルサイズに制限があるため、写真の多いバックアップには向きません。</li>
+              <li><strong>分割されたバックアップ：</strong>写真が多いとエクスポートは自動で複数に分割されます。<strong>すべて</strong>を新しいスマホに送り、読み込み時にすべてのファイルをまとめて選んでください。1つでも欠けると一部の写真が失われます。</li>
+              <li><strong>何度やっても安心：</strong>復元も読み込みも、新しいスマホにあるデータと<strong>統合</strong>されるので、既存の内容が消えることはありません。同じデータを何度復元・読み込みしても重複しません。移行が終わったら、新しいスマホで口座残高や最近の日記を確認してから古いスマホを整理しましょう。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(10)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">資産と持ち物</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(12)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">セキュリティとプライバシー</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-12"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-security">
+            <div class="section-header">
+              <div class="icon-wrap bg-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></svg></div>
+              <h3>データの安全とプライバシー</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>オフラインファースト：</strong>機内や電車などネットがない環境でもすばやく記帳や日記ができます。どの機能もネット接続を必要としません。</li>
+              <li><strong>端末優先、データはあなたのもの：</strong>記録や日記は初期状態では端末内にのみ暗号化して保存されます。あなたのデータを読み取る中央サーバーは一切運営していません。クラウドバックアップはあなた自身のアカウントを使うので、データは常にあなたの手元にあります。</li>
+              <li><strong>認証と通信の安全性：</strong>iCloud、WebDAV、Baidu Netdisk、Google Drive、OneDrive への接続は、各社公式の暗号化方式であなたのアカウントに直接つながります。ログイン情報はこの端末にのみ保存され、第三者のサーバーを経由することはありません。</li>
+              <li><strong>アプリロック：</strong>4桁のパスコード、Face ID、指紋認証に対応。「離れて数分後にロック」も設定でき、他人に勝手に見られるのを防ぎます。</li>
+              <li><strong>必要なときだけ権限を使用：</strong>位置情報・写真・通知などの権限は、関連する機能（日記の周囲情報やリマインダーなど）を使うときだけ利用し、許可なくバックグラウンドで収集することはありません。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">バックアップと復元</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">便利な使い方</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-13"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-advanced">
+            <div class="section-header">
+              <div class="icon-wrap bg-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></svg></div>
+              <h3>便利な使い方</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>ダブルタップで拡大：</strong>ホーム画面で文章の吹き出しをダブルタップすると全画面で拡大表示され、長い日記も読みやすくなります。</li>
+              <li><strong>長押しでメニュー：</strong>吹き出しを長押しすると、編集・コピー・削除・共有・お気に入り・ピン留め・読み上げなどのメニューが開きます。</li>
+              <li><strong>複数選択でまとめて操作：</strong>長押しメニューで「選択」をタップすると複数選択モードになり、まとめて削除したり、複数日の日記を<strong>まとめてコピー</strong>。</li>
+              <li><strong>万能検索：</strong>ホーム画面右上の検索は想像以上に強力です！文字やタグだけでなく、<strong>金額</strong>（例：「25」）や記録した<strong>場所</strong>、さらには「6月1日」「2026年6月」のような日付でも検索でき、過去の記録を瞬時に見つけ出します！</li>
+              <li><strong>ワンタップで最新に戻る：</strong>ホーム画面で過去の記録を見ているときは、<strong>左上の年月選択の横にある × をタップするか、下の入力欄をタップ</strong>するだけで、今日の最新の記録に一瞬で戻れます。何度もスクロールする必要はありません！</li>
+              <li><strong>写真をピンチで拡大：</strong>写真を見ているときは2本指で拡大・縮小でき、長押しで写真アプリに保存できます。</li>
+              <li><strong>やさしいリマインダー：</strong>設定からオンにできます。記録のリマインドのほか、決まった時間に「毎日の振り返り」を届け、あの日の今日の思い出がある日は通知でお知らせします。</li>
+              <li><strong>今日のレシート：</strong>カレンダーで「今日のレシート」（ほかの日を選ぶと「この日のレシート」）をタップすると、その日の記録が感熱紙風のレシートになります。明細・カテゴリ別集計・支出／収入の合計・残高・日記の件数がひと目でわかり、支出だけ・収入だけの表示切り替えやサブタイトルの変更、ワンタップでの共有や保存もできます。</li>
+              <li><strong>いつでも感想を追記：</strong>日記の吹き出しの下にある「📝 感想を追記」をタップすると、本文はそのままで感想や後日談を書き足せます。</li>
+              <li><strong>クレジットカードの支払いリマインダー：</strong>「資産口座」でクレジット口座を作成するときは、支払日も設定しておきましょう！期日前にお知らせするので、支払い忘れを防げます。</li>
+              <li><strong>📱 iPhone のホーム画面ウィジェット：</strong>ホーム画面の何もない所を長押し → 左上の「編集」→「ウィジェットを追加」（iOS 17 以前は左上の「+」）→「Daily Trifles」を検索すると、次のウィジェットを追加できます：<strong>収支サマリー</strong>、<strong>クイック記録</strong>（記帳／日記）、<strong>あの日の今日</strong>、<strong>ランダムに振り返る</strong>、<strong>リマインダー</strong>。
+              <br><strong>🔒 ロック画面ウィジェット：</strong>ロック画面を長押し →「カスタマイズ」→「ロック画面」→ 時刻の下の領域をタップして「Daily Trifles」を検索します。
+              <br><strong>🤖 Android のホーム画面ウィジェット：</strong>ホーム画面の何もない所を長押し →「ウィジェット」→「Daily Trifles」を探すと、<strong>収支サマリー</strong>、<strong>クイック記録</strong>、<strong>あの日の今日</strong>、<strong>ランダムに振り返る</strong>、<strong>リマインダー</strong>を追加できます。「マイページ → ホーム画面ウィジェット」からワンタップで追加することもできます。
+              <br>詳しい図解は「マイページ → ホーム画面ウィジェット」をご覧ください。
+              </li>
+              <li><strong>🎁 隠し機能：</strong>
+              <br><strong>📸 クイックカメラ：</strong>ホーム画面・日記・手入力の画面で「画像」ボタンを長押しすると、すぐにカメラが起動します！
+
+              </li>
+
+              </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">セキュリティとプライバシー</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(14)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">よくある質問 (FAQ)</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-14"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-faq">
+            <div class="section-header">
+              <div class="icon-wrap" style="background: #475569;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></svg></div>
+              <h3>よくある質問とコツ (FAQ)</h3>
+            </div>
+
+            <div class="faq-container">
+            <details>
+  <summary>1. 過去の日記や記録を後から追加するには？</summary>
+
+  <p>シーンに合わせて2つの方法があります：</p>
+
+  <p><strong>方法1：1件ずつすばやく追加（ちょっとした修正に）</strong><br>
+  画面下の <code><span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+</span></code> 日記、または <code><span style="display:inline-block; vertical-align:middle; width: 18px; height: 18px;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="8" y2="10"></line><line x1="12" y1="10" x2="12" y2="10"></line><line x1="16" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="16" y1="14" x2="16" y2="14"></line></svg>
+</span></code> 手入力パネルを開き、いちばん上または左にある<strong>「日時」</strong>をタップして過去の日付に変更するだけ。保存すると、その日付の記録として自動で整理されます。</p>
+
+  <p><strong>方法2：タイムマシンモード（1日分をまとめて追加）</strong><br>
+  ホーム画面左上の<strong>カレンダーアイコン</strong>をタップし、追加したい日を選んで右上の<strong>「後から記録」</strong>をタップします。ホーム画面上部に「⏳ 後から記録中」のバナーが表示され、ひと言の送信、手入力、日記など、すべての記録がその日に「タイムトラベル」します！終わったらバナーの「終了」をタップすれば現在に戻ります。</p>
+  
+  <p><strong>また、ホームの入力欄に「2025年8月1日 タクシー 50」のように入力すれば、8月1日の記録を追加できます。</strong></p>
+</details>
+
+              <details>
+                <summary>2. 投稿済みの日記や記録を修正するには？</summary>
+                <p><strong>記録全体を修正：</strong>ホーム画面の吹き出しを長押しし、表示されたメニューで「編集」を選びます。<br><br><strong>記録内の1項目を修正：</strong>1つの記録に複数のカテゴリ（食材とタクシーなど）が含まれていても、入力し直す必要はありません！吹き出しの中で<strong>該当するカテゴリのラベルをタップ</strong>すると編集画面が開き、その項目の金額やカテゴリを修正できます。</p>
+              </details>
+
+              <details>
+                <summary>3. 記録内の1項目だけを削除するには？</summary>
+                <p>吹き出しのカテゴリのラベルをタップして編集画面を開き、右上の 🗑️ ゴミ箱アイコンから「項目を削除」を選びます。吹き出し内の項目がすべて削除され、写真もない場合は、吹き出しごとタイムラインから消えます。</p>
+              </details>
+
+              <details>
+                <summary>4. 過去の記録が多すぎて探せないときは？</summary>
+                <p>ホーム画面右上の 🔍 <strong>虫眼鏡アイコン</strong>をタップすると、キーワードで何でも検索できます。下のよく使う「#タグ」をタップして絞り込むこともできます。「日記」タグは日記のみ、「帳簿」タグは記録のみを表示します。</p>
+              </details>
+
+              <details>
+                <summary>5. AI の API キーを取得・設定するには？</summary>
+                <p>API キーをワンタップで取得できる機能を現在開発中です。今後のアップデートをお楽しみに！<br>現在は、 <strong>SiliconFlow、Zhipu、DeepSeek</strong> や <strong>Groq</strong> の公式サイトで登録し、無料の API キーを取得してください。<br>取得したら、アプリの「マイページ → AI エンジン」で入力して保存すれば、AI によるクイック記帳が使えるようになります。</p>
+              </details>
+
+              <details>
+                <summary>6. 記録や日記のデータはどこに保存される？消えることはある？</summary>
+                <p>Daily Trifles はオフラインファーストの設計で、すべてのデータは初期状態で<strong>端末内</strong>に暗号化して保存され、あなたのプライバシーを取得する中央サーバーはありません。スマホを紛失してもデータを失わないよう、設定で iCloud、WebDAV、Baidu Netdisk、OneDrive、Google Drive のいずれか（複数も可）の自動バックアップを必ずオンにしてください。</p>
+              </details>
+
+              <details>
+                <summary>7. 写真のアップロードに失敗することがあるのはなぜ？</summary>
+                <p>アプリを快適に動かし、端末の容量を使いすぎないよう、写真のアップロードは1日20枚までに制限し、バックグラウンドで圧縮しています。上限に達したら翌日にお試しください。</p>
+              </details>
+
+              <details>
+                <summary>8. お気に入りやピン留めした記録をすばやく探すには？</summary>
+                <p><strong>ピン留め：</strong>ホーム画面右上の 🔍 をタップし、何も入力しなければ、検索画面が「専用ボード」になり、ピン留めした内容がすべて表示されます。</p>
+                <p><strong>お気に入り：</strong>同じ検索画面の下にあるタグ欄に「#お気に入り」が固定されていて、タップするとお気に入りの思い出や記録がすぐに表示されます。</p>
+              </details>
+
+              <details>
+                <summary>9. 「時の記録」の累計記録日数はどう数える？</summary>
+                <p>その日にアプリで何か1つでも記録すれば、少額の記録でも一行だけの日記でも、その日は記録達成としてカウントされます。毎日少しずつ記録して、どこまで続くか試してみましょう！</p>
+              </details>
+
+              <details>
+                <summary>10. 吹き出しの文字が小さくて見づらいときは？</summary>
+                <p>「マイページ → テーマ」で<strong>「システムの文字サイズに合わせる」</strong>をオンにすると、端末で設定した大きな文字サイズ（シニアモードなど）に合わせて表示されます。細かく調整したい場合はオフにして、下のスライダーで吹き出しの文字サイズを調整できます。</p>
+              </details>
+            </div>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">便利な使い方</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-disabled"><span>最後の章です</span></div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+</div>
+  </div>
+
+</div>
+
+<script>
+  // 🌐 语言切换
+  function rememberLang(l) { try { localStorage.setItem('jmsp_site_lang', l); } catch (e) {} }
+  function toggleLangMenu(e) {
+    e.stopPropagation();
+    var m = document.getElementById('langMenu');
+    if (m) m.classList.toggle('open');
+  }
+  document.addEventListener('click', function (e) {
+    var m = document.getElementById('langMenu');
+    var sw = document.getElementById('langSwitch');
+    if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
+  });
+
+  var tocList = [{"id": "sec-ai", "title": "クイック記録の魔法"}, {"id": "sec-manual", "title": "しっかり家計簿"}, {"id": "sec-diary", "title": "日記カレンダー"}, {"id": "sec-stats", "title": "ホームダッシュボード"}, {"id": "sec-savings", "title": "貯金プランと目標"}, {"id": "sec-debt", "title": "貸し借り"}, {"id": "sec-budget", "title": "きめ細かな予算管理"}, {"id": "sec-recurring", "title": "定期記帳と分割払い"}, {"id": "sec-reimburse", "title": "立替精算の管理"}, {"id": "sec-reminder", "title": "便利なリマインダー"}, {"id": "sec-assets", "title": "資産と持ち物"}, {"id": "sec-backup", "title": "バックアップと復元"}, {"id": "sec-security", "title": "セキュリティとプライバシー"}, {"id": "sec-advanced", "title": "便利な使い方"}, {"id": "sec-faq", "title": "よくある質問 (FAQ)"}];
+  var currentIndex = 0;
+  var showToc = false;
+  var showSearch = false;
+
+  var pagerTrack = document.getElementById('pagerTrack');
+  var pageIndicator = document.getElementById('pageIndicator');
+  var tocDropdown = document.getElementById('tocDropdown');
+  var tocBackdrop = document.getElementById('tocBackdrop');
+  var searchResultsView = document.getElementById('searchResultsView');
+  var pagerViewport = document.getElementById('pagerViewport');
+  var headerBarNormal = document.getElementById('headerBarNormal');
+  var headerBarSearch = document.getElementById('headerBarSearch');
+  var toolbarRow = document.getElementById('toolbarRow');
+  var searchInput = document.getElementById('searchInput');
+  var searchClearBtn = document.getElementById('searchClearBtn');
+  var tocChip = document.getElementById('tocChip');
+
+  function updatePagerTransform(offsetPx, animate) {
+    offsetPx = offsetPx || 0;
+    pagerTrack.classList.toggle('no-anim', animate === false);
+    pagerTrack.style.transform = 'translateX(calc(' + (-currentIndex * 100) + '% + ' + offsetPx + 'px))';
+  }
+
+  function updateTocActive() {
+    var items = tocDropdown.querySelectorAll('.toc-item');
+    items.forEach(function (el, i) {
+      el.classList.toggle('active', i === currentIndex);
+    });
+  }
+
+  function goToChapter(idx) {
+    closeToc();
+    if (idx < 0 || idx >= tocList.length || idx === currentIndex) return;
+    currentIndex = idx;
+    updatePagerTransform();
+    pageIndicator.textContent = (currentIndex + 1) + ' / ' + tocList.length;
+    updateTocActive();
+    var scrollEl = document.getElementById('scroll-' + idx);
+    if (scrollEl) scrollEl.scrollTop = 0;
+  }
+
+  function renderVisibility() {
+    tocDropdown.style.display = showToc ? 'block' : 'none';
+    tocBackdrop.style.display = showToc ? 'block' : 'none';
+    tocChip.classList.toggle('chip-active', showToc);
+    headerBarNormal.style.display = showSearch ? 'none' : 'flex';
+    headerBarSearch.style.display = showSearch ? 'flex' : 'none';
+    toolbarRow.style.display = showSearch ? 'none' : 'flex';
+    searchResultsView.style.display = showSearch ? 'block' : 'none';
+    pagerViewport.style.display = showSearch ? 'none' : 'block';
+  }
+
+  function toggleToc() {
+    showToc = !showToc;
+    showSearch = false;
+    renderVisibility();
+  }
+  function closeToc() {
+    if (!showToc) return;
+    showToc = false;
+    renderVisibility();
+  }
+
+  function openSearch() {
+    showToc = false;
+    showSearch = true;
+    renderVisibility();
+    setTimeout(function () { searchInput.focus(); }, 0);
+  }
+  function closeSearch() {
+    showSearch = false;
+    renderVisibility();
+    searchInput.blur();
+  }
+  function clearSearch() {
+    searchInput.value = '';
+    onSearchInput();
+    searchInput.focus();
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+  function makeSnippet(text, lowerQuery) {
+    var lower = text.toLowerCase();
+    var pos = lower.indexOf(lowerQuery);
+    if (pos === -1) return text.slice(0, 46).replace(/\s+/g, ' ').trim() + '…';
+    var start = Math.max(0, pos - 14);
+    var end = Math.min(text.length, pos + lowerQuery.length + 28);
+    var body = text.slice(start, end).replace(/\s+/g, ' ').trim();
+    return (start > 0 ? '…' : '') + body + (end < text.length ? '…' : '');
+  }
+  function highlightSnippet(snippet, query) {
+    var escaped = escapeHtml(snippet);
+    var q = query.trim();
+    if (!q) return escaped;
+    var escapedQ = escapeHtml(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var re = new RegExp(escapedQ, 'ig');
+    return escaped.replace(re, function (m) { return '<mark>' + m + '</mark>'; });
+  }
+
+  function onSearchInput() {
+    var q = searchInput.value.trim();
+    searchClearBtn.style.display = searchInput.value ? 'flex' : 'none';
+    if (!q) {
+      searchResultsView.innerHTML = '<div class="search-hint">キーワードを入力すると、全15章とよくある質問をまとめて検索できます</div>';
+      return;
+    }
+    var lowerQ = q.toLowerCase();
+    var hits = [];
+    tocList.forEach(function (item, idx) {
+      var secEl = document.getElementById(item.id);
+      var text = secEl ? secEl.innerText.trim() : '';
+      var titleHit = item.title.toLowerCase().indexOf(lowerQ) !== -1;
+      var textHit = text.toLowerCase().indexOf(lowerQ) !== -1;
+      if (titleHit || textHit) {
+        hits.push({ idx: idx, title: item.title, snippet: makeSnippet(text, lowerQ) });
+      }
+    });
+    if (hits.length === 0) {
+      searchResultsView.innerHTML = '<div class="search-empty">「' + escapeHtml(q) + '」に関する内容は見つかりませんでした。別のキーワードでお試しください</div>';
+    } else {
+      searchResultsView.innerHTML = hits.map(function (hit) {
+        return '<div class="search-hit" onclick="selectSearchHit(' + hit.idx + ')">' +
+          '<div class="hit-title">' + escapeHtml(hit.title) + '</div>' +
+          '<div class="hit-snippet">' + highlightSnippet(hit.snippet, q) + '</div>' +
+          '</div>';
+      }).join('');
+    }
+  }
+  searchInput.addEventListener('input', onSearchInput);
+  searchInput.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSearch(); });
+
+  function selectSearchHit(idx) {
+    var q = searchInput.value.trim();
+    closeSearch();
+    goToChapter(idx);
+    setTimeout(function () { scrollToKeyword(idx, q); }, 0);
+  }
+
+  var HIGHLIGHT_NAME = 'help-search-hit';
+  var highlightTimer = null;
+  function clearKeywordHighlight() {
+    if (highlightTimer) { clearTimeout(highlightTimer); highlightTimer = null; }
+    try { if (window.CSS && CSS.highlights) CSS.highlights.delete(HIGHLIGHT_NAME); } catch (e) {}
+  }
+  function findKeywordRange(root, query) {
+    var lowerQ = query.toLowerCase();
+    if (!lowerQ) return null;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var nodes = [], starts = [], full = '', n;
+    while ((n = walker.nextNode())) { nodes.push(n); starts.push(full.length); full += n.data; }
+    var lowerFull = full.toLowerCase();
+    function locate(offset, isEnd) {
+      for (var i = nodes.length - 1; i >= 0; i--) {
+        if (starts[i] < offset || (!isEnd && starts[i] === offset)) return [nodes[i], offset - starts[i]];
+      }
+      return null;
+    }
+    var from = 0;
+    for (var guard = 0; guard < 50; guard++) {
+      var pos = lowerFull.indexOf(lowerQ, from);
+      if (pos === -1) return null;
+      var a = locate(pos, false), b = locate(pos + lowerQ.length, true);
+      if (a && b) {
+        var range = document.createRange();
+        range.setStart(a[0], a[1]);
+        range.setEnd(b[0], b[1]);
+        var rect = range.getBoundingClientRect();
+        if (rect.width > 0 || rect.height > 0) return range;
+      }
+      from = pos + 1;
+    }
+    return null;
+  }
+  function scrollToKeyword(idx, query) {
+    clearKeywordHighlight();
+    if (!query) return;
+    var secEl = document.getElementById(tocList[idx].id);
+    var scrollEl = document.getElementById('scroll-' + idx);
+    if (!secEl || !scrollEl) return;
+    var range = null;
+    try { range = findKeywordRange(secEl, query); } catch (e) { range = null; }
+    if (!range) return;
+    var rangeRect = range.getBoundingClientRect();
+    var boxRect = scrollEl.getBoundingClientRect();
+    var target = scrollEl.scrollTop + (rangeRect.top - boxRect.top) - boxRect.height * 0.3;
+    scrollEl.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+    try {
+      if (window.Highlight && window.CSS && CSS.highlights) {
+        CSS.highlights.set(HIGHLIGHT_NAME, new Highlight(range));
+        highlightTimer = setTimeout(clearKeywordHighlight, 3000);
+      }
+    } catch (e) {}
+  }
+
+  function goBack() {
+    if (window.history.length > 1) { window.history.back(); }
+  }
+
+  var HELP_VIDEO_URL = 'https://mp.weixin.qq.com/s/VJ84eQqEPck5qfWfq8JDWw';
+  function openVideoTutorial() {
+    window.open(HELP_VIDEO_URL, '_blank');
+  }
+
+  /* ==================== 章节横滑翻页手势 ==================== */
+  var chapterStartX = 0, chapterStartY = 0, chapterDragging = false, chapterAxisLocked = null, chapterDragOffset = 0;
+
+  pagerViewport.addEventListener('touchstart', onChapterTouchStart, { passive: true });
+  pagerViewport.addEventListener('touchmove', onChapterTouchMove, { passive: false });
+  pagerViewport.addEventListener('touchend', onChapterTouchEnd);
+  pagerViewport.addEventListener('touchcancel', onChapterTouchCancel);
+
+  function onChapterTouchStart(e) {
+    var sel = window.getSelection();
+    if (sel && sel.toString().length > 0) return;
+    chapterStartX = e.touches[0].clientX;
+    chapterStartY = e.touches[0].clientY;
+    chapterDragging = true;
+    chapterDragOffset = 0;
+    chapterAxisLocked = null;
+  }
+  function onChapterTouchMove(e) {
+    if (!chapterDragging) return;
+    var sel = window.getSelection();
+    if (sel && sel.toString().length > 0) return;
+    var dx = e.touches[0].clientX - chapterStartX;
+    var dy = e.touches[0].clientY - chapterStartY;
+    if (!chapterAxisLocked) {
+      if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return;
+      chapterAxisLocked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+    }
+    if (chapterAxisLocked === 'y') return;
+    if (chapterAxisLocked === 'x') e.preventDefault();
+    var offset = dx;
+    var atFirst = currentIndex === 0;
+    var atLast = currentIndex === tocList.length - 1;
+    if ((atFirst && dx > 0) || (atLast && dx < 0)) offset = dx * 0.3;
+    chapterDragOffset = offset;
+    updatePagerTransform(chapterDragOffset, false);
+  }
+  function onChapterTouchEnd() {
+    if (!chapterDragging) return;
+    chapterDragging = false;
+    var threshold = 60;
+    if (chapterAxisLocked === 'x') {
+      if (chapterDragOffset <= -threshold && currentIndex < tocList.length - 1) {
+        goToChapter(currentIndex + 1);
+      } else if (chapterDragOffset >= threshold && currentIndex > 0) {
+        goToChapter(currentIndex - 1);
+      } else {
+        updatePagerTransform();
+      }
+    }
+    chapterDragOffset = 0;
+    chapterAxisLocked = null;
+  }
+  function onChapterTouchCancel() {
+    chapterDragging = false;
+    chapterDragOffset = 0;
+    chapterAxisLocked = null;
+    updatePagerTransform();
+  }
+
+  /* ==================== 初始化 ==================== */
+  renderVisibility();
+  updatePagerTransform(0, false);
+</script>
+</body>
+</html>

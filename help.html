@@ -4,6 +4,34 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>使用指南 - 鸡毛蒜皮</title>
+<link rel="alternate" hreflang="zh-CN" href="/help.html">
+<link rel="alternate" hreflang="zh-Hant" href="/help-zh-TW.html">
+<link rel="alternate" hreflang="en" href="/help-en.html">
+<link rel="alternate" hreflang="ja" href="/help-ja.html">
+<link rel="alternate" hreflang="x-default" href="/help.html">
+<script>
+  (function () {
+    try {
+      var map = { 'en': '/help-en.html', 'zh-TW': '/help-zh-TW.html', 'ja': '/help-ja.html' };
+      var saved = null;
+      try { saved = localStorage.getItem('jmsp_site_lang'); } catch (e) {}
+      var target = null;
+      if (saved) {
+        target = map[saved] || null;
+      } else {
+        var nl = ((navigator.languages && navigator.languages[0]) || navigator.language || '').toLowerCase();
+        if (nl.indexOf('zh') === 0) {
+          if (/hant|-tw|-hk|-mo/.test(nl)) target = map['zh-TW'];
+        } else if (nl.indexOf('ja') === 0) {
+          target = map['ja'];
+        } else if (nl) {
+          target = map['en'];
+        }
+      }
+      if (target) location.replace(target + location.hash);
+    } catch (e) {}
+  })();
+</script>
 <style>
   :root { color-scheme: light dark; }
   * { box-sizing: border-box; }
@@ -266,6 +294,21 @@
     .nav-label { color: #64748b; }
     .nav-disabled { color: #475569; }
   }
+
+  /* 🌐 语言切换 */
+  .lang-switch { position: relative; }
+  .lang-btn { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-family: inherit; }
+  .lang-menu { display: none; position: absolute; top: calc(100% + 8px); min-width: 140px; padding: 6px; border-radius: 14px;
+    background: #ffffff; box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.18); border: 1px solid rgba(15, 23, 42, 0.06); z-index: 60; }
+  .lang-menu.open { display: block; }
+  .lang-menu a { display: block; padding: 9px 12px; border-radius: 10px; color: #334155; text-decoration: none; font-size: 14px; white-space: nowrap; }
+  .lang-menu a:active { background: rgba(99, 102, 241, 0.08); }
+  .lang-menu a.current { color: #6366f1; font-weight: 600; background: rgba(99, 102, 241, 0.06); }
+  @media (prefers-color-scheme: dark) {
+    .lang-menu { background: #1e293b; border-color: rgba(255,255,255,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.6); }
+    .lang-menu a { color: #cbd5e1; }
+    .lang-menu a.current { color: #818cf8; background: rgba(129, 140, 248, 0.12); }
+  }
 </style>
 </head>
 <body>
@@ -301,10 +344,13 @@
         </svg>
         <span>目录</span>
       </button>
+      <div style="display:flex; align-items:center; gap:8px;">
+      <div class="lang-switch" id="langSwitch"><button type="button" class="toolbar-chip lang-btn" onclick="toggleLangMenu(event)" aria-haspopup="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20"></path><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span>简体中文</span></button><div class="lang-menu" id="langMenu" style="right: 0;"><a href="/help.html" hreflang="zh-CN" lang="zh-CN" class="current" onclick="rememberLang('zh-CN')">简体中文</a><a href="/help-zh-TW.html" hreflang="zh-Hant" lang="zh-Hant" onclick="rememberLang('zh-TW')">繁體中文</a><a href="/help-en.html" hreflang="en" lang="en" onclick="rememberLang('en')">English</a><a href="/help-ja.html" hreflang="ja" lang="ja" onclick="rememberLang('ja')">日本語</a></div></div>
       <button class="toolbar-chip" onclick="openSearch()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>
         <span>搜索</span>
       </button>
+      </div>
     </div>
 
     <div class="toc-dropdown" id="tocDropdown" style="display:none;">
@@ -1105,6 +1151,19 @@
 </div>
 
 <script>
+  // 🌐 语言切换
+  function rememberLang(l) { try { localStorage.setItem('jmsp_site_lang', l); } catch (e) {} }
+  function toggleLangMenu(e) {
+    e.stopPropagation();
+    var m = document.getElementById('langMenu');
+    if (m) m.classList.toggle('open');
+  }
+  document.addEventListener('click', function (e) {
+    var m = document.getElementById('langMenu');
+    var sw = document.getElementById('langSwitch');
+    if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
+  });
+
   var tocList = [{"id": "sec-ai", "title": "极速记账魔法"}, {"id": "sec-manual", "title": "精打细算记账"}, {"id": "sec-diary", "title": "时光日记本"}, {"id": "sec-stats", "title": "全能首页看板"}, {"id": "sec-savings", "title": "存钱计划与目标"}, {"id": "sec-debt", "title": "借贷往来"}, {"id": "sec-budget", "title": "精细化预算管理"}, {"id": "sec-recurring", "title": "周期与分期管理"}, {"id": "sec-reimburse", "title": "报销追踪管理"}, {"id": "sec-reminder", "title": "贴心备忘提醒"}, {"id": "sec-assets", "title": "资产与物品"}, {"id": "sec-backup", "title": "数据备份与恢复"}, {"id": "sec-security", "title": "安全与隐私"}, {"id": "sec-advanced", "title": "进阶玩法"}, {"id": "sec-faq", "title": "常见问题 (FAQ)"}];
   var currentIndex = 0;
   var showToc = false;
