@@ -272,6 +272,47 @@
     .nav-disabled { color: #475569; }
   }
 
+  /* ==================== WebDAV 配置指南（与 App 内 BackupRestore 的教程弹窗内容一致） ==================== */
+  .guide-link { color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500; }
+  .guide-overlay {
+    position: fixed; inset: 0; z-index: 60; background: #f8fafc; display: flex; flex-direction: column;
+    padding-top: env(safe-area-inset-top); transform: translateX(100%); visibility: hidden;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0.4s;
+  }
+  .guide-overlay.open { transform: translateX(0); visibility: visible; transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
+  .guide-header { display: flex; align-items: center; padding: 14px 16px; gap: 8px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+  .guide-tabs { display: flex; justify-content: space-evenly; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .guide-tab {
+    flex: 1; background: none; border: none; padding: 12px 0 10px; font-size: 14px; color: #64748b; cursor: pointer;
+    border-bottom: 2px solid transparent; font-family: inherit;
+  }
+  .guide-tab.active { color: var(--theme-primary, #6366f1); border-bottom-color: var(--theme-primary, #6366f1); font-weight: 600; }
+  .guide-body { flex: 1; overflow-y: auto; padding: 16px 16px calc(40px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .guide-pane { display: none; }
+  .guide-pane.active { display: block; }
+  .step-card { background: #ffffff; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+  .step-card.highlight { border: 1px solid rgba(99, 102, 241, 0.25); }
+  .step-card h3 { margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #1e293b; }
+  .step-card p { margin: 0; font-size: 14px; line-height: 1.7; color: #475569; }
+  .step-card a { font-size: 13px; color: var(--theme-primary, #6366f1); }
+  .guide-fields { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .guide-field-title { font-size: 14px; font-weight: 600; color: #334155; }
+  .guide-field-desc { font-size: 13px; color: #64748b; word-break: break-all; margin-top: 2px; }
+  @media (prefers-color-scheme: dark) {
+    .guide-link { color: #818cf8; }
+    .guide-overlay { background: #111827; }
+    .guide-header { border-bottom-color: rgba(255,255,255,0.06); }
+    .guide-tabs { border-bottom-color: rgba(255,255,255,0.08); }
+    .guide-tab { color: #94a3b8; }
+    .guide-tab.active { color: #818cf8; border-bottom-color: #818cf8; }
+    .step-card { background: #1e293b; box-shadow: none; border: 1px solid rgba(255,255,255,0.05); }
+    .step-card.highlight { border-color: rgba(129, 140, 248, 0.35); }
+    .step-card h3, .guide-field-title { color: #f1f5f9; }
+    .step-card p { color: #cbd5e1; }
+    .step-card a { color: #818cf8; }
+    .guide-field-desc { color: #94a3b8; }
+  }
+
   /* 🌐 语言切换 */
   .lang-switch { position: relative; }
   .lang-btn { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-family: inherit; }
@@ -343,16 +384,17 @@
           <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>貼心備忘提醒</div>
           <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>資產與物品</div>
           <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>資料備份與恢復</div>
-          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>安全與隱私</div>
-          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>進階玩法</div>
-          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>常見問題 (FAQ)</div>
+          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>家庭共享帳本</div>
+          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>安全與隱私</div>
+          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>進階玩法</div>
+          <div class="toc-item" data-idx="15" onclick="goToChapter(15)"><span class="toc-idx">16</span>常見問題 (FAQ)</div>
     </div>
   </div>
 
   <div class="toc-backdrop" id="tocBackdrop" style="display:none;" onclick="closeToc()"></div>
 
   <div class="search-results-view" id="searchResultsView" style="display:none;">
-    <div class="search-hint">輸入關鍵詞，可搜尋指南全部 15 個章節與常見問題中的任意內容</div>
+    <div class="search-hint">輸入關鍵詞，可搜尋指南全部 16 個章節與常見問題中的任意內容</div>
   </div>
 
   <div class="pager-viewport" id="pagerViewport">
@@ -418,6 +460,7 @@
             </div>
             <ul class="help-list">
               <li><strong>多帳本自由切換：</strong>支援建立“家庭”、“個人”、“公司”等多個獨立帳本，在“我的”-“帳本管理”選擇帳本名稱即可極速切換，不同帳本的帳目與統計完全獨立互不干擾，讓公私帳目、多重身份的財務空間都能井井有條。</li>
+              <li><strong>共享帳本：</strong>在「帳本管理」-「👥 共享帳本」裡和家人（最多 3 人）一起記同一本帳，詳見<span onclick="goToChapter(12)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「家庭共享帳本」👆</span>。</li>
               <li>
                 <strong>自動截圖與極速記帳：</strong>我們為你準備了強大的 iOS 專屬極速能力！前往“我的 - 極速記帳指南”，即可快速配置 Siri 語音指令與雙擊背面截圖記帳。支援微信支付與支付寶帳單自動識別金額和分類。
               </li>
@@ -890,13 +933,13 @@
               <h3>資料備份與恢復</h3>
             </div>
             <ul class="help-list">
-              <li><strong>五大網盤隨心選：</strong>支援 iCloud、WebDAV（請自行前往 <strong>堅果雲</strong>、<strong>InfiniCLOUD</strong> 或 <strong>Koofr</strong> 等服務商免費申請 WebDAV 網盤，也可以連線自建的 <strong>Nextcloud</strong> 或 <strong>群暉 NAS</strong>，<strong>點選檢視詳細配置指南👆</strong>）、百度網盤、Google Drive 以及 OneDrive，全部支援增量無感備份，想用哪個網盤、用幾個，完全由你決定。</li>
+              <li><strong>五大網盤隨心選：</strong>支援 iCloud、WebDAV（請自行前往 <strong>堅果雲</strong>、<strong>InfiniCLOUD</strong> 或 <strong>Koofr</strong> 等服務商免費申請 WebDAV 網盤，也可以連線自建的 <strong>Nextcloud</strong> 或 <strong>群暉 NAS</strong>，<span class="guide-link" onclick="openWebdavGuide()">點選檢視詳細配置指南👆</span>）、百度網盤、Google Drive 以及 OneDrive，全部支援增量無感備份，想用哪個網盤、用幾個，完全由你決定。</li>
               <li><strong>日常自動備份：</strong>只要有新資料，每個已連線的網盤都會按各自的節奏自動靜默備份（開啟 App、回到前臺或退到後臺都可能觸發）。💡 注：App 保持在前臺使用時才會靜默備份，頭像旁網盤Logo閃爍代表正在備份中，此時<strong>請勿劃掉清理應用</strong>。</li>
               <li><strong>手動匯出與恢復：</strong>在“我的 - 備份恢復”中，隨時可以匯出全量資料的 <code>JSON</code> 檔案，或含圖片的 <code>PDF</code>、<code>ZIP</code> 備份包儲存到本地；換機或重灌後，也可以直接選擇某個已連線的網盤一鍵恢復，或者匯入本地的備份檔案。</li>
               <li><strong>匯入第三方日記應用：</strong>在“我的 - 備份恢復 - 匯出匯入”中點選“匯入第三方日記應用”：<strong>Day One</strong> 選擇它匯出的壓縮包（Day One 設定 → 「匯入/匯出」→「匯出 Day One JSON [ZIP]」），日記連同照片、時間、地點和天氣一起匯入；<strong>一本日記</strong> 選擇它匯出的 <code>.txt</code> 檔案，按日期自動拆分成一篇篇日記（TXT 不含照片）；<strong>一葉日記</strong> 選擇「設定 → 資料管理 → 匯出Markdown」得到的 zip 壓縮包，文字、時間、地址和圖片一起匯入。重複匯入同一個檔案不會產生重複日記。</li>
               <li><strong>多裝置實時同步——不止是備份，更是"隨身帳本"：</strong>如果你有不止一臺裝置（比如手機 + 平板，或者正在新舊手機之間過渡），開啟這個開關就能讓編輯在裝置之間近乎實時地互相追平，而不用等日常備份的自然節奏慢慢同步過去。</li>
               <li><strong>新裝置自動識別已有主盤：</strong>如果你的其它裝置已經設定過主盤，在新裝置上開啟這個開關時會自動檢測到，並提示你是否保持一致——不用每臺裝置都重新決定一遍。</li>
-              <li><strong>💡 新用法：和家人共用一本帳：</strong>如果你和家人（比如夫妻）願意共用同一份帳本視角，可以在兩臺手機上登入<strong>同一個網盤帳號</strong>（比如同一個百度網盤或 Google Drive 帳號），把這個網盤設成同一個主盤，再各自開啟“多裝置實時同步”——這樣無論誰在自己手機上記了一筆帳、寫了一篇日記，很快就能在對方手機上看到，幾乎就像兩人在共用同一本帳。</li>
+              <li><strong>💡 想和家人一起記帳？</strong>多裝置即時同步是給你自己的多台裝置用的，會同步全部資料（包括日記）。和家人一起記帳請使用<span onclick="goToChapter(12)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「家庭共享帳本」👆</span>：只共享指定的一本帳，日記和其它個人資料互不可見。</li>
               <li><strong>進階選項——多網盤實時映象 / 立即強推全部網盤：</strong>如果你希望每個已連線的網盤都儘量保持實時更新（而不只是主盤優先），可以在“多裝置實時同步”的高階選項裡開啟“多網盤實時映象”；也可以隨時點一下“立即強推全部網盤”，手動觸發一次全量同步。這兩個屬於進階選項，會明顯增加請求頻率，日常使用一般用不到，預設關閉即可。</li>
             </ul>
 
@@ -921,7 +964,7 @@
               <div class="nav-btn nav-next" onclick="goToChapter(12)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
-                  <span class="nav-name">安全與隱私</span>
+                  <span class="nav-name">家庭共享帳本</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
@@ -935,6 +978,60 @@
               <div
                 class="page-scroll"
                 id="scroll-12"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-shared">
+            <div class="section-header">
+              <div class="icon-wrap bg-pink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></div>
+              <h3>家庭共享帳本</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>和家人一起記一本帳：</strong>最多 3 人共用同一個帳本，各自在自己的手機上記帳，一分鐘左右就能在對方手機上看到；每筆帳單下方的時間旁會顯示是誰記的。</li>
+              <li><strong>只共享這一本帳：</strong>只同步共享帳本裡的支出和收入。日記、其它帳本、資產帳戶、備忘和物品等個人資料都不會共享，也不會出現在家人的手機上。</li>
+              <li><strong>準備一個專用堅果雲帳號：</strong>共享資料存放在一個家人共用的 WebDAV 網盤裡。建議一起註冊一個新的堅果雲帳號，只用來放共享帳本：在堅果雲網頁端新建一個資料夾，並產生「應用密碼」（<span class="guide-link" onclick="openWebdavGuide()">點選檢視詳細配置指南👆</span>）。不要使用個人備份用的帳號，App 也會拒絕。</li>
+              <li><strong>新建共享帳本：</strong>進入「我的」-「帳本管理」-「👥 共享帳本」，選「新建共享帳本」，填寫帳本名稱、WebDAV 位址、帳號和應用密碼。建立成功後點「複製邀請碼」，發給家人。</li>
+              <li><strong>加入共享帳本：</strong>家人在同一頁面切到「加入共享帳本」，貼上邀請碼即可，不需要再填堅果雲帳號；從微信等轉發過來、前後帶了別的文字也能識別。邀請碼裡含有共享網盤的帳號和密碼，請只發給信任的人。</li>
+              <li><strong>每人只能改刪自己記的帳：</strong>別人記的帳單只能查看，編輯、刪除、收藏、置頂都會被攔下；你刪除自己記的帳單後，家人那邊也會一起刪除。</li>
+              <li><strong>資產帳戶各算各的：</strong>你記的帳照常扣你自己的帳戶餘額；家人記的帳單只顯示對方用的帳戶名，不會扣你的任何帳戶。</li>
+              <li><strong>共享帳本裡不能用的功能：</strong>轉帳、借貸、存錢、分期、退款、報銷、預算和週期記帳都不能用於共享帳本，相關選項會自動隱藏；用捷徑或 Siri 在共享帳本裡記轉帳，會自動改記到預設帳本。</li>
+              <li><strong>按成員統計：</strong>在共享帳本裡打開統計頁，可以看到所選時間段內每位成員的支出、占比和收入。</li>
+              <li><strong>同步節奏：</strong>App 在前台時約每分鐘同步一次，10 分鐘沒有變化後放慢到每 3 分鐘一次；回到前台或在共享帳本頁點「立即同步」會馬上同步。家人記了新帳會提示「xx 新記了 n 筆帳」。App 在背景時不同步。</li>
+              <li><strong>同步狀態：</strong>共享帳本頁會顯示上次同步的時間；如果共享網盤的帳號或密碼失效，帳本管理裡的「共享」角標會變成紅色的「同步失敗」。</li>
+            </ul>
+
+            <h4 class="help-subtitle">🚪 退出與換機</h4>
+            <ul class="help-list">
+              <li><strong>退出共享：</strong>在共享帳本頁點「退出共享」，會釋放你的名額，這個帳本在你手機上變回普通帳本，已有的帳單都保留。你以前記的帳，其他成員（包括之後新加入的人）仍然能看到。退出時需要連網。</li>
+              <li><strong>換手機：</strong>共享帳本的帳單會隨個人備份一起備份，換機恢復個人備份後帳單都在；但加入共享帳本用的網盤帳號不在個人備份裡，需要用邀請碼重新加入一次。重新加入會認出你原來的身份，不會多佔名額。</li>
+              <li><strong>數量限制：</strong>每個共享帳本最多 3 人，一個人同時只能加入一個共享帳本。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">資料備份與恢復</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
+                  <span class="nav-name">安全與隱私</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-13"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-security">
@@ -952,14 +1049,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
-                  <span class="nav-name">資料備份與恢復</span>
+                  <span class="nav-name">家庭共享帳本</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+              <div class="nav-btn nav-next" onclick="goToChapter(14)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">進階玩法</span>
@@ -975,7 +1072,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-13"
+                id="scroll-14"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-advanced">
@@ -1008,14 +1105,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">安全與隱私</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(14)">
+              <div class="nav-btn nav-next" onclick="goToChapter(15)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">常見問題 (FAQ)</span>
@@ -1031,7 +1128,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-14"
+                id="scroll-15"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-faq">
@@ -1108,7 +1205,7 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(14)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
@@ -1126,6 +1223,87 @@
 
 </div>
 
+<div class="guide-overlay" id="webdavGuide" aria-hidden="true">
+  <div class="guide-header">
+    <button class="back-btn" onclick="closeWebdavGuide()" aria-label="返回"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+    <div class="title-group"><div class="title">配置指南</div></div>
+    <div class="header-spacer"></div>
+  </div>
+  <div class="guide-tabs">
+    <button class="guide-tab active" data-pane="0" onclick="switchGuideTab(0)">堅果雲</button>
+    <button class="guide-tab" data-pane="1" onclick="switchGuideTab(1)">Koofr</button>
+    <button class="guide-tab" data-pane="2" onclick="switchGuideTab(2)"><span data-tx="tab">其它</span></button>
+  </div>
+  <div class="guide-body" id="guideBody">
+    <div class="guide-pane active">
+      <section class="step-card">
+        <h3>1. 開啟服務</h3>
+        <p>登入官網，進入“帳戶資訊” -&gt; “安全設定”。</p>
+      </section>
+      <section class="step-card">
+        <h3>2. 生成第三方應用密碼</h3>
+        <p>找到“第三方應用管理”，點選“新增應用”。應用名稱填“雞毛蒜皮”，點選生成密碼。</p>
+        <div style="margin-top: 8px;"><a href="https://help.jianguoyun.com/?p=2064" target="_blank" rel="noopener">如何獲取？檢視官方圖文教程</a></div>
+      </section>
+      <section class="step-card highlight">
+        <h3>3. 填寫資訊</h3>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">伺服器地址</div><div class="guide-field-desc">https://dav.jianguoyun.com/dav/</div></div>
+          <div><div class="guide-field-title">應用帳號</div><div class="guide-field-desc">您的堅果雲註冊郵箱</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">應用程式密碼</span></div><div class="guide-field-desc">剛才生成的 16 位專屬密碼</div></div>
+        </div>
+      </section>
+    </div>
+    <div class="guide-pane">
+      <section class="step-card">
+        <h3>1. 生成應用專用密碼</h3>
+        <p>登入 Koofr 網頁端，點選右上角頭像進入 <b>Preferences (設定)</b>，在左側選單選擇 <b>Password (密碼)</b><span data-tx="koofr">。</span></p>
+      </section>
+      <section class="step-card">
+        <h3>2. 命名並生成</h3>
+        <p>向下滑動找到 <b>App passwords</b> 區域，在輸入框中填入應用名稱（如“雞毛蒜皮”），點選 <b>Generate</b>，系統將生成一串專屬密碼。</p>
+      </section>
+      <section class="step-card highlight">
+        <h3>3. 填寫資訊</h3>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">伺服器地址</div><div class="guide-field-desc">https://app.koofr.net/dav/Koofr/</div></div>
+          <div><div class="guide-field-title">應用帳號</div><div class="guide-field-desc">您的 Koofr 註冊郵箱</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">應用程式密碼</span></div><div class="guide-field-desc">剛才生成的 App password (注意去掉空格)</div></div>
+        </div>
+      </section>
+    </div>
+    <div class="guide-pane">
+      <section class="step-card">
+        <h3>InfiniCLOUD</h3>
+        <p>登入網頁端進入 <b>My Page</b>，在 <b>Apps Connection</b> 中開啟連線，頁面會顯示 WebDAV 地址、Connection ID 和 Apps Password。</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">伺服器地址</div><div class="guide-field-desc">頁面顯示的 WebDAV Connection URL（形如 https://xxx.teracloud.jp/dav/）</div></div>
+          <div><div class="guide-field-title">應用帳號</div><div class="guide-field-desc">Connection ID</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">應用程式密碼</span></div><div class="guide-field-desc">Apps Password</div></div>
+        </div>
+      </section>
+      <section class="step-card">
+        <h3>Nextcloud</h3>
+        <p>建議在 <b>設定 → 安全 → 裝置與會話</b> 中建立一個應用密碼（名稱填“雞毛蒜皮”），不要直接用登入密碼。</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">伺服器地址</div><div class="guide-field-desc">https://你的域名/remote.php/dav/files/使用者名稱/</div></div>
+          <div><div class="guide-field-title">應用帳號</div><div class="guide-field-desc">Nextcloud 使用者名稱</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">應用程式密碼</span></div><div class="guide-field-desc">剛才建立的應用密碼</div></div>
+        </div>
+      </section>
+      <section class="step-card">
+        <h3>群暉 NAS</h3>
+        <p>在 DSM 的 <b>套件中心</b> 安裝 <b>WebDAV Server</b> 並啟用 HTTPS（預設埠 5006）。手機需能從外網訪問 NAS（DDNS + 埠轉發；QuickConnect 不支援 WebDAV），並使用有效的 HTTPS 證書（如 DSM 自帶的 Let's Encrypt），自簽名證書無法連線。</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">伺服器地址</div><div class="guide-field-desc">https://你的NAS域名:5006/共享資料夾名/</div></div>
+          <div><div class="guide-field-title">應用帳號</div><div class="guide-field-desc">DSM 使用者名稱</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">應用程式密碼</span></div><div class="guide-field-desc">DSM 登入密碼</div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
 <script>
   // 🌐 语言切换
   function rememberLang(l) { try { localStorage.setItem('jmsp_site_lang', l); } catch (e) {} }
@@ -1140,7 +1318,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-  var tocList = [{"id": "sec-ai", "title": "極速記帳魔法"}, {"id": "sec-manual", "title": "精打細算記帳"}, {"id": "sec-diary", "title": "時光日記本"}, {"id": "sec-stats", "title": "全能首頁看板"}, {"id": "sec-savings", "title": "存錢計劃與目標"}, {"id": "sec-debt", "title": "借貸往來"}, {"id": "sec-budget", "title": "精細化預算管理"}, {"id": "sec-recurring", "title": "週期與分期管理"}, {"id": "sec-reimburse", "title": "報銷追蹤管理"}, {"id": "sec-reminder", "title": "貼心備忘提醒"}, {"id": "sec-assets", "title": "資產與物品"}, {"id": "sec-backup", "title": "資料備份與恢復"}, {"id": "sec-security", "title": "安全與隱私"}, {"id": "sec-advanced", "title": "進階玩法"}, {"id": "sec-faq", "title": "常見問題 (FAQ)"}];
+  var tocList = [{"id": "sec-ai", "title": "極速記帳魔法"}, {"id": "sec-manual", "title": "精打細算記帳"}, {"id": "sec-diary", "title": "時光日記本"}, {"id": "sec-stats", "title": "全能首頁看板"}, {"id": "sec-savings", "title": "存錢計劃與目標"}, {"id": "sec-debt", "title": "借貸往來"}, {"id": "sec-budget", "title": "精細化預算管理"}, {"id": "sec-recurring", "title": "週期與分期管理"}, {"id": "sec-reimburse", "title": "報銷追蹤管理"}, {"id": "sec-reminder", "title": "貼心備忘提醒"}, {"id": "sec-assets", "title": "資產與物品"}, {"id": "sec-backup", "title": "資料備份與恢復"}, {"id": "sec-shared", "title": "家庭共享帳本"}, {"id": "sec-security", "title": "安全與隱私"}, {"id": "sec-advanced", "title": "進階玩法"}, {"id": "sec-faq", "title": "常見問題 (FAQ)"}];
   var currentIndex = 0;
   var showToc = false;
   var showSearch = false;
@@ -1248,7 +1426,7 @@
     var q = searchInput.value.trim();
     searchClearBtn.style.display = searchInput.value ? 'flex' : 'none';
     if (!q) {
-      searchResultsView.innerHTML = '<div class="search-hint">輸入關鍵詞，可搜尋指南全部 15 個章節與常見問題中的任意內容</div>';
+      searchResultsView.innerHTML = '<div class="search-hint">輸入關鍵詞，可搜尋指南全部 16 個章節與常見問題中的任意內容</div>';
       return;
     }
     var lowerQ = q.toLowerCase();
@@ -1410,6 +1588,56 @@
   /* ==================== 初始化 ==================== */
   renderVisibility();
   updatePagerTransform(0, false);
+  // ==================== WebDAV 配置指南 ====================
+  var webdavGuide = document.getElementById('webdavGuide');
+  function openWebdavGuide() {
+    webdavGuide.classList.add('open');
+    webdavGuide.setAttribute('aria-hidden', 'false');
+  }
+  function closeWebdavGuide() {
+    webdavGuide.classList.remove('open');
+    webdavGuide.setAttribute('aria-hidden', 'true');
+  }
+  function switchGuideTab(i) {
+    var tabs = webdavGuide.querySelectorAll('.guide-tab');
+    var panes = webdavGuide.querySelectorAll('.guide-pane');
+    for (var k = 0; k < tabs.length; k++) {
+      tabs[k].classList.toggle('active', k === i);
+      panes[k].classList.toggle('active', k === i);
+    }
+    document.getElementById('guideBody').scrollTop = 0;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && webdavGuide.classList.contains('open')) closeWebdavGuide();
+  });
+  // 左边缘右滑返回（与 App 子页面的手势一致：从屏幕左侧 30px 内开始，右滑超过 1/4 屏宽关闭）
+  (function () {
+    var sx = 0, sy = 0, dx = 0, tracking = false, decided = false;
+    webdavGuide.addEventListener('touchstart', function (e) {
+      var t = e.touches[0]; sx = t.clientX; sy = t.clientY; dx = 0;
+      tracking = sx <= 30; decided = false;
+    }, { passive: true });
+    webdavGuide.addEventListener('touchmove', function (e) {
+      if (!tracking) return;
+      var t = e.touches[0]; dx = t.clientX - sx; var dy = t.clientY - sy;
+      if (!decided) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        decided = true;
+        if (Math.abs(dy) > Math.abs(dx) || dx < 0) { tracking = false; return; }
+        webdavGuide.style.transition = 'none';
+      }
+      webdavGuide.style.transform = 'translateX(' + Math.max(0, dx) + 'px)';
+    }, { passive: true });
+    function end() {
+      if (!tracking || !decided) { tracking = false; return; }
+      tracking = false;
+      webdavGuide.style.transition = '';
+      webdavGuide.style.transform = '';
+      if (dx > window.innerWidth / 4) closeWebdavGuide();
+    }
+    webdavGuide.addEventListener('touchend', end);
+    webdavGuide.addEventListener('touchcancel', end);
+  })();
 </script>
 </body>
 </html>

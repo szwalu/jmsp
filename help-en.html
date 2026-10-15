@@ -272,6 +272,47 @@
     .nav-disabled { color: #475569; }
   }
 
+  /* ==================== WebDAV 配置指南（与 App 内 BackupRestore 的教程弹窗内容一致） ==================== */
+  .guide-link { color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500; }
+  .guide-overlay {
+    position: fixed; inset: 0; z-index: 60; background: #f8fafc; display: flex; flex-direction: column;
+    padding-top: env(safe-area-inset-top); transform: translateX(100%); visibility: hidden;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0.4s;
+  }
+  .guide-overlay.open { transform: translateX(0); visibility: visible; transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
+  .guide-header { display: flex; align-items: center; padding: 14px 16px; gap: 8px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+  .guide-tabs { display: flex; justify-content: space-evenly; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .guide-tab {
+    flex: 1; background: none; border: none; padding: 12px 0 10px; font-size: 14px; color: #64748b; cursor: pointer;
+    border-bottom: 2px solid transparent; font-family: inherit;
+  }
+  .guide-tab.active { color: var(--theme-primary, #6366f1); border-bottom-color: var(--theme-primary, #6366f1); font-weight: 600; }
+  .guide-body { flex: 1; overflow-y: auto; padding: 16px 16px calc(40px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .guide-pane { display: none; }
+  .guide-pane.active { display: block; }
+  .step-card { background: #ffffff; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+  .step-card.highlight { border: 1px solid rgba(99, 102, 241, 0.25); }
+  .step-card h3 { margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #1e293b; }
+  .step-card p { margin: 0; font-size: 14px; line-height: 1.7; color: #475569; }
+  .step-card a { font-size: 13px; color: var(--theme-primary, #6366f1); }
+  .guide-fields { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .guide-field-title { font-size: 14px; font-weight: 600; color: #334155; }
+  .guide-field-desc { font-size: 13px; color: #64748b; word-break: break-all; margin-top: 2px; }
+  @media (prefers-color-scheme: dark) {
+    .guide-link { color: #818cf8; }
+    .guide-overlay { background: #111827; }
+    .guide-header { border-bottom-color: rgba(255,255,255,0.06); }
+    .guide-tabs { border-bottom-color: rgba(255,255,255,0.08); }
+    .guide-tab { color: #94a3b8; }
+    .guide-tab.active { color: #818cf8; border-bottom-color: #818cf8; }
+    .step-card { background: #1e293b; box-shadow: none; border: 1px solid rgba(255,255,255,0.05); }
+    .step-card.highlight { border-color: rgba(129, 140, 248, 0.35); }
+    .step-card h3, .guide-field-title { color: #f1f5f9; }
+    .step-card p { color: #cbd5e1; }
+    .step-card a { color: #818cf8; }
+    .guide-field-desc { color: #94a3b8; }
+  }
+
   /* 🌐 语言切换 */
   .lang-switch { position: relative; }
   .lang-btn { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-family: inherit; }
@@ -343,16 +384,17 @@
           <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>Handy Reminders</div>
           <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>Assets & Items</div>
           <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>Backup & Restore</div>
-          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>Security & Privacy</div>
-          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>Advanced Tips</div>
-          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>FAQ</div>
+          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>Family Shared Ledger</div>
+          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>Security & Privacy</div>
+          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>Advanced Tips</div>
+          <div class="toc-item" data-idx="15" onclick="goToChapter(15)"><span class="toc-idx">16</span>FAQ</div>
     </div>
   </div>
 
   <div class="toc-backdrop" id="tocBackdrop" style="display:none;" onclick="closeToc()"></div>
 
   <div class="search-results-view" id="searchResultsView" style="display:none;">
-    <div class="search-hint">Enter a keyword to search all 15 chapters and the FAQ</div>
+    <div class="search-hint">Enter keywords to search all 16 chapters of the guide and the FAQ</div>
   </div>
 
   <div class="pager-viewport" id="pagerViewport">
@@ -418,6 +460,7 @@
             </div>
             <ul class="help-list">
               <li><strong>Multiple ledgers: </strong>Create separate ledgers such as "Family", "Personal" or "Work" and switch between them under Me → Ledgers. Each ledger's entries and stats are completely independent, keeping personal and business finances neatly apart.</li>
+              <li><strong>Shared ledger: </strong>In "Ledgers" → "👥 Shared Ledger", keep one ledger together with your family (up to 3 people). See <span onclick="goToChapter(12)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">"Family Shared Ledger" 👆</span>。</li>
               <li>
                 <strong>Screenshot & quick logging: </strong>We've prepared powerful iOS-only shortcuts! Go to Me → Quick Logging Guide to set up Siri voice commands and back-tap screenshot logging. Amounts and categories are recognized automatically from WeChat Pay and Alipay receipts.
               </li>
@@ -890,13 +933,13 @@
               <h3>Backup & Restore</h3>
             </div>
             <ul class="help-list">
-              <li><strong>Five cloud options: </strong>iCloud, WebDAV (get a free WebDAV account from providers such as <strong>Jianguoyun</strong>、<strong>InfiniCLOUD</strong> or <strong>Koofr</strong> and others — or connect your own <strong>Nextcloud</strong> or <strong>Synology NAS</strong>，<strong>Tap for the detailed setup guide👆</strong>), Baidu Netdisk, Google Drive and OneDrive all support incremental background backups. Use whichever and however many you like.</li>
+              <li><strong>Five cloud options: </strong>iCloud, WebDAV (get a free WebDAV account from providers such as <strong>Jianguoyun</strong>、<strong>InfiniCLOUD</strong> or <strong>Koofr</strong> and others — or connect your own <strong>Nextcloud</strong> or <strong>Synology NAS</strong>，<span class="guide-link" onclick="openWebdavGuide()">Tap for the detailed setup guide👆</span>), Baidu Netdisk, Google Drive and OneDrive all support incremental background backups. Use whichever and however many you like.</li>
               <li><strong>Automatic daily backups: </strong>Whenever there's new data, each connected cloud backs up quietly on its own schedule (opening the app, returning to it or sending it to the background can all trigger this). 💡 Note: backups only run while the app is in the foreground. When the cloud logo next to your avatar is blinking, a backup is in progress — <strong>please don't swipe the app away</strong>。</li>
               <li><strong>Manual export & restore: </strong>Under Me → Backup & Restore you can export all your data as a  <code>JSON</code> file anytime, or as a backup package with photos ( <code>PDF</code>、<code>ZIP</code> ) saved to your device. After switching phones or reinstalling, restore from any connected cloud in one tap or import a local backup file.</li>
               <li><strong>Import from other diary apps: </strong>In Me → Backup & Restore → Export/Import, tap "Import from other diary apps": <strong>Day One</strong> — choose its exported archive (Day One Settings → Import/Export → Export Day One JSON [ZIP]); entries are imported with photos, time, location and weather; <strong>一本日记 (Yiben Diary)</strong> — choose its exported  <code>.txt</code> file and it's split into entries by date (TXT has no photos); <strong>一叶日记 (Yiye Diary)</strong> — choose the zip from Settings → Data Management → Export Markdown; text, time, address and photos are imported together. Importing the same file again won't create duplicates.</li>
               <li><strong>Multi-device live sync — more than a backup, a ledger that goes with you: </strong>If you use more than one device (e.g. phone + tablet, or moving between old and new phones), turn this on and edits sync between them almost in real time, instead of waiting for the regular backup schedule.</li>
               <li><strong>New devices detect your main cloud: </strong>If your other devices already have a main cloud set, turning this on on a new device detects it and asks whether to match — no need to decide again on every device.</li>
-              <li><strong>💡 Share a ledger with family: </strong>If you and a family member (e.g. your partner) want to share the same view of your books, sign in to <strong>the same cloud account</strong> on both phones (e.g. the same Baidu Netdisk or Google Drive account), set it as the main cloud on both, and turn on Multi-device live sync on each. Whoever logs a bill or writes an entry, it shows up on the other phone shortly — almost like sharing one book.</li>
+              <li><strong>💡 Want to keep books with your family? </strong>Real-time multi-device sync is for your own devices and syncs all your data, including diaries. To keep books with your family, use <span onclick="goToChapter(12)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">"Family Shared Ledger" 👆</span>: only the chosen ledger is shared, and diaries and other personal data stay private.</li>
               <li><strong>Advanced — multi-cloud mirroring / push to all clouds now: </strong>If you want every connected cloud kept as up to date as possible (not just the main one), turn on "Multi-cloud mirroring" in the advanced options of Multi-device live sync; or tap "Push to all clouds now" anytime to trigger a full sync manually. Both are advanced options that noticeably increase requests — most people don't need them, so leaving them off is fine.</li>
             </ul>
 
@@ -921,7 +964,7 @@
               <div class="nav-btn nav-next" onclick="goToChapter(12)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">Next</span>
-                  <span class="nav-name">Security & Privacy</span>
+                  <span class="nav-name">Family Shared Ledger</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
@@ -935,6 +978,60 @@
               <div
                 class="page-scroll"
                 id="scroll-12"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-shared">
+            <div class="section-header">
+              <div class="icon-wrap bg-pink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></div>
+              <h3>Family Shared Ledger</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>Keep one ledger with your family: </strong>Up to 3 people share one ledger. Everyone records on their own phone, and new entries show up on the others' phones in about a minute; the name of whoever recorded each entry appears next to its time.</li>
+              <li><strong>Only this ledger is shared: </strong>Only expenses and income in the shared ledger are synced. Diaries, other ledgers, accounts, memos, items and other personal data are never shared and never appear on your family's phones.</li>
+              <li><strong>Set up a dedicated Jianguoyun account: </strong>Shared data is stored on a WebDAV drive your family uses together. We recommend registering a new Jianguoyun account just for the shared ledger: create a folder on the Jianguoyun website and generate an app password (<span class="guide-link" onclick="openWebdavGuide()">Tap for the detailed setup guide👆</span>). Don't use the account you use for personal backups — the app will refuse it.</li>
+              <li><strong>Create a shared ledger: </strong>Go to "Me" → "Ledgers" → "👥 Shared Ledger", choose "Create", and enter the ledger name, WebDAV address, account and app password. Once it's created, tap "Copy invite code" and send it to your family.</li>
+              <li><strong>Join a shared ledger: </strong>Family members switch to "Join" on the same page and paste the invite code — no Jianguoyun account needed. Codes forwarded through chat apps still work even with extra text around them. The invite code contains the shared drive's account and password, so only share it with people you trust.</li>
+              <li><strong>Everyone edits only their own entries: </strong>Entries recorded by others are view-only — editing, deleting, favoriting and pinning are blocked. When you delete your own entry, it's deleted on your family's phones too.</li>
+              <li><strong>Accounts stay separate: </strong>Your entries come out of your own account balances as usual; your family's entries only show the name of the account they used and never affect your accounts.</li>
+              <li><strong>Not available in shared ledgers: </strong>Transfers, loans, savings plans, installments, refunds, reimbursements, budgets and recurring entries can't be used in shared ledgers, and their options are hidden. Transfers recorded with Shortcuts or Siri while in a shared ledger go to the default ledger instead.</li>
+              <li><strong>Stats by member: </strong>Open the Stats page in a shared ledger to see each member's expenses, share and income for the selected period.</li>
+              <li><strong>How often it syncs: </strong>While the app is open it syncs about once a minute, slowing to every 3 minutes after 10 minutes with no changes. Returning to the app or tapping "Sync now" on the shared ledger page syncs right away. When family members add entries you'll see "xx added n new entries". Nothing syncs while the app is in the background.</li>
+              <li><strong>Sync status: </strong>The shared ledger page shows when it last synced. If the shared drive's account or password stops working, the "Shared" badge in Ledgers turns into a red "Sync failed".</li>
+            </ul>
+
+            <h4 class="help-subtitle">🚪 Leaving and switching phones</h4>
+            <ul class="help-list">
+              <li><strong>Leave the shared ledger: </strong>Tap "Leave shared ledger" on the shared ledger page to free up your spot. The ledger becomes a regular ledger on your phone and all existing entries stay. Entries you recorded remain visible to other members, including anyone who joins later. You need to be online to leave.</li>
+              <li><strong>Switching phones: </strong>Shared ledger entries are included in your personal backup, so they come back when you restore it on a new phone. The shared drive account isn't in the personal backup, though, so you'll need to join again with the invite code. Rejoining recognizes you as the same member and doesn't take an extra spot.</li>
+              <li><strong>Limits: </strong>Each shared ledger has up to 3 members, and each person can join only one shared ledger at a time.</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">Previous</span>
+                  <span class="nav-name">Backup & Restore</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">Next</span>
+                  <span class="nav-name">Security & Privacy</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-13"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-security">
@@ -952,14 +1049,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">Previous</span>
-                  <span class="nav-name">Backup & Restore</span>
+                  <span class="nav-name">Family Shared Ledger</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+              <div class="nav-btn nav-next" onclick="goToChapter(14)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">Next</span>
                   <span class="nav-name">Advanced Tips</span>
@@ -975,7 +1072,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-13"
+                id="scroll-14"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-advanced">
@@ -1008,14 +1105,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">Previous</span>
                   <span class="nav-name">Security & Privacy</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(14)">
+              <div class="nav-btn nav-next" onclick="goToChapter(15)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">Next</span>
                   <span class="nav-name">FAQ</span>
@@ -1031,7 +1128,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-14"
+                id="scroll-15"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-faq">
@@ -1108,7 +1205,7 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(14)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">Previous</span>
@@ -1126,6 +1223,87 @@
 
 </div>
 
+<div class="guide-overlay" id="webdavGuide" aria-hidden="true">
+  <div class="guide-header">
+    <button class="back-btn" onclick="closeWebdavGuide()" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+    <div class="title-group"><div class="title">Setup guide</div></div>
+    <div class="header-spacer"></div>
+  </div>
+  <div class="guide-tabs">
+    <button class="guide-tab active" data-pane="0" onclick="switchGuideTab(0)">Jianguoyun</button>
+    <button class="guide-tab" data-pane="1" onclick="switchGuideTab(1)">Koofr</button>
+    <button class="guide-tab" data-pane="2" onclick="switchGuideTab(2)"><span data-tx="tab">Other</span></button>
+  </div>
+  <div class="guide-body" id="guideBody">
+    <div class="guide-pane active">
+      <section class="step-card">
+        <h3>1. Enable the service</h3>
+        <p>Sign in on the website and go to "Account Info" -&gt; "Security Settings".</p>
+      </section>
+      <section class="step-card">
+        <h3>2. Create a third-party app password</h3>
+        <p>Find "Third-party App Management" and tap "Add App". Name it "Daily Trifles" and tap to generate a password.</p>
+        <div style="margin-top: 8px;"><a href="https://help.jianguoyun.com/?p=2064" target="_blank" rel="noopener">How? See the official illustrated guide</a></div>
+      </section>
+      <section class="step-card highlight">
+        <h3>3. Fill in the details</h3>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">Server URL</div><div class="guide-field-desc">https://dav.jianguoyun.com/dav/</div></div>
+          <div><div class="guide-field-title">Account</div><div class="guide-field-desc">Your Jianguoyun account email</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">App password</span></div><div class="guide-field-desc">The 16-character password you just generated</div></div>
+        </div>
+      </section>
+    </div>
+    <div class="guide-pane">
+      <section class="step-card">
+        <h3>1. Create an app-specific password</h3>
+        <p>Sign in to Koofr on the web, tap your avatar in the top right and open <b>Preferences</b>, then choose from the left menu: <b>Password</b><span data-tx="koofr">.</span></p>
+      </section>
+      <section class="step-card">
+        <h3>2. Name it and generate</h3>
+        <p>Scroll down to the <b>App passwords</b> section, enter an app name (e.g. "Daily Trifles"), then tap <b>Generate</b>, and a dedicated password will be generated.</p>
+      </section>
+      <section class="step-card highlight">
+        <h3>3. Fill in the details</h3>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">Server URL</div><div class="guide-field-desc">https://app.koofr.net/dav/Koofr/</div></div>
+          <div><div class="guide-field-title">Account</div><div class="guide-field-desc">Your Koofr account email</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">App password</span></div><div class="guide-field-desc">The app password you just generated (remove spaces)</div></div>
+        </div>
+      </section>
+    </div>
+    <div class="guide-pane">
+      <section class="step-card">
+        <h3>InfiniCLOUD</h3>
+        <p>Sign in on the web and open <b>My Page</b>, then in <b>Apps Connection</b> turn on the connection; the page will show the WebDAV URL, Connection ID and Apps Password.</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">Server URL</div><div class="guide-field-desc">The WebDAV Connection URL shown on the page (e.g. https://xxx.teracloud.jp/dav/)</div></div>
+          <div><div class="guide-field-title">Account</div><div class="guide-field-desc">Connection ID</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">App password</span></div><div class="guide-field-desc">Apps Password</div></div>
+        </div>
+      </section>
+      <section class="step-card">
+        <h3>Nextcloud</h3>
+        <p>We recommend going to <b>Settings → Security → Devices & sessions</b> to create an app password (name it "Daily Trifles") instead of using your login password.</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">Server URL</div><div class="guide-field-desc">https://your-domain/remote.php/dav/files/username/</div></div>
+          <div><div class="guide-field-title">Account</div><div class="guide-field-desc">Nextcloud username</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">App password</span></div><div class="guide-field-desc">The app password you just created</div></div>
+        </div>
+      </section>
+      <section class="step-card">
+        <h3>Synology NAS</h3>
+        <p>In DSM's <b>Package Center,</b> install <b>WebDAV Server</b> and enable HTTPS (default port 5006). Your phone must be able to reach the NAS from outside (DDNS + port forwarding; QuickConnect doesn't support WebDAV), with a valid HTTPS certificate (such as DSM's built-in Let's Encrypt); self-signed certificates won't work.</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">Server URL</div><div class="guide-field-desc">https://your-nas-domain:5006/shared-folder/</div></div>
+          <div><div class="guide-field-title">Account</div><div class="guide-field-desc">DSM username</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">App password</span></div><div class="guide-field-desc">DSM login password</div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
 <script>
   // 🌐 语言切换
   function rememberLang(l) { try { localStorage.setItem('jmsp_site_lang', l); } catch (e) {} }
@@ -1140,7 +1318,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-  var tocList = [{"id": "sec-ai", "title": "Quick Logging Magic"}, {"id": "sec-manual", "title": "Detailed Bookkeeping"}, {"id": "sec-diary", "title": "Diary Calendar"}, {"id": "sec-stats", "title": "Home Dashboard"}, {"id": "sec-savings", "title": "Savings Plans & Goals"}, {"id": "sec-debt", "title": "Debts"}, {"id": "sec-budget", "title": "Detailed Budgets"}, {"id": "sec-recurring", "title": "Recurring & Installments"}, {"id": "sec-reimburse", "title": "Reimbursement Tracking"}, {"id": "sec-reminder", "title": "Handy Reminders"}, {"id": "sec-assets", "title": "Assets & Items"}, {"id": "sec-backup", "title": "Backup & Restore"}, {"id": "sec-security", "title": "Security & Privacy"}, {"id": "sec-advanced", "title": "Advanced Tips"}, {"id": "sec-faq", "title": "FAQ"}];
+  var tocList = [{"id": "sec-ai", "title": "Quick Logging Magic"}, {"id": "sec-manual", "title": "Detailed Bookkeeping"}, {"id": "sec-diary", "title": "Diary Calendar"}, {"id": "sec-stats", "title": "Home Dashboard"}, {"id": "sec-savings", "title": "Savings Plans & Goals"}, {"id": "sec-debt", "title": "Debts"}, {"id": "sec-budget", "title": "Detailed Budgets"}, {"id": "sec-recurring", "title": "Recurring & Installments"}, {"id": "sec-reimburse", "title": "Reimbursement Tracking"}, {"id": "sec-reminder", "title": "Handy Reminders"}, {"id": "sec-assets", "title": "Assets & Items"}, {"id": "sec-backup", "title": "Backup & Restore"}, {"id": "sec-shared", "title": "Family Shared Ledger"}, {"id": "sec-security", "title": "Security & Privacy"}, {"id": "sec-advanced", "title": "Advanced Tips"}, {"id": "sec-faq", "title": "FAQ"}];
   var currentIndex = 0;
   var showToc = false;
   var showSearch = false;
@@ -1248,7 +1426,7 @@
     var q = searchInput.value.trim();
     searchClearBtn.style.display = searchInput.value ? 'flex' : 'none';
     if (!q) {
-      searchResultsView.innerHTML = '<div class="search-hint">Enter a keyword to search all 15 chapters and the FAQ</div>';
+      searchResultsView.innerHTML = '<div class="search-hint">Enter keywords to search all 16 chapters of the guide and the FAQ</div>';
       return;
     }
     var lowerQ = q.toLowerCase();
@@ -1410,6 +1588,56 @@
   /* ==================== 初始化 ==================== */
   renderVisibility();
   updatePagerTransform(0, false);
+  // ==================== WebDAV 配置指南 ====================
+  var webdavGuide = document.getElementById('webdavGuide');
+  function openWebdavGuide() {
+    webdavGuide.classList.add('open');
+    webdavGuide.setAttribute('aria-hidden', 'false');
+  }
+  function closeWebdavGuide() {
+    webdavGuide.classList.remove('open');
+    webdavGuide.setAttribute('aria-hidden', 'true');
+  }
+  function switchGuideTab(i) {
+    var tabs = webdavGuide.querySelectorAll('.guide-tab');
+    var panes = webdavGuide.querySelectorAll('.guide-pane');
+    for (var k = 0; k < tabs.length; k++) {
+      tabs[k].classList.toggle('active', k === i);
+      panes[k].classList.toggle('active', k === i);
+    }
+    document.getElementById('guideBody').scrollTop = 0;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && webdavGuide.classList.contains('open')) closeWebdavGuide();
+  });
+  // 左边缘右滑返回（与 App 子页面的手势一致：从屏幕左侧 30px 内开始，右滑超过 1/4 屏宽关闭）
+  (function () {
+    var sx = 0, sy = 0, dx = 0, tracking = false, decided = false;
+    webdavGuide.addEventListener('touchstart', function (e) {
+      var t = e.touches[0]; sx = t.clientX; sy = t.clientY; dx = 0;
+      tracking = sx <= 30; decided = false;
+    }, { passive: true });
+    webdavGuide.addEventListener('touchmove', function (e) {
+      if (!tracking) return;
+      var t = e.touches[0]; dx = t.clientX - sx; var dy = t.clientY - sy;
+      if (!decided) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        decided = true;
+        if (Math.abs(dy) > Math.abs(dx) || dx < 0) { tracking = false; return; }
+        webdavGuide.style.transition = 'none';
+      }
+      webdavGuide.style.transform = 'translateX(' + Math.max(0, dx) + 'px)';
+    }, { passive: true });
+    function end() {
+      if (!tracking || !decided) { tracking = false; return; }
+      tracking = false;
+      webdavGuide.style.transition = '';
+      webdavGuide.style.transform = '';
+      if (dx > window.innerWidth / 4) closeWebdavGuide();
+    }
+    webdavGuide.addEventListener('touchend', end);
+    webdavGuide.addEventListener('touchcancel', end);
+  })();
 </script>
 </body>
 </html>

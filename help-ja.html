@@ -272,6 +272,47 @@
     .nav-disabled { color: #475569; }
   }
 
+  /* ==================== WebDAV 配置指南（与 App 内 BackupRestore 的教程弹窗内容一致） ==================== */
+  .guide-link { color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500; }
+  .guide-overlay {
+    position: fixed; inset: 0; z-index: 60; background: #f8fafc; display: flex; flex-direction: column;
+    padding-top: env(safe-area-inset-top); transform: translateX(100%); visibility: hidden;
+    transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1), visibility 0s linear 0.4s;
+  }
+  .guide-overlay.open { transform: translateX(0); visibility: visible; transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); }
+  .guide-header { display: flex; align-items: center; padding: 14px 16px; gap: 8px; border-bottom: 1px solid rgba(0,0,0,0.04); }
+  .guide-tabs { display: flex; justify-content: space-evenly; border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .guide-tab {
+    flex: 1; background: none; border: none; padding: 12px 0 10px; font-size: 14px; color: #64748b; cursor: pointer;
+    border-bottom: 2px solid transparent; font-family: inherit;
+  }
+  .guide-tab.active { color: var(--theme-primary, #6366f1); border-bottom-color: var(--theme-primary, #6366f1); font-weight: 600; }
+  .guide-body { flex: 1; overflow-y: auto; padding: 16px 16px calc(40px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .guide-pane { display: none; }
+  .guide-pane.active { display: block; }
+  .step-card { background: #ffffff; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+  .step-card.highlight { border: 1px solid rgba(99, 102, 241, 0.25); }
+  .step-card h3 { margin: 0 0 6px; font-size: 15px; font-weight: 600; color: #1e293b; }
+  .step-card p { margin: 0; font-size: 14px; line-height: 1.7; color: #475569; }
+  .step-card a { font-size: 13px; color: var(--theme-primary, #6366f1); }
+  .guide-fields { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .guide-field-title { font-size: 14px; font-weight: 600; color: #334155; }
+  .guide-field-desc { font-size: 13px; color: #64748b; word-break: break-all; margin-top: 2px; }
+  @media (prefers-color-scheme: dark) {
+    .guide-link { color: #818cf8; }
+    .guide-overlay { background: #111827; }
+    .guide-header { border-bottom-color: rgba(255,255,255,0.06); }
+    .guide-tabs { border-bottom-color: rgba(255,255,255,0.08); }
+    .guide-tab { color: #94a3b8; }
+    .guide-tab.active { color: #818cf8; border-bottom-color: #818cf8; }
+    .step-card { background: #1e293b; box-shadow: none; border: 1px solid rgba(255,255,255,0.05); }
+    .step-card.highlight { border-color: rgba(129, 140, 248, 0.35); }
+    .step-card h3, .guide-field-title { color: #f1f5f9; }
+    .step-card p { color: #cbd5e1; }
+    .step-card a { color: #818cf8; }
+    .guide-field-desc { color: #94a3b8; }
+  }
+
   /* 🌐 语言切换 */
   .lang-switch { position: relative; }
   .lang-btn { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; font-family: inherit; }
@@ -343,16 +384,17 @@
           <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>便利なリマインダー</div>
           <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>資産と持ち物</div>
           <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>バックアップと復元</div>
-          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>セキュリティとプライバシー</div>
-          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>便利な使い方</div>
-          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>よくある質問 (FAQ)</div>
+          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>家族の共有帳簿</div>
+          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>セキュリティとプライバシー</div>
+          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>便利な使い方</div>
+          <div class="toc-item" data-idx="15" onclick="goToChapter(15)"><span class="toc-idx">16</span>よくある質問 (FAQ)</div>
     </div>
   </div>
 
   <div class="toc-backdrop" id="tocBackdrop" style="display:none;" onclick="closeToc()"></div>
 
   <div class="search-results-view" id="searchResultsView" style="display:none;">
-    <div class="search-hint">キーワードを入力すると、全15章とよくある質問をまとめて検索できます</div>
+    <div class="search-hint">キーワードを入力すると、ガイド全 16 章とよくある質問を検索できます</div>
   </div>
 
   <div class="pager-viewport" id="pagerViewport">
@@ -418,6 +460,7 @@
             </div>
             <ul class="help-list">
               <li><strong>複数の帳簿：</strong>「家族」「個人」「仕事」など複数の帳簿を作成し、「マイページ → 帳簿管理」ですばやく切り替えられます。帳簿ごとの記録や統計は完全に独立しているので、公私の家計もすっきり管理できます。</li>
+              <li><strong>共有帳簿：</strong>「帳簿管理」→「👥 共有帳簿」で家族（最大 3 人）と同じ帳簿に記録できます。詳しくは<span onclick="goToChapter(12)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「家族の共有帳簿」👆</span>。</li>
               <li>
                 <strong>スクショ記帳とクイック記録：</strong>iOS 専用の便利な機能を用意しています！「マイページ → クイック記録ガイド」で、Siri の音声コマンドと背面タップでのスクショ記帳を設定できます。WeChat Pay や Alipay の明細から金額とカテゴリを自動で読み取ります。
               </li>
@@ -890,13 +933,13 @@
               <h3>バックアップと復元</h3>
             </div>
             <ul class="help-list">
-              <li><strong>5つのクラウドから選べる：</strong>iCloud、WebDAV（ <strong>坚果云（Jianguoyun）</strong>、<strong>InfiniCLOUD</strong> や <strong>Koofr</strong> などで無料の WebDAV を申し込むか、自前の <strong>Nextcloud</strong> や <strong>Synology NAS</strong>，<strong>詳しい設定ガイドを見る👆</strong>に接続することもできます）、Baidu Netdisk、Google Drive、OneDrive に対応し、すべて差分の自動バックアップが可能です。どれを何個使うかは自由です。</li>
+              <li><strong>5つのクラウドから選べる：</strong>iCloud、WebDAV（ <strong>坚果云（Jianguoyun）</strong>、<strong>InfiniCLOUD</strong> や <strong>Koofr</strong> などで無料の WebDAV を申し込むか、自前の <strong>Nextcloud</strong> や <strong>Synology NAS</strong>，<span class="guide-link" onclick="openWebdavGuide()">詳しい設定ガイドを見る👆</span>に接続することもできます）、Baidu Netdisk、Google Drive、OneDrive に対応し、すべて差分の自動バックアップが可能です。どれを何個使うかは自由です。</li>
               <li><strong>毎日の自動バックアップ：</strong>新しいデータがあると、接続中の各クラウドがそれぞれのタイミングで自動バックアップします（アプリを開いたとき、前面に戻ったとき、バックグラウンドに移ったときなど）。💡 注：バックアップはアプリを前面で使っているときのみ行われます。アバター横のクラウドのロゴが点滅しているのはバックアップ中なので、<strong>アプリをスワイプして終了しないでください</strong>。</li>
               <li><strong>手動エクスポートと復元：</strong>「マイページ → バックアップと復元」から、全データを <code>JSON</code> ファイルとして、または画像付きの <code>PDF</code>、<code>ZIP</code> バックアップとしていつでも端末に保存できます。機種変更や再インストール後は、接続済みのクラウドからワンタップで復元するか、端末のバックアップファイルを読み込めます。</li>
               <li><strong>他の日記アプリから読み込み：</strong>「マイページ → バックアップと復元 → エクスポート／インポート」で「他の日記アプリから読み込む」をタップ：<strong>Day One</strong> は書き出した ZIP（Day One の設定 →「読み込み／書き出し」→「Day One JSON [ZIP] を書き出す」）を選ぶと、写真・時刻・場所・天気ごと読み込まれます。<strong>一本日记</strong> は書き出した <code>.txt</code> ファイルを選ぶと、日付ごとに日記に分割されます（TXT に写真は含まれません）。<strong>一叶日记</strong> は「設定 → データ管理 → Markdown を書き出す」で作成した ZIP を選ぶと、本文・時刻・住所・写真がまとめて読み込まれます。同じファイルを何度読み込んでも重複しません。</li>
               <li><strong>複数端末のリアルタイム同期 ― バックアップを超えた「持ち歩ける帳簿」：</strong>複数の端末（スマホとタブレット、新旧のスマホなど）を使っているなら、これをオンにすると編集内容がほぼリアルタイムで端末間に反映され、通常のバックアップを待つ必要がありません。</li>
               <li><strong>新しい端末でメインのクラウドを自動検出：</strong>ほかの端末でメインのクラウドを設定済みなら、新しい端末でこれをオンにしたときに自動で検出し、同じ設定にするか確認します。端末ごとに決め直す必要はありません。</li>
-              <li><strong>💡 新しい使い方：家族で帳簿を共有：</strong>家族（夫婦など）と同じ帳簿を共有したい場合は、2台のスマホで<strong>同じクラウドのアカウント</strong>（同じ Baidu Netdisk や Google Drive のアカウントなど）にログインし、そのクラウドを両方でメインに設定して、それぞれ「複数端末のリアルタイム同期」をオンにします。どちらが記帳しても日記を書いても、すぐに相手のスマホにも表示され、まるで1冊の帳簿を一緒に使っているようになります。</li>
+              <li><strong>💡 家族と一緒に記録したいときは？</strong>マルチデバイスのリアルタイム同期は自分の複数の端末用で、日記を含むすべてのデータを同期します。家族と一緒に記録するには<span onclick="goToChapter(12)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「家族の共有帳簿」👆</span>を使ってください。共有されるのは指定した帳簿だけで、日記などの個人データはお互いに見えません。</li>
               <li><strong>上級設定 ― 複数クラウドのリアルタイムミラー／今すぐ全クラウドに送信：</strong>接続中のすべてのクラウドをできるだけリアルタイムで最新にしたい場合（メインのクラウドだけでなく）は、「複数端末のリアルタイム同期」の詳細設定で「複数クラウドのリアルタイムミラー」をオンにします。また「今すぐ全クラウドに送信」をタップすると、いつでも手動で全体を同期できます。どちらも上級者向けで通信回数が大きく増えるため、普段は使わずオフのままで大丈夫です。</li>
             </ul>
 
@@ -921,7 +964,7 @@
               <div class="nav-btn nav-next" onclick="goToChapter(12)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">次の章</span>
-                  <span class="nav-name">セキュリティとプライバシー</span>
+                  <span class="nav-name">家族の共有帳簿</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </div>
@@ -935,6 +978,60 @@
               <div
                 class="page-scroll"
                 id="scroll-12"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-shared">
+            <div class="section-header">
+              <div class="icon-wrap bg-pink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></div>
+              <h3>家族の共有帳簿</h3>
+            </div>
+            <ul class="help-list">
+              <li><strong>家族と同じ帳簿に記録：</strong>最大 3 人で 1 つの帳簿を使えます。各自のスマホで記録すると 1 分ほどで相手のスマホにも表示され、各記録の時刻の横に記録した人の名前が表示されます。</li>
+              <li><strong>共有されるのはこの帳簿だけ：</strong>同期されるのは共有帳簿の支出と収入だけです。日記・他の帳簿・口座・メモ・持ち物などの個人データは共有されず、家族のスマホにも表示されません。</li>
+              <li><strong>専用の Jianguoyun アカウントを用意：</strong>共有データは家族で使う WebDAV ドライブに保存されます。共有帳簿専用に新しい Jianguoyun アカウントを登録し、Web 版でフォルダを作成してアプリパスワードを発行してください（<span class="guide-link" onclick="openWebdavGuide()">詳しい設定ガイドを見る👆</span>）。個人バックアップ用のアカウントは使わないでください（アプリでも拒否されます）。</li>
+              <li><strong>共有帳簿を作成：</strong>「マイページ」→「帳簿管理」→「👥 共有帳簿」で「新規作成」を選び、帳簿名・WebDAV アドレス・アカウント・アプリパスワードを入力します。作成後「招待コードをコピー」をタップして家族に送ってください。</li>
+              <li><strong>共有帳簿に参加：</strong>家族は同じページで「参加する」に切り替え、招待コードを貼り付けるだけで、Jianguoyun アカウントの入力は不要です。チャットアプリで転送されて前後に別の文字が付いていても認識できます。招待コードには共有ドライブのアカウントとパスワードが含まれるので、信頼できる人にだけ送ってください。</li>
+              <li><strong>編集・削除できるのは自分の記録だけ：</strong>他の人の記録は閲覧のみで、編集・削除・お気に入り・ピン留めはできません。自分の記録を削除すると、家族のスマホからも削除されます。</li>
+              <li><strong>口座はそれぞれ別：</strong>自分の記録はいつもどおり自分の口座残高に反映され、家族の記録は相手が使った口座名が表示されるだけで、あなたの口座には影響しません。</li>
+              <li><strong>共有帳簿で使えない機能：</strong>振替・貸し借り・積立・分割払い・返金・経費精算・予算・定期記録は共有帳簿では使えず、関連する項目は自動的に非表示になります。共有帳簿でショートカットや Siri から振替を記録すると、デフォルトの帳簿に記録されます。</li>
+              <li><strong>メンバー別の統計：</strong>共有帳簿で統計ページを開くと、選択した期間のメンバーごとの支出・割合・収入が表示されます。</li>
+              <li><strong>同期のタイミング：</strong>アプリを開いている間は約 1 分ごとに同期し、10 分間変化がなければ 3 分ごとになります。アプリに戻ったときや共有帳簿ページで「今すぐ同期」をタップするとすぐに同期します。家族が記録すると「xx さんが n 件記録しました」と表示されます。バックグラウンドでは同期しません。</li>
+              <li><strong>同期状態：</strong>共有帳簿ページに最終同期時刻が表示されます。共有ドライブのアカウントやパスワードが使えなくなると、帳簿管理の「共有」バッジが赤い「同期失敗」に変わります。</li>
+            </ul>
+
+            <h4 class="help-subtitle">🚪 共有をやめる・機種変更</h4>
+            <ul class="help-list">
+              <li><strong>共有をやめる：</strong>共有帳簿ページで「共有をやめる」をタップすると枠が空き、この帳簿はあなたのスマホで通常の帳簿に戻り、既存の記録はそのまま残ります。あなたが記録した分は、他のメンバー（後から参加した人を含む）も引き続き見られます。やめるにはネット接続が必要です。</li>
+              <li><strong>機種変更：</strong>共有帳簿の記録は個人バックアップにも含まれるため、新しいスマホで復元すれば戻ります。ただし共有ドライブのアカウントは個人バックアップに含まれないので、招待コードでもう一度参加してください。再参加すると同じメンバーとして認識され、枠は増えません。</li>
+              <li><strong>人数の上限：</strong>共有帳簿は 1 つにつき最大 3 人で、1 人が参加できる共有帳簿は 1 つだけです。</li>
+            </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">前の章</span>
+                  <span class="nav-name">バックアップと復元</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">次の章</span>
+                  <span class="nav-name">セキュリティとプライバシー</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-13"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-security">
@@ -952,14 +1049,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">前の章</span>
-                  <span class="nav-name">バックアップと復元</span>
+                  <span class="nav-name">家族の共有帳簿</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+              <div class="nav-btn nav-next" onclick="goToChapter(14)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">次の章</span>
                   <span class="nav-name">便利な使い方</span>
@@ -975,7 +1072,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-13"
+                id="scroll-14"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-advanced">
@@ -1008,14 +1105,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">前の章</span>
                   <span class="nav-name">セキュリティとプライバシー</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(14)">
+              <div class="nav-btn nav-next" onclick="goToChapter(15)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">次の章</span>
                   <span class="nav-name">よくある質問 (FAQ)</span>
@@ -1031,7 +1128,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-14"
+                id="scroll-15"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-faq">
@@ -1108,7 +1205,7 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(14)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">前の章</span>
@@ -1126,6 +1223,87 @@
 
 </div>
 
+<div class="guide-overlay" id="webdavGuide" aria-hidden="true">
+  <div class="guide-header">
+    <button class="back-btn" onclick="closeWebdavGuide()" aria-label="戻る"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+    <div class="title-group"><div class="title">設定ガイド</div></div>
+    <div class="header-spacer"></div>
+  </div>
+  <div class="guide-tabs">
+    <button class="guide-tab active" data-pane="0" onclick="switchGuideTab(0)">坚果云（Jianguoyun）</button>
+    <button class="guide-tab" data-pane="1" onclick="switchGuideTab(1)">Koofr</button>
+    <button class="guide-tab" data-pane="2" onclick="switchGuideTab(2)"><span data-tx="tab">その他</span></button>
+  </div>
+  <div class="guide-body" id="guideBody">
+    <div class="guide-pane active">
+      <section class="step-card">
+        <h3>1. サービスを有効にする</h3>
+        <p>公式サイトにログインし、「アカウント情報」-&gt;「セキュリティ設定」を開きます。</p>
+      </section>
+      <section class="step-card">
+        <h3>2. サードパーティアプリ用パスワードを作成</h3>
+        <p>「サードパーティアプリ管理」で「アプリを追加」をタップし、アプリ名に「Daily Trifles」と入力してパスワードを生成します。</p>
+        <div style="margin-top: 8px;"><a href="https://help.jianguoyun.com/?p=2064" target="_blank" rel="noopener">取得方法は公式の図解ガイドをご覧ください</a></div>
+      </section>
+      <section class="step-card highlight">
+        <h3>3. 情報を入力</h3>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">サーバーURL</div><div class="guide-field-desc">https://dav.jianguoyun.com/dav/</div></div>
+          <div><div class="guide-field-title">アカウント</div><div class="guide-field-desc">Jianguoyunの登録メールアドレス</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">アプリ用パスワード</span></div><div class="guide-field-desc">先ほど生成した16文字の専用パスワード</div></div>
+        </div>
+      </section>
+    </div>
+    <div class="guide-pane">
+      <section class="step-card">
+        <h3>1. アプリ専用パスワードを作成</h3>
+        <p>KoofrのWeb版にログインし、右上のアバターから <b>Preferences（設定）</b>を開き、左のメニューで <b>Password（パスワード）</b><span data-tx="koofr">を選択します。</span></p>
+      </section>
+      <section class="step-card">
+        <h3>2. 名前を付けて生成</h3>
+        <p>下にスクロールして <b>App passwords</b> の欄でアプリ名（例：「Daily Trifles」）を入力し、 <b>Generate</b>をタップすると専用パスワードが生成されます。</p>
+      </section>
+      <section class="step-card highlight">
+        <h3>3. 情報を入力</h3>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">サーバーURL</div><div class="guide-field-desc">https://app.koofr.net/dav/Koofr/</div></div>
+          <div><div class="guide-field-title">アカウント</div><div class="guide-field-desc">Koofrの登録メールアドレス</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">アプリ用パスワード</span></div><div class="guide-field-desc">先ほど生成した App password（スペースは除く）</div></div>
+        </div>
+      </section>
+    </div>
+    <div class="guide-pane">
+      <section class="step-card">
+        <h3>InfiniCLOUD</h3>
+        <p>Web版にログインして <b>My Page</b>を開き、 <b>Apps Connection</b> で接続を有効にすると、WebDAVのアドレス、Connection ID、Apps Password が表示されます。</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">サーバーURL</div><div class="guide-field-desc">ページに表示される WebDAV Connection URL（例：https://xxx.teracloud.jp/dav/）</div></div>
+          <div><div class="guide-field-title">アカウント</div><div class="guide-field-desc">Connection ID</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">アプリ用パスワード</span></div><div class="guide-field-desc">Apps Password</div></div>
+        </div>
+      </section>
+      <section class="step-card">
+        <h3>Nextcloud</h3>
+        <p>おすすめは <b>設定 → セキュリティ → デバイスとセッション</b> でアプリパスワード（名前は「Daily Trifles」）を作成することです。ログインパスワードをそのまま使わないでください。</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">サーバーURL</div><div class="guide-field-desc">https://あなたのドメイン/remote.php/dav/files/ユーザー名/</div></div>
+          <div><div class="guide-field-title">アカウント</div><div class="guide-field-desc">Nextcloudのユーザー名</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">アプリ用パスワード</span></div><div class="guide-field-desc">先ほど作成したアプリパスワード</div></div>
+        </div>
+      </section>
+      <section class="step-card">
+        <h3>Synology NAS</h3>
+        <p>DSMの <b>パッケージセンター</b> で <b>WebDAV Server</b> をインストールし、HTTPS（既定のポート 5006）を有効にします。スマートフォンから外部ネットワーク経由でNASにアクセスできる必要があり（DDNS + ポート転送。QuickConnect は WebDAV 非対応）、有効なHTTPS証明書（DSM内蔵の Let's Encrypt など）が必要です。自己署名証明書では接続できません。</p>
+        <div class="guide-fields">
+          <div><div class="guide-field-title">サーバーURL</div><div class="guide-field-desc">https://あなたのNASのドメイン:5006/共有フォルダ名/</div></div>
+          <div><div class="guide-field-title">アカウント</div><div class="guide-field-desc">DSMのユーザー名</div></div>
+          <div><div class="guide-field-title"><span data-tx="webdav">アプリ用パスワード</span></div><div class="guide-field-desc">DSMのログインパスワード</div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
 <script>
   // 🌐 语言切换
   function rememberLang(l) { try { localStorage.setItem('jmsp_site_lang', l); } catch (e) {} }
@@ -1140,7 +1318,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-  var tocList = [{"id": "sec-ai", "title": "クイック記録の魔法"}, {"id": "sec-manual", "title": "しっかり家計簿"}, {"id": "sec-diary", "title": "日記カレンダー"}, {"id": "sec-stats", "title": "ホームダッシュボード"}, {"id": "sec-savings", "title": "貯金プランと目標"}, {"id": "sec-debt", "title": "貸し借り"}, {"id": "sec-budget", "title": "きめ細かな予算管理"}, {"id": "sec-recurring", "title": "定期記帳と分割払い"}, {"id": "sec-reimburse", "title": "立替精算の管理"}, {"id": "sec-reminder", "title": "便利なリマインダー"}, {"id": "sec-assets", "title": "資産と持ち物"}, {"id": "sec-backup", "title": "バックアップと復元"}, {"id": "sec-security", "title": "セキュリティとプライバシー"}, {"id": "sec-advanced", "title": "便利な使い方"}, {"id": "sec-faq", "title": "よくある質問 (FAQ)"}];
+  var tocList = [{"id": "sec-ai", "title": "クイック記録の魔法"}, {"id": "sec-manual", "title": "しっかり家計簿"}, {"id": "sec-diary", "title": "日記カレンダー"}, {"id": "sec-stats", "title": "ホームダッシュボード"}, {"id": "sec-savings", "title": "貯金プランと目標"}, {"id": "sec-debt", "title": "貸し借り"}, {"id": "sec-budget", "title": "きめ細かな予算管理"}, {"id": "sec-recurring", "title": "定期記帳と分割払い"}, {"id": "sec-reimburse", "title": "立替精算の管理"}, {"id": "sec-reminder", "title": "便利なリマインダー"}, {"id": "sec-assets", "title": "資産と持ち物"}, {"id": "sec-backup", "title": "バックアップと復元"}, {"id": "sec-shared", "title": "家族の共有帳簿"}, {"id": "sec-security", "title": "セキュリティとプライバシー"}, {"id": "sec-advanced", "title": "便利な使い方"}, {"id": "sec-faq", "title": "よくある質問 (FAQ)"}];
   var currentIndex = 0;
   var showToc = false;
   var showSearch = false;
@@ -1248,7 +1426,7 @@
     var q = searchInput.value.trim();
     searchClearBtn.style.display = searchInput.value ? 'flex' : 'none';
     if (!q) {
-      searchResultsView.innerHTML = '<div class="search-hint">キーワードを入力すると、全15章とよくある質問をまとめて検索できます</div>';
+      searchResultsView.innerHTML = '<div class="search-hint">キーワードを入力すると、ガイド全 16 章とよくある質問を検索できます</div>';
       return;
     }
     var lowerQ = q.toLowerCase();
@@ -1410,6 +1588,56 @@
   /* ==================== 初始化 ==================== */
   renderVisibility();
   updatePagerTransform(0, false);
+  // ==================== WebDAV 配置指南 ====================
+  var webdavGuide = document.getElementById('webdavGuide');
+  function openWebdavGuide() {
+    webdavGuide.classList.add('open');
+    webdavGuide.setAttribute('aria-hidden', 'false');
+  }
+  function closeWebdavGuide() {
+    webdavGuide.classList.remove('open');
+    webdavGuide.setAttribute('aria-hidden', 'true');
+  }
+  function switchGuideTab(i) {
+    var tabs = webdavGuide.querySelectorAll('.guide-tab');
+    var panes = webdavGuide.querySelectorAll('.guide-pane');
+    for (var k = 0; k < tabs.length; k++) {
+      tabs[k].classList.toggle('active', k === i);
+      panes[k].classList.toggle('active', k === i);
+    }
+    document.getElementById('guideBody').scrollTop = 0;
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && webdavGuide.classList.contains('open')) closeWebdavGuide();
+  });
+  // 左边缘右滑返回（与 App 子页面的手势一致：从屏幕左侧 30px 内开始，右滑超过 1/4 屏宽关闭）
+  (function () {
+    var sx = 0, sy = 0, dx = 0, tracking = false, decided = false;
+    webdavGuide.addEventListener('touchstart', function (e) {
+      var t = e.touches[0]; sx = t.clientX; sy = t.clientY; dx = 0;
+      tracking = sx <= 30; decided = false;
+    }, { passive: true });
+    webdavGuide.addEventListener('touchmove', function (e) {
+      if (!tracking) return;
+      var t = e.touches[0]; dx = t.clientX - sx; var dy = t.clientY - sy;
+      if (!decided) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        decided = true;
+        if (Math.abs(dy) > Math.abs(dx) || dx < 0) { tracking = false; return; }
+        webdavGuide.style.transition = 'none';
+      }
+      webdavGuide.style.transform = 'translateX(' + Math.max(0, dx) + 'px)';
+    }, { passive: true });
+    function end() {
+      if (!tracking || !decided) { tracking = false; return; }
+      tracking = false;
+      webdavGuide.style.transition = '';
+      webdavGuide.style.transform = '';
+      if (dx > window.innerWidth / 4) closeWebdavGuide();
+    }
+    webdavGuide.addEventListener('touchend', end);
+    webdavGuide.addEventListener('touchcancel', end);
+  })();
 </script>
 </body>
 </html>
