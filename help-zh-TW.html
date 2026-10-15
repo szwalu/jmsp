@@ -297,6 +297,7 @@
   .step-card a { font-size: 13px; color: var(--theme-primary, #6366f1); }
   .guide-fields { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
   .guide-field-title { font-size: 14px; font-weight: 600; color: #334155; }
+  .step-card p.guide-note { margin-top: 10px; font-size: 12px; line-height: 1.6; color: #94a3b8; }
   .guide-field-desc { font-size: 13px; color: #64748b; word-break: break-all; margin-top: 2px; }
   @media (prefers-color-scheme: dark) {
     .guide-link { color: #818cf8; }
@@ -934,6 +935,7 @@
             </div>
             <ul class="help-list">
               <li><strong>五大網盤隨心選：</strong>支援 iCloud、WebDAV（請自行前往 <strong>堅果雲</strong>、<strong>InfiniCLOUD</strong> 或 <strong>Koofr</strong> 等服務商免費申請 WebDAV 網盤，也可以連線自建的 <strong>Nextcloud</strong> 或 <strong>群暉 NAS</strong>，<span class="guide-link" onclick="openWebdavGuide()">點選檢視詳細配置指南👆</span>）、百度網盤、Google Drive 以及 OneDrive，全部支援增量無感備份，想用哪個網盤、用幾個，完全由你決定。</li>
+              <li><strong>WebDAV 備份資料夾：</strong>伺服器位址照設定指南填寫即可（如堅果雲填 https://dav.jianguoyun.com/dav/），不用自己加資料夾，App 會自動在後面加上 triflesbackup 資料夾。iPhone 和 iPad 會自動建立這個資料夾；安卓手機請先在網盤網頁端手動新建一個名為 triflesbackup（全小寫）的資料夾，否則連線時會提示「權限不足」。</li>
               <li><strong>日常自動備份：</strong>只要有新資料，每個已連線的網盤都會按各自的節奏自動靜默備份（開啟 App、回到前臺或退到後臺都可能觸發）。💡 注：App 保持在前臺使用時才會靜默備份，頭像旁網盤Logo閃爍代表正在備份中，此時<strong>請勿劃掉清理應用</strong>。</li>
               <li><strong>手動匯出與恢復：</strong>在“我的 - 備份恢復”中，隨時可以匯出全量資料的 <code>JSON</code> 檔案，或含圖片的 <code>PDF</code>、<code>ZIP</code> 備份包儲存到本地；換機或重灌後，也可以直接選擇某個已連線的網盤一鍵恢復，或者匯入本地的備份檔案。</li>
               <li><strong>匯入第三方日記應用：</strong>在“我的 - 備份恢復 - 匯出匯入”中點選“匯入第三方日記應用”：<strong>Day One</strong> 選擇它匯出的壓縮包（Day One 設定 → 「匯入/匯出」→「匯出 Day One JSON [ZIP]」），日記連同照片、時間、地點和天氣一起匯入；<strong>一本日記</strong> 選擇它匯出的 <code>.txt</code> 檔案，按日期自動拆分成一篇篇日記（TXT 不含照片）；<strong>一葉日記</strong> 選擇「設定 → 資料管理 → 匯出Markdown」得到的 zip 壓縮包，文字、時間、地址和圖片一起匯入。重複匯入同一個檔案不會產生重複日記。</li>
@@ -988,7 +990,7 @@
             <ul class="help-list">
               <li><strong>和家人一起記一本帳：</strong>最多 3 人共用同一個帳本，各自在自己的手機上記帳，一分鐘左右就能在對方手機上看到；每筆帳單下方的時間旁會顯示是誰記的。</li>
               <li><strong>只共享這一本帳：</strong>只同步共享帳本裡的支出和收入。日記、其它帳本、資產帳戶、備忘和物品等個人資料都不會共享，也不會出現在家人的手機上。</li>
-              <li><strong>準備一個專用堅果雲帳號：</strong>共享資料存放在一個家人共用的 WebDAV 網盤裡。建議一起註冊一個新的堅果雲帳號，只用來放共享帳本：在堅果雲網頁端新建一個資料夾，並產生「應用密碼」（<span class="guide-link" onclick="openWebdavGuide()">點選檢視詳細配置指南👆</span>）。不要使用個人備份用的帳號，App 也會拒絕。</li>
+              <li><strong>準備一個專用堅果雲帳號：</strong>共享資料存放在一個家人共用的 WebDAV 網盤裡。建議一起註冊一個新的堅果雲帳號，只用來放共享帳本：在堅果雲網頁端新建一個資料夾，並產生「應用密碼」（<span class="guide-link" onclick="openWebdavGuide()">點選檢視詳細配置指南👆</span>）。例如新建 jmsp 資料夾，WebDAV 位址就填 https://dav.jianguoyun.com/dav/jmsp/（資料夾名稱建議用英文字母或數字）。不要使用個人備份用的帳號，App 也會拒絕。</li>
               <li><strong>新建共享帳本：</strong>進入「我的」-「帳本管理」-「👥 共享帳本」，選「新建共享帳本」，填寫帳本名稱、WebDAV 位址、帳號和應用密碼。建立成功後點「複製邀請碼」，發給家人。</li>
               <li><strong>加入共享帳本：</strong>家人在同一頁面切到「加入共享帳本」，貼上邀請碼即可，不需要再填堅果雲帳號；從微信等轉發過來、前後帶了別的文字也能識別。邀請碼裡含有共享網盤的帳號和密碼，請只發給信任的人。</li>
               <li><strong>每人只能改刪自己記的帳：</strong>別人記的帳單只能查看，編輯、刪除、收藏、置頂都會被攔下；你刪除自己記的帳單後，家人那邊也會一起刪除。</li>
@@ -1252,6 +1254,7 @@
           <div><div class="guide-field-title">應用帳號</div><div class="guide-field-desc">您的堅果雲註冊郵箱</div></div>
           <div><div class="guide-field-title"><span data-tx="webdav">應用程式密碼</span></div><div class="guide-field-desc">剛才生成的 16 位專屬密碼</div></div>
         </div>
+        <p class="guide-note">App 會自動在伺服器位址後面加上 triflesbackup 資料夾，不用自己填。iPhone 和 iPad 會自動建立這個資料夾；安卓手機請先在網盤網頁端、伺服器位址對應的位置手動新建 triflesbackup 資料夾（全小寫）。</p>
       </section>
     </div>
     <div class="guide-pane">
@@ -1270,9 +1273,13 @@
           <div><div class="guide-field-title">應用帳號</div><div class="guide-field-desc">您的 Koofr 註冊郵箱</div></div>
           <div><div class="guide-field-title"><span data-tx="webdav">應用程式密碼</span></div><div class="guide-field-desc">剛才生成的 App password (注意去掉空格)</div></div>
         </div>
+        <p class="guide-note">App 會自動在伺服器位址後面加上 triflesbackup 資料夾，不用自己填。iPhone 和 iPad 會自動建立這個資料夾；安卓手機請先在網盤網頁端、伺服器位址對應的位置手動新建 triflesbackup 資料夾（全小寫）。</p>
       </section>
     </div>
     <div class="guide-pane">
+      <section class="step-card">
+        <p class="guide-note" style="margin-top: 0;">App 會自動在伺服器位址後面加上 triflesbackup 資料夾，不用自己填。iPhone 和 iPad 會自動建立這個資料夾；安卓手機請先在網盤網頁端、伺服器位址對應的位置手動新建 triflesbackup 資料夾（全小寫）。</p>
+      </section>
       <section class="step-card">
         <h3>InfiniCLOUD</h3>
         <p>登入網頁端進入 <b>My Page</b>，在 <b>Apps Connection</b> 中開啟連線，頁面會顯示 WebDAV 地址、Connection ID 和 Apps Password。</p>

@@ -297,6 +297,7 @@
   .step-card a { font-size: 13px; color: var(--theme-primary, #6366f1); }
   .guide-fields { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
   .guide-field-title { font-size: 14px; font-weight: 600; color: #334155; }
+  .step-card p.guide-note { margin-top: 10px; font-size: 12px; line-height: 1.6; color: #94a3b8; }
   .guide-field-desc { font-size: 13px; color: #64748b; word-break: break-all; margin-top: 2px; }
   @media (prefers-color-scheme: dark) {
     .guide-link { color: #818cf8; }
@@ -934,6 +935,7 @@
             </div>
             <ul class="help-list">
               <li><strong>5つのクラウドから選べる：</strong>iCloud、WebDAV（ <strong>坚果云（Jianguoyun）</strong>、<strong>InfiniCLOUD</strong> や <strong>Koofr</strong> などで無料の WebDAV を申し込むか、自前の <strong>Nextcloud</strong> や <strong>Synology NAS</strong>，<span class="guide-link" onclick="openWebdavGuide()">詳しい設定ガイドを見る👆</span>に接続することもできます）、Baidu Netdisk、Google Drive、OneDrive に対応し、すべて差分の自動バックアップが可能です。どれを何個使うかは自由です。</li>
+              <li><strong>WebDAV のバックアップフォルダ：</strong>サーバーアドレスは設定ガイドのとおりに入力すれば OK です（Jianguoyun なら https://dav.jianguoyun.com/dav/）。フォルダを自分で付け足す必要はなく、アプリが末尾に triflesbackup フォルダを自動で追加します。iPhone と iPad ではこのフォルダが自動作成されます。Android では先にクラウドドライブの Web 版で triflesbackup（すべて小文字）というフォルダを作成してください。作成しないと接続時に権限エラーになります。</li>
               <li><strong>毎日の自動バックアップ：</strong>新しいデータがあると、接続中の各クラウドがそれぞれのタイミングで自動バックアップします（アプリを開いたとき、前面に戻ったとき、バックグラウンドに移ったときなど）。💡 注：バックアップはアプリを前面で使っているときのみ行われます。アバター横のクラウドのロゴが点滅しているのはバックアップ中なので、<strong>アプリをスワイプして終了しないでください</strong>。</li>
               <li><strong>手動エクスポートと復元：</strong>「マイページ → バックアップと復元」から、全データを <code>JSON</code> ファイルとして、または画像付きの <code>PDF</code>、<code>ZIP</code> バックアップとしていつでも端末に保存できます。機種変更や再インストール後は、接続済みのクラウドからワンタップで復元するか、端末のバックアップファイルを読み込めます。</li>
               <li><strong>他の日記アプリから読み込み：</strong>「マイページ → バックアップと復元 → エクスポート／インポート」で「他の日記アプリから読み込む」をタップ：<strong>Day One</strong> は書き出した ZIP（Day One の設定 →「読み込み／書き出し」→「Day One JSON [ZIP] を書き出す」）を選ぶと、写真・時刻・場所・天気ごと読み込まれます。<strong>一本日记</strong> は書き出した <code>.txt</code> ファイルを選ぶと、日付ごとに日記に分割されます（TXT に写真は含まれません）。<strong>一叶日记</strong> は「設定 → データ管理 → Markdown を書き出す」で作成した ZIP を選ぶと、本文・時刻・住所・写真がまとめて読み込まれます。同じファイルを何度読み込んでも重複しません。</li>
@@ -988,7 +990,7 @@
             <ul class="help-list">
               <li><strong>家族と同じ帳簿に記録：</strong>最大 3 人で 1 つの帳簿を使えます。各自のスマホで記録すると 1 分ほどで相手のスマホにも表示され、各記録の時刻の横に記録した人の名前が表示されます。</li>
               <li><strong>共有されるのはこの帳簿だけ：</strong>同期されるのは共有帳簿の支出と収入だけです。日記・他の帳簿・口座・メモ・持ち物などの個人データは共有されず、家族のスマホにも表示されません。</li>
-              <li><strong>専用の Jianguoyun アカウントを用意：</strong>共有データは家族で使う WebDAV ドライブに保存されます。共有帳簿専用に新しい Jianguoyun アカウントを登録し、Web 版でフォルダを作成してアプリパスワードを発行してください（<span class="guide-link" onclick="openWebdavGuide()">詳しい設定ガイドを見る👆</span>）。個人バックアップ用のアカウントは使わないでください（アプリでも拒否されます）。</li>
+              <li><strong>専用の Jianguoyun アカウントを用意：</strong>共有データは家族で使う WebDAV ドライブに保存されます。共有帳簿専用に新しい Jianguoyun アカウントを登録し、Web 版でフォルダを作成してアプリパスワードを発行してください（<span class="guide-link" onclick="openWebdavGuide()">詳しい設定ガイドを見る👆</span>）。たとえば jmsp というフォルダを作成した場合、WebDAV アドレスは https://dav.jianguoyun.com/dav/jmsp/ と入力します（フォルダ名は英数字がおすすめです）。個人バックアップ用のアカウントは使わないでください（アプリでも拒否されます）。</li>
               <li><strong>共有帳簿を作成：</strong>「マイページ」→「帳簿管理」→「👥 共有帳簿」で「新規作成」を選び、帳簿名・WebDAV アドレス・アカウント・アプリパスワードを入力します。作成後「招待コードをコピー」をタップして家族に送ってください。</li>
               <li><strong>共有帳簿に参加：</strong>家族は同じページで「参加する」に切り替え、招待コードを貼り付けるだけで、Jianguoyun アカウントの入力は不要です。チャットアプリで転送されて前後に別の文字が付いていても認識できます。招待コードには共有ドライブのアカウントとパスワードが含まれるので、信頼できる人にだけ送ってください。</li>
               <li><strong>編集・削除できるのは自分の記録だけ：</strong>他の人の記録は閲覧のみで、編集・削除・お気に入り・ピン留めはできません。自分の記録を削除すると、家族のスマホからも削除されます。</li>
@@ -1252,6 +1254,7 @@
           <div><div class="guide-field-title">アカウント</div><div class="guide-field-desc">Jianguoyunの登録メールアドレス</div></div>
           <div><div class="guide-field-title"><span data-tx="webdav">アプリ用パスワード</span></div><div class="guide-field-desc">先ほど生成した16文字の専用パスワード</div></div>
         </div>
+        <p class="guide-note">アプリがサーバーアドレスの末尾に triflesbackup フォルダを自動で追加するので、自分で入力する必要はありません。iPhone と iPad ではこのフォルダが自動作成されます。Android では先にクラウドドライブの Web 版で、サーバーアドレスが指す場所に triflesbackup（すべて小文字）フォルダを作成してください。</p>
       </section>
     </div>
     <div class="guide-pane">
@@ -1270,9 +1273,13 @@
           <div><div class="guide-field-title">アカウント</div><div class="guide-field-desc">Koofrの登録メールアドレス</div></div>
           <div><div class="guide-field-title"><span data-tx="webdav">アプリ用パスワード</span></div><div class="guide-field-desc">先ほど生成した App password（スペースは除く）</div></div>
         </div>
+        <p class="guide-note">アプリがサーバーアドレスの末尾に triflesbackup フォルダを自動で追加するので、自分で入力する必要はありません。iPhone と iPad ではこのフォルダが自動作成されます。Android では先にクラウドドライブの Web 版で、サーバーアドレスが指す場所に triflesbackup（すべて小文字）フォルダを作成してください。</p>
       </section>
     </div>
     <div class="guide-pane">
+      <section class="step-card">
+        <p class="guide-note" style="margin-top: 0;">アプリがサーバーアドレスの末尾に triflesbackup フォルダを自動で追加するので、自分で入力する必要はありません。iPhone と iPad ではこのフォルダが自動作成されます。Android では先にクラウドドライブの Web 版で、サーバーアドレスが指す場所に triflesbackup（すべて小文字）フォルダを作成してください。</p>
+      </section>
       <section class="step-card">
         <h3>InfiniCLOUD</h3>
         <p>Web版にログインして <b>My Page</b>を開き、 <b>Apps Connection</b> で接続を有効にすると、WebDAVのアドレス、Connection ID、Apps Password が表示されます。</p>

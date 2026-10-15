@@ -297,6 +297,7 @@
   .step-card a { font-size: 13px; color: var(--theme-primary, #6366f1); }
   .guide-fields { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
   .guide-field-title { font-size: 14px; font-weight: 600; color: #334155; }
+  .step-card p.guide-note { margin-top: 10px; font-size: 12px; line-height: 1.6; color: #94a3b8; }
   .guide-field-desc { font-size: 13px; color: #64748b; word-break: break-all; margin-top: 2px; }
   @media (prefers-color-scheme: dark) {
     .guide-link { color: #818cf8; }
@@ -934,6 +935,7 @@
             </div>
             <ul class="help-list">
               <li><strong>Five cloud options: </strong>iCloud, WebDAV (get a free WebDAV account from providers such as <strong>Jianguoyun</strong>、<strong>InfiniCLOUD</strong> or <strong>Koofr</strong> and others — or connect your own <strong>Nextcloud</strong> or <strong>Synology NAS</strong>，<span class="guide-link" onclick="openWebdavGuide()">Tap for the detailed setup guide👆</span>), Baidu Netdisk, Google Drive and OneDrive all support incremental background backups. Use whichever and however many you like.</li>
+              <li><strong>WebDAV backup folder: </strong>Enter the server address as shown in the setup guide (for Jianguoyun: https://dav.jianguoyun.com/dav/) — no need to add a folder yourself; the app automatically adds a triflesbackup folder at the end. iPhone and iPad create this folder automatically; on Android, first create a folder named triflesbackup (all lowercase) on the drive's website, otherwise connecting will fail with a permission error.</li>
               <li><strong>Automatic daily backups: </strong>Whenever there's new data, each connected cloud backs up quietly on its own schedule (opening the app, returning to it or sending it to the background can all trigger this). 💡 Note: backups only run while the app is in the foreground. When the cloud logo next to your avatar is blinking, a backup is in progress — <strong>please don't swipe the app away</strong>。</li>
               <li><strong>Manual export & restore: </strong>Under Me → Backup & Restore you can export all your data as a  <code>JSON</code> file anytime, or as a backup package with photos ( <code>PDF</code>、<code>ZIP</code> ) saved to your device. After switching phones or reinstalling, restore from any connected cloud in one tap or import a local backup file.</li>
               <li><strong>Import from other diary apps: </strong>In Me → Backup & Restore → Export/Import, tap "Import from other diary apps": <strong>Day One</strong> — choose its exported archive (Day One Settings → Import/Export → Export Day One JSON [ZIP]); entries are imported with photos, time, location and weather; <strong>一本日记 (Yiben Diary)</strong> — choose its exported  <code>.txt</code> file and it's split into entries by date (TXT has no photos); <strong>一叶日记 (Yiye Diary)</strong> — choose the zip from Settings → Data Management → Export Markdown; text, time, address and photos are imported together. Importing the same file again won't create duplicates.</li>
@@ -988,7 +990,7 @@
             <ul class="help-list">
               <li><strong>Keep one ledger with your family: </strong>Up to 3 people share one ledger. Everyone records on their own phone, and new entries show up on the others' phones in about a minute; the name of whoever recorded each entry appears next to its time.</li>
               <li><strong>Only this ledger is shared: </strong>Only expenses and income in the shared ledger are synced. Diaries, other ledgers, accounts, memos, items and other personal data are never shared and never appear on your family's phones.</li>
-              <li><strong>Set up a dedicated Jianguoyun account: </strong>Shared data is stored on a WebDAV drive your family uses together. We recommend registering a new Jianguoyun account just for the shared ledger: create a folder on the Jianguoyun website and generate an app password (<span class="guide-link" onclick="openWebdavGuide()">Tap for the detailed setup guide👆</span>). Don't use the account you use for personal backups — the app will refuse it.</li>
+              <li><strong>Set up a dedicated Jianguoyun account: </strong>Shared data is stored on a WebDAV drive your family uses together. We recommend registering a new Jianguoyun account just for the shared ledger: create a folder on the Jianguoyun website and generate an app password (<span class="guide-link" onclick="openWebdavGuide()">Tap for the detailed setup guide👆</span>). For example, create a folder named jmsp and enter https://dav.jianguoyun.com/dav/jmsp/ as the WebDAV address (use English letters or numbers for the folder name). Don't use the account you use for personal backups — the app will refuse it.</li>
               <li><strong>Create a shared ledger: </strong>Go to "Me" → "Ledgers" → "👥 Shared Ledger", choose "Create", and enter the ledger name, WebDAV address, account and app password. Once it's created, tap "Copy invite code" and send it to your family.</li>
               <li><strong>Join a shared ledger: </strong>Family members switch to "Join" on the same page and paste the invite code — no Jianguoyun account needed. Codes forwarded through chat apps still work even with extra text around them. The invite code contains the shared drive's account and password, so only share it with people you trust.</li>
               <li><strong>Everyone edits only their own entries: </strong>Entries recorded by others are view-only — editing, deleting, favoriting and pinning are blocked. When you delete your own entry, it's deleted on your family's phones too.</li>
@@ -1252,6 +1254,7 @@
           <div><div class="guide-field-title">Account</div><div class="guide-field-desc">Your Jianguoyun account email</div></div>
           <div><div class="guide-field-title"><span data-tx="webdav">App password</span></div><div class="guide-field-desc">The 16-character password you just generated</div></div>
         </div>
+        <p class="guide-note">The app automatically adds a triflesbackup folder to the end of the server address — don't type it yourself. iPhone and iPad create this folder automatically; on Android, first create a triflesbackup folder (all lowercase) on the drive's website, at the location the server address points to.</p>
       </section>
     </div>
     <div class="guide-pane">
@@ -1270,9 +1273,13 @@
           <div><div class="guide-field-title">Account</div><div class="guide-field-desc">Your Koofr account email</div></div>
           <div><div class="guide-field-title"><span data-tx="webdav">App password</span></div><div class="guide-field-desc">The app password you just generated (remove spaces)</div></div>
         </div>
+        <p class="guide-note">The app automatically adds a triflesbackup folder to the end of the server address — don't type it yourself. iPhone and iPad create this folder automatically; on Android, first create a triflesbackup folder (all lowercase) on the drive's website, at the location the server address points to.</p>
       </section>
     </div>
     <div class="guide-pane">
+      <section class="step-card">
+        <p class="guide-note" style="margin-top: 0;">The app automatically adds a triflesbackup folder to the end of the server address — don't type it yourself. iPhone and iPad create this folder automatically; on Android, first create a triflesbackup folder (all lowercase) on the drive's website, at the location the server address points to.</p>
+      </section>
       <section class="step-card">
         <h3>InfiniCLOUD</h3>
         <p>Sign in on the web and open <b>My Page</b>, then in <b>Apps Connection</b> turn on the connection; the page will show the WebDAV URL, Connection ID and Apps Password.</p>
