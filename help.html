@@ -363,7 +363,7 @@
       </button>
       <div class="title-group">
         <div class="title">使用指南</div>
-        <div class="page-indicator" id="pageIndicator">1 / 15</div>
+        <div class="page-indicator" id="pageIndicator">1 / 17</div>
       </div>
       <div class="header-spacer" aria-hidden="true"></div>
     </div>
@@ -399,26 +399,27 @@
           <div class="toc-item active" data-idx="0" onclick="goToChapter(0)"><span class="toc-idx">1</span>极速记账魔法</div>
           <div class="toc-item" data-idx="1" onclick="goToChapter(1)"><span class="toc-idx">2</span>精打细算记账</div>
           <div class="toc-item" data-idx="2" onclick="goToChapter(2)"><span class="toc-idx">3</span>时光日记本</div>
-          <div class="toc-item" data-idx="3" onclick="goToChapter(3)"><span class="toc-idx">4</span>全能首页看板</div>
-          <div class="toc-item" data-idx="4" onclick="goToChapter(4)"><span class="toc-idx">5</span>存钱计划与目标</div>
-          <div class="toc-item" data-idx="5" onclick="goToChapter(5)"><span class="toc-idx">6</span>借贷往来</div>
-          <div class="toc-item" data-idx="6" onclick="goToChapter(6)"><span class="toc-idx">7</span>精细化预算管理</div>
-          <div class="toc-item" data-idx="7" onclick="goToChapter(7)"><span class="toc-idx">8</span>周期与分期管理</div>
-          <div class="toc-item" data-idx="8" onclick="goToChapter(8)"><span class="toc-idx">9</span>报销追踪管理</div>
-          <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>贴心备忘提醒</div>
-          <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>资产与物品</div>
-          <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>数据备份与恢复</div>
-          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>家庭共享账本</div>
-          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>安全与隐私</div>
-          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>进阶玩法</div>
-          <div class="toc-item" data-idx="15" onclick="goToChapter(15)"><span class="toc-idx">16</span>常见问题 (FAQ)</div>
+          <div class="toc-item" data-idx="3" onclick="goToChapter(3)"><span class="toc-idx">4</span>标签系统</div>
+          <div class="toc-item" data-idx="4" onclick="goToChapter(4)"><span class="toc-idx">5</span>全能首页看板</div>
+          <div class="toc-item" data-idx="5" onclick="goToChapter(5)"><span class="toc-idx">6</span>存钱计划与目标</div>
+          <div class="toc-item" data-idx="6" onclick="goToChapter(6)"><span class="toc-idx">7</span>借贷往来</div>
+          <div class="toc-item" data-idx="7" onclick="goToChapter(7)"><span class="toc-idx">8</span>精细化预算管理</div>
+          <div class="toc-item" data-idx="8" onclick="goToChapter(8)"><span class="toc-idx">9</span>周期与分期管理</div>
+          <div class="toc-item" data-idx="9" onclick="goToChapter(9)"><span class="toc-idx">10</span>报销追踪管理</div>
+          <div class="toc-item" data-idx="10" onclick="goToChapter(10)"><span class="toc-idx">11</span>贴心备忘提醒</div>
+          <div class="toc-item" data-idx="11" onclick="goToChapter(11)"><span class="toc-idx">12</span>资产与物品</div>
+          <div class="toc-item" data-idx="12" onclick="goToChapter(12)"><span class="toc-idx">13</span>数据备份与恢复</div>
+          <div class="toc-item" data-idx="13" onclick="goToChapter(13)"><span class="toc-idx">14</span>家庭共享账本</div>
+          <div class="toc-item" data-idx="14" onclick="goToChapter(14)"><span class="toc-idx">15</span>安全与隐私</div>
+          <div class="toc-item" data-idx="15" onclick="goToChapter(15)"><span class="toc-idx">16</span>进阶玩法</div>
+          <div class="toc-item" data-idx="16" onclick="goToChapter(16)"><span class="toc-idx">17</span>常见问题 (FAQ)</div>
     </div>
   </div>
 
   <div class="toc-backdrop" id="tocBackdrop" style="display:none;" onclick="closeToc()"></div>
 
   <div class="search-results-view" id="searchResultsView" style="display:none;">
-    <div class="search-hint">输入关键词，可搜索指南全部 16 个章节与常见问题中的任意内容</div>
+    <div class="search-hint">输入关键词，可搜索指南全部 17 个章节与常见问题中的任意内容</div>
   </div>
 
   <div class="pager-viewport" id="pagerViewport">
@@ -484,7 +485,7 @@
             </div>
             <ul class="help-list">
               <li><strong>多账本自由切换：</strong>支持创建“家庭”、“个人”、“公司”等多个独立账本，在“我的”-“账本管理”里新建和管理。切换账本有三个入口：主页顶部统计面板的左上角、手工记账页的右上角，以及“我的”-“账本管理”。不同账本的账目与统计完全独立互不干扰，让公私账目、多重身份的财务空间都能井井有条。</li>
-              <li><strong>共享账本：</strong>在“账本管理”-“👥 共享账本”里和家人（最多 3 人）一起记同一本账，详见<span onclick="goToChapter(12)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「家庭共享账本」👆</span>。</li>
+              <li><strong>共享账本：</strong>在“账本管理”-“👥 共享账本”里和家人（最多 3 人）一起记同一本账，详见<span onclick="goToChapter(13)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「家庭共享账本」👆</span>。</li>
               <li>
                 <strong>自动截屏与极速记账：</strong>我们为你准备了强大的 iOS 专属极速能力！前往“我的 - 极速记账指南”，即可快速配置 Siri 语音指令与双击背面截屏记账。支持微信支付与支付宝账单自动识别金额和分类。
               </li>
@@ -564,6 +565,7 @@
     <li><strong>📝 录音转文字（iPhone）：</strong>在全屏日记里，录音条上有一个<strong>「转文字」</strong>按钮，点一下即可把录音识别成文字，识别完可以先修改再保存。转出的文字显示在录音条下方，带「录音转文字」小标签，和正文区分开，不会混进正文；之后也可以随时编辑或删除，录音本身不受影响。识别完全在手机本地进行，录音不会上传；转写的文字同样能被搜索到，并随日记一起备份。如提示设备不支持离线识别，可在 iPhone「设置 - 通用 - 键盘」中开启「听写」后再试。</li>
 
     <li><strong>图文与环境感知：</strong>支持最多 20 张高清图与 10 个专属标签，更能为你盖上专属的心情印章。系统会在后台默默感知天气与定位，将彼时的环境与情绪，一并封存为珍贵的时光印记。</li>
+    <li><strong>🏷️ 标签：</strong>日记和账单共用一套标签，支持分组、子标签和归档，详见<span onclick="goToChapter(3)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「标签系统」👆</span>。</li>
     <li><strong>📍 地点与天气：</strong>全屏日记顶部的「地点 · 天气」可以分别点击修改。点<strong>地点</strong>会升起「设置地点」面板，可在「市+区 / 区县 / 路门牌」三档中选一个，也可以手动输入，点右上角<strong>「获取当前位置」</strong>可换成现在所在地的地址；点<strong>天气</strong>可从 16 种天气中选择，左右拖动温度条设置温度，点<strong>「重新获取」</strong>可按当前位置重新查询天气。地点、天气右边的 <strong>✕</strong> 可以单独去掉该项。</li>
     <li><strong>那年今日：</strong>当首页出现回忆小横幅，或日历图标闪烁 ✨ 时，说明今天有回忆！直接点击小横幅（或进入日历点击<code>那年今日</code>），即可像翻书一样左右滑动重温往日时光，还可以补记五年内今天的日记。<code>那年今日</code>按钮右上角红色数字是历史日记条数，右下角小相机角标代表这天有历年照片。如果相册里正好有历年今天拍的照片，页面顶部会自动出现一条照片提示，点开就是按年份分类的完整相册，选中照片还能直接生成那一年这天的日记。</li>
     <li><strong>摇一摇随机漫游：</strong>在日历中点击<code>随机漫游</code>，即可进入无尽的时光探索模式。此时只需<strong>用力摇晃手机</strong>，伴随着清脆的震动反馈，系统会瞬间为你重新洗牌，随机抽取全新的过往时光，带来盲盒般的惊喜！</li>
@@ -584,6 +586,53 @@
               <div class="nav-btn nav-next" onclick="goToChapter(3)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
+                  <span class="nav-name">标签系统</span>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </div>
+            </div>
+
+                <div style="height: 24px;"></div>
+              </div>
+            </div>
+
+            <!-- 🏷️ 第 4 章 标签系统（2026-10-19） -->
+            <div class="page-slide">
+              <div
+                class="page-scroll"
+                id="scroll-3"
+                tabindex="-1"
+              >
+                <div class="help-section" id="sec-tags">
+                  <div class="section-header">
+                    <div class="icon-wrap bg-indigo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" /><circle cx="7.5" cy="7.5" r=".5" fill="currentColor" /></svg></div>
+                    <h3>标签系统</h3>
+                  </div>
+                  <ul class="help-list">
+                    <li><strong>一套标签，日记和账单通用：</strong>标签是给记录打的“记号”，方便以后按主题找回。同一个标签既可以用在日记上，也可以用在账单上，比如“旅行”既能标在游记上，也能标在机票、酒店的账单上，搜索时一起出来。</li>
+                    <li><strong>怎么打标签：</strong>写日记时点底部的<strong>「标签」</strong>，一篇日记最多选 10 个，还可以选特殊的「收藏」；手工记账时点<strong>「标签」</strong>，一笔账选 1 个，点一下即选中。面板顶部可以搜索已有标签，输入新名字点「创建」就能新建（最多 6 个字）；常用的标签会出现在「最近使用」一行。</li>
+                    <li><strong>🌿 子标签：</strong>标签下面可以再挂一层子标签，比如“旅行”下面放“日本”“云南”。有子标签的标签右侧有一个小箭头，点箭头会在这一行下面展开子标签，点文字则是选中父标签本身。新建时可以在搜索框直接输入“旅行/日本”，也可以在标签管理里点父标签选「添加子标签」。</li>
+                    <li><strong>标签管理：</strong>在“我的”-“标签管理”里整理全部标签。右上角「添加」可以新建标签或分组；分组标题可以折叠，点右侧 <strong>⋯</strong> 可以修改分组名、进入排序或删除分组（组里的标签会移到「默认分组」）；排序时按住分组右侧的 <strong>≡</strong> 拖动分组，按住标签可以拖到别的位置或分组。点任意标签可以添加子标签、重命名、移动到分组、归档或删除。</li>
+                    <li><strong>归档：</strong>不常用的标签可以归档，归档后不再出现在选择面板里，但已有记录上的标签照常显示、照常能搜到；在标签管理页底部「已归档标签」里可以随时恢复。归档父标签时，它的子标签也一起隐藏。</li>
+                    <li><strong>改名和删除：</strong>为了不改动你已经记下的内容，已经被日记或账单用过的标签暂时不能改名或删除，可以归档隐藏；还没被用过的标签可以随意改名、删除。</li>
+                    <li><strong>在哪里显示：</strong>首页和日历的日记、账单气泡下方会显示标签，子标签显示成“#旅行/日本”，一行放不下时先把父标签省略成“#旅…/日本”。账单的标签单独显示在第三行。</li>
+                    <li><strong>按标签查找：</strong>在首页搜索页点标签即可筛选；选父标签“旅行”时，“旅行/日本”“旅行/云南”等子标签的记录也会一起找出来。日记图库、足迹地图的筛选和导出时按标签筛选也是同样的规则。</li>
+                    <li><strong>开启标签：</strong>不需要标签的话，可以在标签管理页顶部关闭“开启标签”，写日记和记账时就不再显示标签按钮；已有记录上的标签不受影响，随时可以再打开。</li>
+                    <li><strong>备份与同步：</strong>标签的分组、顺序和归档设置会随网盘备份一起保存，打开多设备实时同步后，各台设备上的标签整理也会保持一致。</li>
+                  </ul>
+                </div>
+
+            <div class="chapter-nav-footer">
+              <div class="nav-btn nav-prev" onclick="goToChapter(2)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
+                <div class="nav-text">
+                  <span class="nav-label">上一章</span>
+                  <span class="nav-name">时光日记本</span>
+                </div>
+              </div>
+              <div class="nav-btn nav-next" onclick="goToChapter(4)">
+                <div class="nav-text nav-text-right">
+                  <span class="nav-label">下一章</span>
                   <span class="nav-name">全能首页看板</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
@@ -597,7 +646,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-3"
+                id="scroll-4"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-stats">
@@ -619,14 +668,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(2)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(3)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
-                  <span class="nav-name">时光日记本</span>
+                  <span class="nav-name">标签系统</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(4)">
+              <div class="nav-btn nav-next" onclick="goToChapter(5)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">存钱计划与目标</span>
@@ -642,7 +691,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-4"
+                id="scroll-5"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-savings">
@@ -669,14 +718,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(3)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(4)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">全能首页看板</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(5)">
+              <div class="nav-btn nav-next" onclick="goToChapter(6)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">借贷往来</span>
@@ -692,7 +741,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-5"
+                id="scroll-6"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-debt">
@@ -714,14 +763,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(4)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(5)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">存钱计划与目标</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(6)">
+              <div class="nav-btn nav-next" onclick="goToChapter(7)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">精细化预算管理</span>
@@ -737,7 +786,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-6"
+                id="scroll-7"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-budget">
@@ -752,18 +801,19 @@
               <li><strong>主次分级预算：</strong> 不仅可以设置总额，还能点击列表中的各主分类或二级子分类（如单独为“餐饮-咖啡”设置上限），精确掌控每一笔细分开销。</li>
               <li><strong>退款智能抵扣与过滤：</strong> 预算引擎极其严谨——“内部转账”、“余额调整”以及“不计入预算”的账单会自动被剔除。如果某笔消费发生了退款，系统会智能按净支出计算，把退回来的钱实时补充回可用预算里。</li>
               <li><strong>一键设为默认：</strong> 每月预算金额大同小异？在月度预算看板点击顶部的“设为默认”，未来的每个月都会自动套用这套模板，省去重复填写的烦恼。</li>
+              <li><strong>📅 动态日预算：</strong> 设置了月预算后，月度看板会显示“今日可用预算”，下方日历显示每天花了多少。每天的额度 = 剩余预算 ÷ 本月剩余天数，少花一天后面每天就能多花一点；没超当天额度的日子是绿色，超了是红色。点某一天可以查看当天额度和账单。年度看板里，如果 12 个月的月预算合计超过年预算，会给出提醒。</li>
             </ul>
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(5)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(6)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">借贷往来</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(7)">
+              <div class="nav-btn nav-next" onclick="goToChapter(8)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">周期与分期管理</span>
@@ -779,7 +829,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-7"
+                id="scroll-8"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-recurring">
@@ -798,14 +848,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(6)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(7)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">精细化预算管理</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(8)">
+              <div class="nav-btn nav-next" onclick="goToChapter(9)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">报销追踪管理</span>
@@ -821,7 +871,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-8"
+                id="scroll-9"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-reimburse">
@@ -845,14 +895,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(7)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(8)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">周期与分期管理</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(9)">
+              <div class="nav-btn nav-next" onclick="goToChapter(10)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">贴心备忘提醒</span>
@@ -868,7 +918,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-9"
+                id="scroll-10"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-reminder">
@@ -885,14 +935,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(8)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(9)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">报销追踪管理</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(10)">
+              <div class="nav-btn nav-next" onclick="goToChapter(11)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">资产与物品</span>
@@ -908,7 +958,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-10"
+                id="scroll-11"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-assets">
@@ -925,14 +975,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(9)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(10)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">贴心备忘提醒</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(11)">
+              <div class="nav-btn nav-next" onclick="goToChapter(12)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">数据备份与恢复</span>
@@ -948,7 +998,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-11"
+                id="scroll-12"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-backup">
@@ -964,7 +1014,7 @@
               <li><strong>导入第三方日记应用：</strong>在“我的 - 备份恢复 - 导出导入”中点击“导入第三方日记应用”：<strong>Day One</strong> 选择它导出的压缩包（Day One 设置 → 「导入/导出」→「导出 Day One JSON [ZIP]」），日记连同照片、时间、地点和天气一起导入；<strong>一本日记</strong> 选择它导出的 <code>.txt</code> 文件，按日期自动拆分成一篇篇日记（TXT 不含照片）；<strong>一叶日记</strong> 选择「设置 → 数据管理 → 导出Markdown」得到的 zip 压缩包，文字、时间、地址和图片一起导入。重复导入同一个文件不会产生重复日记。</li>
               <li><strong>多设备实时同步——不止是备份，更是"随身账本"：</strong>如果你有不止一台设备（比如手机 + 平板，或者正在新旧手机之间过渡），打开这个开关就能让编辑在设备之间近乎实时地互相追平，而不用等日常备份的自然节奏慢慢同步过去。</li>
               <li><strong>新设备自动识别已有主盘：</strong>如果你的其它设备已经设置过主盘，在新设备上打开这个开关时会自动检测到，并提示你是否保持一致——不用每台设备都重新决定一遍。</li>
-              <li><strong>💡 想和家人一起记账？</strong>多设备实时同步是给你自己的多台设备用的，会同步全部数据（包括日记）。和家人一起记账请使用<span onclick="goToChapter(12)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「家庭共享账本」👆</span>：只共享指定的一本账，日记和其它个人数据互不可见。</li>
+              <li><strong>💡 想和家人一起记账？</strong>多设备实时同步是给你自己的多台设备用的，会同步全部数据（包括日记）。和家人一起记账请使用<span onclick="goToChapter(13)" style="color: var(--theme-primary, #6366f1); cursor: pointer; text-decoration: underline; font-weight: 500;">「家庭共享账本」👆</span>：只共享指定的一本账，日记和其它个人数据互不可见。</li>
               <li><strong>进阶选项——多网盘实时镜像 / 立即强推全部网盘：</strong>如果你希望每个已连接的网盘都尽量保持实时更新（而不只是主盘优先），可以在“多设备实时同步”的高级选项里打开“多网盘实时镜像”；也可以随时点一下“立即强推全部网盘”，手动触发一次全量同步。这两个属于进阶选项，会明显增加请求频率，日常使用一般用不到，默认关闭即可。</li>
             </ul>
 
@@ -979,14 +1029,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(10)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">资产与物品</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(12)">
+              <div class="nav-btn nav-next" onclick="goToChapter(13)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">家庭共享账本</span>
@@ -1002,7 +1052,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-12"
+                id="scroll-13"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-shared">
@@ -1033,14 +1083,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(11)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">数据备份与恢复</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(13)">
+              <div class="nav-btn nav-next" onclick="goToChapter(14)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">安全与隐私</span>
@@ -1056,7 +1106,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-13"
+                id="scroll-14"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-security">
@@ -1074,14 +1124,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(12)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">家庭共享账本</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(14)">
+              <div class="nav-btn nav-next" onclick="goToChapter(15)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">进阶玩法</span>
@@ -1097,7 +1147,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-14"
+                id="scroll-15"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-advanced">
@@ -1130,14 +1180,14 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(13)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(14)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
                   <span class="nav-name">安全与隐私</span>
                 </div>
               </div>
-              <div class="nav-btn nav-next" onclick="goToChapter(15)">
+              <div class="nav-btn nav-next" onclick="goToChapter(16)">
                 <div class="nav-text nav-text-right">
                   <span class="nav-label">下一章</span>
                   <span class="nav-name">常见问题 (FAQ)</span>
@@ -1153,7 +1203,7 @@
             <div class="page-slide">
               <div
                 class="page-scroll"
-                id="scroll-15"
+                id="scroll-16"
                 tabindex="-1"
               >
                 <div class="help-section" id="sec-faq">
@@ -1231,7 +1281,7 @@
                 </div>
 
             <div class="chapter-nav-footer">
-              <div class="nav-btn nav-prev" onclick="goToChapter(14)">
+              <div class="nav-btn nav-prev" onclick="goToChapter(15)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
                 <div class="nav-text">
                   <span class="nav-label">上一章</span>
@@ -1349,7 +1399,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-  var tocList = [{"id": "sec-ai", "title": "极速记账魔法"}, {"id": "sec-manual", "title": "精打细算记账"}, {"id": "sec-diary", "title": "时光日记本"}, {"id": "sec-stats", "title": "全能首页看板"}, {"id": "sec-savings", "title": "存钱计划与目标"}, {"id": "sec-debt", "title": "借贷往来"}, {"id": "sec-budget", "title": "精细化预算管理"}, {"id": "sec-recurring", "title": "周期与分期管理"}, {"id": "sec-reimburse", "title": "报销追踪管理"}, {"id": "sec-reminder", "title": "贴心备忘提醒"}, {"id": "sec-assets", "title": "资产与物品"}, {"id": "sec-backup", "title": "数据备份与恢复"}, {"id": "sec-shared", "title": "家庭共享账本"}, {"id": "sec-security", "title": "安全与隐私"}, {"id": "sec-advanced", "title": "进阶玩法"}, {"id": "sec-faq", "title": "常见问题 (FAQ)"}];
+  var tocList = [{"id": "sec-ai", "title": "极速记账魔法"}, {"id": "sec-manual", "title": "精打细算记账"}, {"id": "sec-diary", "title": "时光日记本"}, {"id": "sec-tags", "title": "标签系统"}, {"id": "sec-stats", "title": "全能首页看板"}, {"id": "sec-savings", "title": "存钱计划与目标"}, {"id": "sec-debt", "title": "借贷往来"}, {"id": "sec-budget", "title": "精细化预算管理"}, {"id": "sec-recurring", "title": "周期与分期管理"}, {"id": "sec-reimburse", "title": "报销追踪管理"}, {"id": "sec-reminder", "title": "贴心备忘提醒"}, {"id": "sec-assets", "title": "资产与物品"}, {"id": "sec-backup", "title": "数据备份与恢复"}, {"id": "sec-shared", "title": "家庭共享账本"}, {"id": "sec-security", "title": "安全与隐私"}, {"id": "sec-advanced", "title": "进阶玩法"}, {"id": "sec-faq", "title": "常见问题 (FAQ)"}];
   var currentIndex = 0;
   var showToc = false;
   var showSearch = false;
@@ -1457,7 +1507,7 @@
     var q = searchInput.value.trim();
     searchClearBtn.style.display = searchInput.value ? 'flex' : 'none';
     if (!q) {
-      searchResultsView.innerHTML = '<div class="search-hint">输入关键词，可搜索指南全部 16 个章节与常见问题中的任意内容</div>';
+      searchResultsView.innerHTML = '<div class="search-hint">输入关键词，可搜索指南全部 17 个章节与常见问题中的任意内容</div>';
       return;
     }
     var lowerQ = q.toLowerCase();
