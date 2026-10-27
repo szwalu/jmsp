@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>用户协议 / User Agreement - Trifles Daily</title>
+<title>用户协议 / 使用者條款 / User Agreement - Trifles Daily</title>
 <style>
   :root {
     --app-bg: #ffffff;
@@ -90,8 +90,9 @@
     .end-copyright { color: #666; }
   }
 
-  [data-lang="en"] .zh { display: none; }
-  [data-lang="zh"] .en { display: none; }
+  [data-lang="en"] .zh, [data-lang="en"] .tw { display: none; }
+  [data-lang="zh"] .en, [data-lang="zh"] .tw { display: none; }
+  [data-lang="tw"] .zh, [data-lang="tw"] .en { display: none; }
 </style>
 </head>
 <body>
@@ -99,10 +100,12 @@
   <div class="header-bar">
     <div class="title">
       <span class="zh">鸡毛蒜皮用户协议</span>
+      <span class="tw">雞毛蒜皮使用者條款</span>
       <span class="en">Trifles Daily User Agreement</span>
     </div>
     <div class="lang-switch">
-      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn" id="btn-zh" onclick="setLang('zh')">简体</button>
+      <button class="lang-btn" id="btn-tw" onclick="setLang('tw')">繁體</button>
       <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
@@ -110,14 +113,18 @@
   <div class="content-padding">
     <div class="meta-info">
       <p class="zh">发布日期：2026 年 3 月 27 日</p>
+      <p class="tw">發布日期：2026 年 3 月 27 日</p>
       <p class="zh">生效日期：2026 年 3 月 27 日</p>
+      <p class="tw">生效日期：2026 年 3 月 27 日</p>
       <p class="en">Published: Mar 27, 2026</p>
       <p class="en">Effective: Mar 27, 2026</p>
     </div>
 
     <div class="intro-box">
       <p class="welcome-text zh">欢迎使用"鸡毛蒜皮"！</p>
+      <p class="welcome-text tw">歡迎使用「雞毛蒜皮」！</p>
       <p class="zh">在您开始使用"鸡毛蒜皮"软件及相关服务（以下简称"本服务"）之前，请务必审慎阅读并充分理解本协议。当您开始实际使用本服务时，即视为您已充分阅读、理解并接受本协议的全部内容。</p>
+      <p class="tw">在您開始使用「雞毛蒜皮」軟體及相關服務（以下簡稱「本服務」）之前，請務必審慎閱讀並充分理解本條款。當您開始實際使用本服務時，即視為您已充分閱讀、理解並接受本條款的全部內容。</p>
       <p class="welcome-text en">Welcome to Trifles Daily!</p>
       <p class="en">Before you use the "Trifles Daily" software and related services (the "Service"), please read this agreement carefully. By using the Service, you acknowledge that you have read and accepted all terms.</p>
     </div>
@@ -125,11 +132,17 @@
     <!-- Section 1 -->
     <section>
       <h3 class="zh">一、 服务说明与授权</h3>
+      <h3 class="tw">一、 服務說明與授權</h3>
       <h3 class="en">1. Service Description</h3>
       <ul class="zh">
         <li><strong>服务内容：</strong> "鸡毛蒜皮"是一款专注本地存储的笔记与记账工具。</li>
         <li><strong>个人用途：</strong> 本服务仅限用户个人非商业用途。未经许可，您不得对本软件或其衍生资料进行商业营利活动。</li>
         <li><strong>知识产权：</strong> 我们拥有"鸡毛蒜皮"的软件著作权及界面设计。您对您在软件中创建的任何内容享有完全的著作权。</li>
+      </ul>
+      <ul class="tw">
+        <li><strong>服務內容：</strong> 「雞毛蒜皮」是一款專注本機儲存的筆記與記帳工具。</li>
+        <li><strong>個人用途：</strong> 本服務僅限使用者個人非商業用途。未經許可，您不得對本軟體或其衍生資料進行商業營利活動。</li>
+        <li><strong>智慧財產權：</strong> 我們擁有「雞毛蒜皮」的軟體著作權及介面設計。您對您在軟體中建立的任何內容享有完全的著作權。</li>
       </ul>
       <ul class="en">
         <li><strong>Content:</strong> "Trifles Daily" is a local-first notes and accounting tool.</li>
@@ -141,11 +154,17 @@
     <!-- Section 2 -->
     <section>
       <h3 class="zh">二、 数据存储与安全（重要）</h3>
+      <h3 class="tw">二、 資料儲存與安全（重要）</h3>
       <h3 class="en">2. Data Storage &amp; Safety (Important)</h3>
       <ul class="zh">
         <li><strong>本地存储：</strong> "鸡毛蒜皮"是一款无须注册、无须强制联网的纯本地应用。您的所有笔记、账本及媒体文件默认<strong>仅保存在您当前使用的设备中</strong>。</li>
         <li><strong>数据丢失风险：</strong> 请您自行妥善保管设备并定期进行数据导出备份。<strong>若您卸载本应用、清除应用数据或设备损坏，将导致数据永久丢失</strong>，我们不承担因此产生的数据恢复或赔偿责任。</li>
         <li><strong>可选云备份：</strong> 若您在应用内主动开启 Google Drive、百度网盘、OneDrive、iCloud 或 WebDAV 等可选云备份功能，系统会额外为您保留一份云端副本，可在一定程度上降低设备损坏或误删带来的数据丢失风险；但使用这些第三方云服务须同时遵守其各自的服务条款，因第三方服务本身产生的问题（如账号被封、存储限额、服务中断等），由您与该第三方自行解决，我们不承担连带责任。各云备份渠道具体访问哪些数据、如何使用，请见我们的《隐私政策》。</li>
+      </ul>
+      <ul class="tw">
+        <li><strong>本機儲存：</strong> 「雞毛蒜皮」是一款無須註冊、無須強制聯網的純本機應用。您的所有筆記、帳本及媒體檔案預設<strong>僅儲存在您目前使用的裝置中</strong>。</li>
+        <li><strong>資料遺失風險：</strong> 請您自行妥善保管裝置並定期進行資料匯出備份。<strong>若您解除安裝本應用、清除應用資料或裝置損壞，將導致資料永久遺失</strong>，我們不承擔因此產生的資料復原或賠償責任。</li>
+        <li><strong>可選雲端備份：</strong> 若您在應用內主動開啟 Google Drive、百度網盤、OneDrive、iCloud 或 WebDAV 等可選雲端備份功能，系統會額外為您保留一份雲端副本，可在一定程度上降低裝置損壞或誤刪帶來的資料遺失風險；但使用這些第三方雲端服務須同時遵守其各自的服務條款，因第三方服務本身產生的問題（如帳號被封、儲存限額、服務中斷等），由您與該第三方自行解決，我們不承擔連帶責任。各雲端備份管道具體存取哪些資料、如何使用，請見我們的《隱私權政策》。</li>
       </ul>
       <ul class="en">
         <li><strong>Local Storage:</strong> "Trifles Daily" works offline without requiring an account. <strong>By default, all your data is stored exclusively on your device.</strong></li>
@@ -157,10 +176,15 @@
     <!-- Section 3 -->
     <section>
       <h3 class="zh">三、 用户行为规范</h3>
+      <h3 class="tw">三、 使用者行為規範</h3>
       <h3 class="en">3. Code of Conduct</h3>
       <ul class="zh">
         <li><strong>技术破坏：</strong> 禁止反向工程、反向汇编、拆解本软件，或使用任何插件干扰本服务的正常运行。</li>
         <li><strong>合规使用：</strong> 请遵守国家法律法规，妥善管理您的本地内容。</li>
+      </ul>
+      <ul class="tw">
+        <li><strong>技術破壞：</strong> 禁止反向工程、反組譯、拆解本軟體，或使用任何外掛干擾本服務的正常運作。</li>
+        <li><strong>合規使用：</strong> 請遵守相關法律法規，妥善管理您的本機內容。</li>
       </ul>
       <ul class="en">
         <li><strong>Technical Harm:</strong> No reverse engineering or using unauthorized tools to interfere with the app.</li>
@@ -170,10 +194,15 @@
     <!-- Section 4 -->
     <section>
       <h3 class="zh">四、 免责声明</h3>
+      <h3 class="tw">四、 免責聲明</h3>
       <h3 class="en">4. Disclaimers</h3>
       <ul class="zh">
         <li><strong>"按现状"提供：</strong> 本服务按当前技术水平所能达到的现状提供。我们不担保服务一定能满足您的全部需求。</li>
         <li><strong>第三方服务：</strong> 本软件部分功能（如天气）依赖第三方接口。因第三方服务产生的异常或纠纷，由您与该第三方自行解决，我们不承担连带责任。</li>
+      </ul>
+      <ul class="tw">
+        <li><strong>「依現狀」提供：</strong> 本服務依目前技術水準所能達到的現狀提供。我們不擔保服務一定能滿足您的全部需求。</li>
+        <li><strong>第三方服務：</strong> 本軟體部分功能（如天氣）依賴第三方介面。因第三方服務產生的異常或糾紛，由您與該第三方自行解決，我們不承擔連帶責任。</li>
       </ul>
       <ul class="en">
         <li><strong>"As Is":</strong> Service is provided "as is" without any warranty of uninterrupted operation.</li>
@@ -184,9 +213,13 @@
     <!-- Section 5 -->
     <section>
       <h3 class="zh">五、 联系我们</h3>
+      <h3 class="tw">五、 聯絡我們</h3>
       <h3 class="en">5. Contact Us</h3>
       <ul class="zh">
         <li>如对本协议有任何疑问，请通过 <strong>ming@woabc.com</strong> 与我们联系。</li>
+      </ul>
+      <ul class="tw">
+        <li>如對本條款有任何疑問，請透過 <strong>ming@woabc.com</strong> 與我們聯絡。</li>
       </ul>
       <ul class="en">
         <li>If you have questions, please contact us at: <strong>ming@woabc.com</strong></li>
@@ -200,26 +233,34 @@
 <script>
   function setLang(lang) {
     document.getElementById('page').setAttribute('data-lang', lang);
-    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh' : 'en');
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : (lang === 'tw' ? 'zh-Hant' : 'en'));
     document.getElementById('btn-zh').classList.toggle('active', lang === 'zh');
+    document.getElementById('btn-tw').classList.toggle('active', lang === 'tw');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     try { localStorage.setItem('td-lang', lang); } catch (e) {}
   }
 
-  (function init() {
-    var lang = 'en';
-    try {
-      var saved = localStorage.getItem('td-lang');
-      if (saved) {
-        lang = saved;
-      } else {
-        var navLang = navigator.language || navigator.userLanguage || '';
-        lang = navLang.indexOf('zh') === 0 ? 'zh' : 'en';
+  // 系统语言 → 页面语言：繁体（zh-Hant / 台湾 / 香港 / 澳门）→ tw；其它中文 → zh；其它 → en
+  function detectLang() {
+    var list = [];
+    try { list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || navigator.userLanguage || '']; } catch (e) {}
+    for (var i = 0; i < list.length; i++) {
+      var l = String(list[i] || '').toLowerCase();
+      if (l.indexOf('zh') === 0) {
+        return /hant|-tw|-hk|-mo/.test(l) ? 'tw' : 'zh';
       }
-    } catch (e) {
-      var navLang2 = navigator.language || navigator.userLanguage || '';
-      lang = navLang2.indexOf('zh') === 0 ? 'zh' : 'en';
+      if (l) return 'en';
     }
+    return 'en';
+  }
+
+  (function init() {
+    var lang = '';
+    try {
+      var q = (location.search.match(/[?&]lang=(zh|tw|en)\b/) || [])[1]; // 也可用 ?lang=tw 直接指定
+      lang = q || localStorage.getItem('td-lang') || '';
+    } catch (e) {}
+    if (lang !== 'zh' && lang !== 'tw' && lang !== 'en') lang = detectLang();
     setLang(lang);
   })();
 </script>
