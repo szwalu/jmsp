@@ -16,10 +16,17 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="雞毛蒜皮 - あなたのデジタル生活アシスタント">
 <meta property="og:description" content="ひとことで家計簿、気軽に日記。完全無料・広告なし・サブスクなし。データはあなたのスマホだけに。">
-<meta property="og:image" content="https://jmsp.app/images/en/zy.png">
+<meta property="og:image" content="https://jmsp.app/images/en/zy.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="apple-itunes-app" content="app-id=6762100023">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
+<script>
+  // 首屏入场动画（向上滑入 20px）每次打开网站只播一次：切换语言、从使用指南回来等再次加载首页时不再播放，避免看起来「抖一下」
+  try {
+    if (sessionStorage.getItem('jmsp_enter_anim_shown')) document.documentElement.classList.add('no-enter-anim');
+    else sessionStorage.setItem('jmsp_enter_anim_shown', '1');
+  } catch (e) {}
+</script>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/images/主题.png">
   <style>
@@ -270,6 +277,7 @@
     }
     /* 图片加载前先按 iPhone 截图比例占好位置，加载后自动改用图片真实比例（auto），避免加载时把下面的内容顶下去 */
     .mockup-img, .hero-shot img { aspect-ratio: auto 1179 / 2556; }
+    .no-enter-anim .hero, .no-enter-anim .downloads, .no-enter-anim .hero-shot { animation: none; }
     .bento-card:hover .mockup-img { transform: translateY(-4px) scale(1.02); }
     @media (min-width: 768px) {
       .card-hz { flex-direction: row; align-items: center; }
@@ -446,7 +454,7 @@
       </div>
 
     </section>
-    <div class="hero-shot"><img src="./images/en/zy.png" alt="雞毛蒜皮のホーム画面"></div>
+    <div class="hero-shot"><img src="./images/en/zy.webp" alt="雞毛蒜皮のホーム画面"></div>
 
     <!-- 核心理念 (图文混排 Bento Box) -->
     <section>
@@ -465,7 +473,7 @@
             </div>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/en/jz.PNG" alt="爆速記帳の画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/jz.webp" alt="爆速記帳の画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -475,7 +483,7 @@
             <p class="bento-desc">集中して長文を書けるだけでなく、天気と位置情報もバックグラウンドでさりげなく記録。「あの日の今日」「ランダム散歩」「足あとマップ」「日記フォト」で大切な思い出を振り返れます。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/en/rj.PNG" alt="日記の画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/rj.webp" alt="日記の画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -485,7 +493,7 @@
             <p class="bento-desc">日記・家計簿・資産の 3 モードをスワイプで切り替えられるホームダッシュボード。AI による振り返り分析も搭載。複数通貨の自動換算と純資産のリアルタイム把握に対応。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/en/kb.PNG" alt="ダッシュボードの画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/kb.webp" alt="ダッシュボードの画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -495,7 +503,7 @@
             <p class="bento-desc">暮らしのモノをまるごとデジタル管理。家電・ガジェットから常備薬まで、場所ごとに整理でき、期限の 7 日前にお知らせします。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/en/wp.PNG" alt="モノ管理の画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/wp.webp" alt="モノ管理の画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -505,7 +513,7 @@
             <p class="bento-desc">新暦・旧暦の日付計算と長期間の繰り返しに対応。通知はシステムから時間どおりに届くので、オフラインでも安心です。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/en/bw.PNG" alt="リマインダーの画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/bw.webp" alt="リマインダーの画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card span-2 card-hz-rev">
@@ -515,7 +523,7 @@
             <p class="bento-desc">オフラインファースト設計で、データはスマホ本体だけに保存され、私たちのサーバーを通りません。指紋・顔認証のアプリロックや、iCloud・WebDAV・Google Drive などへの自動差分バックアップに対応し、プライバシーの不安から解放されます。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/en/bf.PNG" alt="バックアップの画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/bf.webp" alt="バックアップの画面" loading="lazy">
           </div>
         </div>
       </div>
@@ -586,7 +594,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-    var CURRENT_PAGE_BUILD = '20261029_3';
+    var CURRENT_PAGE_BUILD = '20261029_4';
     var appConfig = {
       version: 'v1.5.5',
       androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.5.5/app-release.apk',

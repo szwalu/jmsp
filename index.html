@@ -39,10 +39,17 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="鸡毛蒜皮 - 你的数字生活管家">
 <meta property="og:description" content="一句话记账，随手写日记。全免费、零广告、无会员，数据只保存在你的手机上。">
-<meta property="og:image" content="https://jmsp.app/images/zy.png">
+<meta property="og:image" content="https://jmsp.app/images/zy.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="apple-itunes-app" content="app-id=6762100023">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
+<script>
+  // 首屏入场动画（向上滑入 20px）每次打开网站只播一次：切换语言、从使用指南回来等再次加载首页时不再播放，避免看起来「抖一下」
+  try {
+    if (sessionStorage.getItem('jmsp_enter_anim_shown')) document.documentElement.classList.add('no-enter-anim');
+    else sessionStorage.setItem('jmsp_enter_anim_shown', '1');
+  } catch (e) {}
+</script>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/images/主题.png">
   <style>
@@ -293,6 +300,7 @@
     }
     /* 图片加载前先按 iPhone 截图比例占好位置，加载后自动改用图片真实比例（auto），避免加载时把下面的内容顶下去 */
     .mockup-img, .hero-shot img { aspect-ratio: auto 1179 / 2556; }
+    .no-enter-anim .hero, .no-enter-anim .downloads, .no-enter-anim .hero-shot { animation: none; }
     .bento-card:hover .mockup-img { transform: translateY(-4px) scale(1.02); }
     @media (min-width: 768px) {
       .card-hz { flex-direction: row; align-items: center; }
@@ -485,7 +493,7 @@
         <div class="dl-action">进入</div>
       </div>
     </section>
-    <div class="hero-shot"><img src="./images/zy.png" alt="鸡毛蒜皮首页界面"></div>
+    <div class="hero-shot"><img src="./images/zy.webp" alt="鸡毛蒜皮首页界面"></div>
 
     <!-- 核心理念 (图文混排 Bento Box) -->
     <section>
@@ -504,7 +512,7 @@
             </div>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/jz.PNG" alt="极速记账魔法界面" loading="lazy">
+            <img class="mockup-img" src="./images/jz.webp" alt="极速记账魔法界面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -514,7 +522,7 @@
             <p class="bento-desc">不仅支持沉浸式长篇写作，还能在后台无感记录天气与定位。通过“那年今日”、“随机漫游”及“足迹地图”，重温珍贵记忆。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/rj.PNG" alt="时光日记本界面" loading="lazy">
+            <img class="mockup-img" src="./images/rj.webp" alt="时光日记本界面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -524,7 +532,7 @@
             <p class="bento-desc">日记、记账、资产“三模”无缝滑动的首页看板，融合 AI 智能复盘诊断。支持多币种自动折算与净资产实时追踪。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/kb.PNG" alt="多维洞察看板界面" loading="lazy">
+            <img class="mockup-img" src="./images/kb.webp" alt="多维洞察看板界面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -534,7 +542,7 @@
             <p class="bento-desc">将实体生活全面数字化。从数码家电到常备药物，支持多维空间管理，提供 7 天精准过期贴心提醒。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/wp.PNG" alt="物品与资产雷达界面" loading="lazy">
+            <img class="mockup-img" src="./images/wp.webp" alt="物品与资产雷达界面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -544,7 +552,7 @@
             <p class="bento-desc">支持公农历推算与超长线循环。提醒由系统准时推送，离线也不耽误。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/bw.PNG" alt="全场景生活备忘界面" loading="lazy">
+            <img class="mockup-img" src="./images/bw.webp" alt="全场景生活备忘界面" loading="lazy">
           </div>
         </div>
         <div class="bento-card span-2 card-hz-rev">
@@ -554,7 +562,7 @@
             <p class="bento-desc">采用离线优先架构，数据只保存在你的手机上，不经过我们的服务器。支持指纹/面容应用锁，以及 iCloud、WebDAV、Google Drive 等多平台自动增量备份，彻底告别隐私焦虑。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/bf.PNG" alt="数据备份安全界面" loading="lazy">
+            <img class="mockup-img" src="./images/bf.webp" alt="数据备份安全界面" loading="lazy">
           </div>
         </div>
       </div>
@@ -625,7 +633,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-    var CURRENT_PAGE_BUILD = '20261029_3';
+    var CURRENT_PAGE_BUILD = '20261029_4';
     var appConfig = {
       version: 'v1.5.5',
       androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.5.5/app-release.apk',

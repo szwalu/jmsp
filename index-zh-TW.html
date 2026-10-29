@@ -16,10 +16,17 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="雞毛蒜皮 - 你的數位生活管家">
 <meta property="og:description" content="一句話記帳，隨手寫日記。全免費、零廣告、無會員，資料只保存在你的手機上。">
-<meta property="og:image" content="https://jmsp.app/images/zh-TW/zy.png">
+<meta property="og:image" content="https://jmsp.app/images/zh-TW/zy.webp">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="apple-itunes-app" content="app-id=6762100023">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
+<script>
+  // 首屏入场动画（向上滑入 20px）每次打开网站只播一次：切换语言、从使用指南回来等再次加载首页时不再播放，避免看起来「抖一下」
+  try {
+    if (sessionStorage.getItem('jmsp_enter_anim_shown')) document.documentElement.classList.add('no-enter-anim');
+    else sessionStorage.setItem('jmsp_enter_anim_shown', '1');
+  } catch (e) {}
+</script>
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/images/主题.png">
   <style>
@@ -270,6 +277,7 @@
     }
     /* 图片加载前先按 iPhone 截图比例占好位置，加载后自动改用图片真实比例（auto），避免加载时把下面的内容顶下去 */
     .mockup-img, .hero-shot img { aspect-ratio: auto 1179 / 2556; }
+    .no-enter-anim .hero, .no-enter-anim .downloads, .no-enter-anim .hero-shot { animation: none; }
     .bento-card:hover .mockup-img { transform: translateY(-4px) scale(1.02); }
     @media (min-width: 768px) {
       .card-hz { flex-direction: row; align-items: center; }
@@ -446,7 +454,7 @@
       </div>
 
     </section>
-    <div class="hero-shot"><img src="./images/zh-TW/zy.png" alt="雞毛蒜皮首頁介面"></div>
+    <div class="hero-shot"><img src="./images/zh-TW/zy.webp" alt="雞毛蒜皮首頁介面"></div>
 
     <!-- 核心理念 (图文混排 Bento Box) -->
     <section>
@@ -465,7 +473,7 @@
             </div>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/zh-TW/jz.PNG" alt="極速記帳魔法介面" loading="lazy">
+            <img class="mockup-img" src="./images/zh-TW/jz.webp" alt="極速記帳魔法介面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -475,7 +483,7 @@
             <p class="bento-desc">不僅支援沉浸式長篇寫作，還能在背景無感記錄天氣與定位。透過「那年今日」、「隨機漫遊」、「足跡地圖」及「日記圖庫」，重溫珍貴記憶。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/zh-TW/rj.PNG" alt="時光日記本介面" loading="lazy">
+            <img class="mockup-img" src="./images/zh-TW/rj.webp" alt="時光日記本介面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -485,7 +493,7 @@
             <p class="bento-desc">日記、記帳、資產「三模」無縫滑動的首頁看板，融合 AI 智慧覆盤診斷。支援多幣種自動換算與淨資產即時追蹤。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/zh-TW/kb.PNG" alt="多維洞察看板介面" loading="lazy">
+            <img class="mockup-img" src="./images/zh-TW/kb.webp" alt="多維洞察看板介面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -495,7 +503,7 @@
             <p class="bento-desc">將實體生活全面數位化。從數位家電到常備藥物，支援多維空間管理，提供 7 天精準到期貼心提醒。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/zh-TW/wp.PNG" alt="物品與資產雷達介面" loading="lazy">
+            <img class="mockup-img" src="./images/zh-TW/wp.webp" alt="物品與資產雷達介面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -505,7 +513,7 @@
             <p class="bento-desc">支援國農曆推算與超長線循環。提醒由系統準時推送，離線也不耽誤。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/zh-TW/bw.PNG" alt="全場景生活備忘介面" loading="lazy">
+            <img class="mockup-img" src="./images/zh-TW/bw.webp" alt="全場景生活備忘介面" loading="lazy">
           </div>
         </div>
         <div class="bento-card span-2 card-hz-rev">
@@ -515,7 +523,7 @@
             <p class="bento-desc">採用離線優先架構，資料只保存在你的手機上，不經過我們的伺服器。支援指紋／臉部應用鎖，以及 iCloud、WebDAV、Google Drive 等多平台自動增量備份，徹底告別隱私焦慮。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/zh-TW/bf.PNG" alt="資料備份安全介面" loading="lazy">
+            <img class="mockup-img" src="./images/zh-TW/bf.webp" alt="資料備份安全介面" loading="lazy">
           </div>
         </div>
       </div>
@@ -586,7 +594,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-    var CURRENT_PAGE_BUILD = '20261029_3';
+    var CURRENT_PAGE_BUILD = '20261029_4';
     var appConfig = {
       version: 'v1.5.5',
       androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.5.5/app-release.apk',
