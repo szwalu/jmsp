@@ -156,6 +156,18 @@
       .more-section, .faq-section { margin-top: 56px; }
       .hero-shot { margin: -24px auto 56px; }
       .hero-shot img { max-width: 260px; }
+      /* 手机：图标 + 标题/标语并排，「全免费 · 零广告 · 无会员」单独一行占满宽度，不折行 */
+      /* 上下两行 1fr 留白：图标比文字高时，多出的高度只分给留白行，标题与标语之间不被拉开（文字垂直居中在图标旁） */
+      .container .hero { display: grid; grid-template-columns: auto 1fr; grid-template-rows: 1fr auto auto 1fr auto; column-gap: 20px; row-gap: 0; } /* 用 .container 提高优先级：后面原有的 .hero { gap: 20px } 在网格里也会加到行之间 */
+      .hero-content { display: contents; }
+      .hero .app-icon { grid-column: 1; grid-row: 1 / span 4; align-self: center; }
+      .hero .app-title { grid-column: 2; grid-row: 2; }
+      .hero .app-slogan { grid-column: 2; grid-row: 3; }
+      .hero-badges { grid-column: 1 / -1; grid-row: 5; flex-wrap: nowrap; gap: 6px; margin-top: 18px; }
+      .hero-badge { font-size: 13px; padding: 4px 10px; white-space: nowrap; }
+    }
+    @media (max-width: 360px) {
+      .hero-badge { font-size: 12px; padding: 4px 8px; }
     }
     /* === 下载区域 === */
     .downloads { display: flex; flex-direction: column; gap: 16px; margin-bottom: 72px; max-width: 800px; margin-left: auto; margin-right: auto; animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
@@ -256,6 +268,8 @@
       border: 1px solid var(--img-border);
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    /* 图片加载前先按 iPhone 截图比例占好位置，加载后自动改用图片真实比例（auto），避免加载时把下面的内容顶下去 */
+    .mockup-img, .hero-shot img { aspect-ratio: auto 1179 / 2556; }
     .bento-card:hover .mockup-img { transform: translateY(-4px) scale(1.02); }
     @media (min-width: 768px) {
       .card-hz { flex-direction: row; align-items: center; }
@@ -572,7 +586,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-    var CURRENT_PAGE_BUILD = '20261029_2';
+    var CURRENT_PAGE_BUILD = '20261029_3';
     var appConfig = {
       version: 'v1.5.5',
       androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.5.5/app-release.apk',
@@ -647,12 +661,11 @@
         pwdSpan.innerText = appConfig.lanzouPwd;
       }
     }
-    window.addEventListener('pageshow', function(event) {
-      if (event.persisted) {
-        window.location.reload();
-      } else {
-        fetchLatestConfig();
-      }
+    // 从使用指南等页面返回（浏览器从往返缓存恢复本页，event.persisted 为 true）时，原来会整页 reload：
+    // 重新加载后浏览器恢复滚动位置，而上方的截图（懒加载、没有预留高度）逐张加载把内容顶来顶去 → 页面上下窜动几下。
+    // 现在不再 reload，只检查一次 version.json（有新版本时 fetchLatestConfig 自己会刷新到新版本）。
+    window.addEventListener('pageshow', function() {
+      fetchLatestConfig();
     });
     document.getElementById('dynamic-year').textContent = new Date().getFullYear();
     function isWeChat() {
