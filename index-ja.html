@@ -186,6 +186,25 @@
     .c-green { color: #10b981; } .c-orange { color: #f97316; } .c-teal { color: #14b8a6; }
     .bento-title { font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
     .bento-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    /* 观看视频（与使用指南同款） */
+    .video-tip-line { display: flex; align-items: center; gap: 6px; margin: 12px 0 0 0; color: var(--text-muted); font-size: 14px; }
+    .video-icon-inline {
+      width: 14px; height: 14px; flex-shrink: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'/%3E%3Crect x='2' y='6' width='14' height='12' rx='2'/%3E%3C/svg%3E");
+      background-size: contain; background-repeat: no-repeat;
+    }
+    .shortcut-link {
+      color: var(--primary); text-decoration: none; font-weight: 600;
+      padding: 2px 4px; background: rgba(99, 102, 241, 0.08); border-radius: 6px; transition: all 0.2s;
+      display: inline-block; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .shortcut-link:active { background: rgba(99, 102, 241, 0.15); transform: scale(0.95); }
+    @media (prefers-color-scheme: dark) {
+      .shortcut-link { color: #818cf8; background: rgba(129, 140, 248, 0.15); }
+      .video-icon-inline {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'/%3E%3Crect x='2' y='6' width='14' height='12' rx='2'/%3E%3C/svg%3E");
+      }
+    }
     .bento-img-wrap { flex: 1; margin-top: 32px; padding: 0 40px 40px 40px; display: flex; justify-content: center; align-items: center; }
     .mockup-img {
       width: 100%;
@@ -397,9 +416,14 @@
             <div class="icon-wrapper c-blue">✨</div>
             <h3 class="bento-title">爆速記帳マジック</h3>
             <p class="bento-desc">Siri での音声入力や一文だけの記帳に対応。内蔵の AI モデルがくだけた長い文章も正確に読み取り、複数の支出を自動で分けて記録。執事とおしゃべりするような自然さで家計簿をつけられます。</p>
+            <div class="video-tip-line">
+              <span class="video-icon-inline" aria-hidden="true"></span>
+              <strong>動画を見る：</strong>
+              <a class="shortcut-link" href="https://mp.weixin.qq.com/s/VJ84eQqEPck5qfWfq8JDWw" target="_blank" rel="noopener">再生する</a>
+            </div>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/jz.PNG" alt="爆速記帳の画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/jz.PNG" alt="爆速記帳の画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -409,7 +433,7 @@
             <p class="bento-desc">集中して長文を書けるだけでなく、天気と位置情報もバックグラウンドでさりげなく記録。「あの日の今日」「ランダム散歩」「足あとマップ」「日記フォト」で大切な思い出を振り返れます。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/rj.PNG" alt="日記の画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/rj.PNG" alt="日記の画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -419,7 +443,7 @@
             <p class="bento-desc">日記・家計簿・資産の 3 モードをスワイプで切り替えられるホームダッシュボード。AI による振り返り分析も搭載。複数通貨の自動換算と純資産のリアルタイム把握に対応。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/kb.PNG" alt="ダッシュボードの画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/kb.PNG" alt="ダッシュボードの画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -429,7 +453,7 @@
             <p class="bento-desc">暮らしのモノをまるごとデジタル管理。家電・ガジェットから常備薬まで、場所ごとに整理でき、期限の 7 日前にお知らせします。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/wp.PNG" alt="モノ管理の画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/wp.PNG" alt="モノ管理の画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card">
@@ -439,7 +463,7 @@
             <p class="bento-desc">新暦・旧暦の日付計算と長期間の繰り返しに対応。通知はシステムで予約されるため、オフラインでも時間どおりに届きます。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/bw.PNG" alt="リマインダーの画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/bw.PNG" alt="リマインダーの画面" loading="lazy">
           </div>
         </div>
         <div class="bento-card span-2 card-hz-rev">
@@ -449,7 +473,7 @@
             <p class="bento-desc">オフラインファースト設計で、データは標準でスマホ本体に暗号化保存。指紋・顔認証のアプリロックや、iCloud・WebDAV などへの自動差分バックアップに対応し、プライバシーの不安から解放されます。</p>
           </div>
           <div class="bento-img-wrap">
-            <img class="mockup-img" src="./images/bf.PNG" alt="バックアップの画面" loading="lazy">
+            <img class="mockup-img" src="./images/en/bf.PNG" alt="バックアップの画面" loading="lazy">
           </div>
         </div>
       </div>
@@ -483,7 +507,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-    var CURRENT_PAGE_BUILD = '20261021_1';
+    var CURRENT_PAGE_BUILD = '20261029_1';
     var appConfig = {
       version: 'v1.5.5',
       androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.5.5/app-release.apk',

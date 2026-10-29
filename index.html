@@ -209,6 +209,25 @@
     .c-green { color: #10b981; } .c-orange { color: #f97316; } .c-teal { color: #14b8a6; }
     .bento-title { font-size: 22px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
     .bento-desc { font-size: 15px; color: var(--text-muted); line-height: 1.7; }
+    /* 观看视频（与使用指南同款） */
+    .video-tip-line { display: flex; align-items: center; gap: 6px; margin: 12px 0 0 0; color: var(--text-muted); font-size: 14px; }
+    .video-icon-inline {
+      width: 14px; height: 14px; flex-shrink: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'/%3E%3Crect x='2' y='6' width='14' height='12' rx='2'/%3E%3C/svg%3E");
+      background-size: contain; background-repeat: no-repeat;
+    }
+    .shortcut-link {
+      color: var(--primary); text-decoration: none; font-weight: 600;
+      padding: 2px 4px; background: rgba(99, 102, 241, 0.08); border-radius: 6px; transition: all 0.2s;
+      display: inline-block; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .shortcut-link:active { background: rgba(99, 102, 241, 0.15); transform: scale(0.95); }
+    @media (prefers-color-scheme: dark) {
+      .shortcut-link { color: #818cf8; background: rgba(129, 140, 248, 0.15); }
+      .video-icon-inline {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5'/%3E%3Crect x='2' y='6' width='14' height='12' rx='2'/%3E%3C/svg%3E");
+      }
+    }
     .bento-img-wrap { flex: 1; margin-top: 32px; padding: 0 40px 40px 40px; display: flex; justify-content: center; align-items: center; }
     .mockup-img {
       width: 100%;
@@ -399,7 +418,7 @@
           <div class="dl-text-group">
             <div class="dl-text-main">Android 备用源</div>
             <div id="android-alt-sub" class="dl-text-sub">蓝奏云网盘(密码:<span class="copy-pwd" onclick="copyPassword(event, this)" title="点击复制">
-  <span id="lanzou-pwd">9zwv</span>
+  <span id="lanzou-pwd">fxhu</span>
   <svg id="copy-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 3px;">
     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -420,6 +439,11 @@
             <div class="icon-wrapper c-blue">✨</div>
             <h3 class="bento-title">极速记账魔法</h3>
             <p class="bento-desc">支持 Siri 免触控语音与一句话记账。内置 AI 大模型深度解析，可完美处理极度口语化的复杂长句，智能拆分多笔账单，让记账如同与私人管家聊天般自然顺畅。</p>
+            <div class="video-tip-line">
+              <span class="video-icon-inline" aria-hidden="true"></span>
+              <strong>观看视频：</strong>
+              <a class="shortcut-link" href="https://mp.weixin.qq.com/s/VJ84eQqEPck5qfWfq8JDWw" target="_blank" rel="noopener">点击观看</a>
+            </div>
           </div>
           <div class="bento-img-wrap">
             <img class="mockup-img" src="./images/jz.PNG" alt="极速记账魔法界面" loading="lazy">
@@ -506,12 +530,12 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-    var CURRENT_PAGE_BUILD = '20261021_1';
+    var CURRENT_PAGE_BUILD = '20261029_1';
     var appConfig = {
-      version: 'v1.6.5',
-      androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.6.5/app-release.apk',
-      lanzouUrl: 'https://wwany.lanzn.com/i8F5F4dmtb9e',
-      lanzouPwd: '9zwv',
+      version: 'v1.5.5',
+      androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.5.5/app-release.apk',
+      lanzouUrl: 'https://wwany.lanzn.com/itC0Z4b9myzg',
+      lanzouPwd: 'fxhu',
       iosAppStoreUrl: 'https://apps.apple.com/cn/app/id6762100023'
     };
     // 同一个 buildTime 只允许触发一次强制刷新，防止 index.html 缓存未及时更新时
