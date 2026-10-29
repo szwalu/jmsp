@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -12,6 +12,13 @@
 <link rel="alternate" hreflang="en" href="/index-en.html">
 <link rel="alternate" hreflang="ja" href="/index-ja.html">
 <link rel="alternate" hreflang="x-default" href="/index.html">
+<meta name="description" content="雞毛蒜皮：ひとことで家計簿、チャット感覚の日記、モノとリマインダーの管理。完全無料・広告なし・サブスクなし。データはあなたのスマホだけに保存されます。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="雞毛蒜皮 - あなたのデジタル生活アシスタント">
+<meta property="og:description" content="ひとことで家計簿、気軽に日記。完全無料・広告なし・サブスクなし。データはあなたのスマホだけに。">
+<meta property="og:image" content="https://jmsp.app/images/en/zy.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="apple-itunes-app" content="app-id=6762100023">
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/images/主题.png">
@@ -116,6 +123,40 @@
       -webkit-text-fill-color: transparent;
     }
     .app-slogan { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0; font-weight: 400; }
+    /* 全免费 · 零广告 · 无会员 */
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .hero-badge { font-size: 14px; font-weight: 600; line-height: 1.4; padding: 5px 12px; border-radius: 999px; color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+    .hero-badge::before { content: '✓ '; }
+    /* 首屏截图 */
+    .hero-shot { text-align: center; margin: -32px auto 72px; animation: fadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+    .hero-shot img { width: 100%; max-width: 300px; height: auto; border-radius: 28px; border: 1px solid var(--img-border); box-shadow: 0 24px 56px rgba(15, 23, 42, 0.16); }
+    /* 更多实用功能 */
+    .more-section, .faq-section { margin-top: 72px; }
+    .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .feat-item { display: flex; gap: 12px; align-items: flex-start; padding: 16px; border-radius: 18px; background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: var(--glass-shadow); }
+    .feat-ico { font-size: 22px; line-height: 1.3; flex-shrink: 0; }
+    .feat-text { display: flex; flex-direction: column; min-width: 0; }
+    .feat-text b { font-size: 15px; font-weight: 600; line-height: 1.4; color: var(--text-main); }
+    .feat-text span { font-size: 13px; line-height: 1.5; color: var(--text-muted); margin-top: 2px; }
+    /* 常见问题 */
+    .faq-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .faq-list details { padding: 16px 20px; border-radius: 18px; background: var(--card-bg); border: 1px solid var(--card-border); box-shadow: var(--glass-shadow); }
+    .faq-list summary { font-size: 16px; font-weight: 600; cursor: pointer; color: var(--text-main); list-style-position: inside; }
+    .faq-list details p { margin-top: 10px; font-size: 15px; line-height: 1.7; color: var(--text-muted); }
+    /* 页脚链接 */
+    .footer-links { display: flex; justify-content: center; gap: 10px; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
+    .footer-links a { color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--primary); }
+    /* 安卓下载提示 */
+    .dl-tip { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 24px); transform: translate(-50%, 20px); width: max-content; max-width: calc(100% - 48px); padding: 12px 18px; border-radius: 14px; background: rgba(15, 23, 42, 0.92); color: #fff; font-size: 14px; line-height: 1.5; text-align: center; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 50; }
+    .dl-tip.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 768px) {
+      .feat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .feat-item { padding: 14px; gap: 6px; flex-direction: column; } /* 手机两列：图标放上面，文字占满整格 */
+      .more-section, .faq-section { margin-top: 56px; }
+      .hero-shot { margin: -24px auto 56px; }
+      .hero-shot img { max-width: 260px; }
+    }
     /* === 下载区域 === */
     .downloads { display: flex; flex-direction: column; gap: 16px; margin-bottom: 72px; max-width: 800px; margin-left: auto; margin-right: auto; animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
     .dl-btn { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; border-radius: 22px; background: var(--card-bg); border: 1px solid var(--card-border); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: var(--glass-shadow); cursor: pointer; text-decoration: none; transition: all 0.2s ease; color: var(--text-main); }
@@ -363,7 +404,8 @@
       <img class="app-icon" src="./images/主题.png" alt="雞毛蒜皮 Logo" onerror="this.src='https://api.iconify.design/fluent-emoji-flat:feather.svg'" />
       <div class="hero-content">
         <h1 class="app-title">雞毛蒜皮</h1>
-        <p class="app-slogan">暮らしの小さな出来事を記録。チャット感覚で書ける日記と家計簿の新しい体験。</p>
+        <p class="app-slogan">ひとことで家計簿、気軽に日記。データはあなたのスマホの中だけに。</p>
+        <div class="hero-badges"><span class="hero-badge">完全無料</span><span class="hero-badge">広告なし</span><span class="hero-badge">サブスクなし</span></div>
       </div>
     </header>
     <section class="downloads">
@@ -383,29 +425,15 @@
           <div class="dl-icon">🤖</div>
           <div class="dl-text-group">
             <div class="dl-text-main">Android 公式</div>
-            <div id="android-official-sub" class="dl-text-sub">v1.3.8(2) | .zip で保存された場合は拡張子 .zip を削除してインストール</div>
+            <div id="android-official-sub" class="dl-text-sub">v1.5.5 · 公式 APK</div>
           </div>
         </div>
         <div class="dl-action">入手</div>
       </div>
 
-      <div class="dl-btn dl-android-alt" onclick="handleLanzouDownload()">
-        <div class="dl-left">
-          <div class="dl-icon">☁️</div>
-          <div class="dl-text-group">
-            <div class="dl-text-main">Android ミラー</div>
-            <div id="android-alt-sub" class="dl-text-sub">Lanzou クラウド（パスワード：<span class="copy-pwd" onclick="copyPassword(event, this)" title="タップしてコピー">
-  <span id="lanzou-pwd">fxhu</span>
-  <svg id="copy-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 3px;">
-    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-  </svg>
-</span>）</div>
-          </div>
-        </div>
-        <div class="dl-action">開く</div>
-      </div>
     </section>
+    <div class="hero-shot"><img src="./images/en/zy.png" alt="雞毛蒜皮のホーム画面"></div>
+
     <!-- 核心理念 (图文混排 Bento Box) -->
     <section>
       <h2 class="section-title">記録のかたちを、新しく</h2>
@@ -415,7 +443,7 @@
           <div class="bento-content">
             <div class="icon-wrapper c-blue">✨</div>
             <h3 class="bento-title">爆速記帳マジック</h3>
-            <p class="bento-desc">Siri での音声入力や一文だけの記帳に対応。内蔵の AI モデルがくだけた長い文章も正確に読み取り、複数の支出を自動で分けて記録。執事とおしゃべりするような自然さで家計簿をつけられます。</p>
+            <p class="bento-desc">Siri での音声入力や一文だけの記帳に対応。AI モデルを接続すれば（ご自身の API キーを入力するだけ）、くだけた長い文章も複数の支出に自動で分けて記録。執事とおしゃべりするような自然さで家計簿をつけられます。</p>
             <div class="video-tip-line">
               <span class="video-icon-inline" aria-hidden="true"></span>
               <strong>動画を見る：</strong>
@@ -460,7 +488,7 @@
           <div class="bento-content">
             <div class="icon-wrapper c-teal">🔔</div>
             <h3 class="bento-title">あらゆる場面のリマインダー</h3>
-            <p class="bento-desc">新暦・旧暦の日付計算と長期間の繰り返しに対応。通知はシステムで予約されるため、オフラインでも時間どおりに届きます。</p>
+            <p class="bento-desc">新暦・旧暦の日付計算と長期間の繰り返しに対応。通知はシステムから時間どおりに届くので、オフラインでも安心です。</p>
           </div>
           <div class="bento-img-wrap">
             <img class="mockup-img" src="./images/en/bw.PNG" alt="リマインダーの画面" loading="lazy">
@@ -470,7 +498,7 @@
           <div class="bento-content">
             <div class="icon-wrapper c-green">🛡️</div>
             <h3 class="bento-title">データはあなたのもの</h3>
-            <p class="bento-desc">オフラインファースト設計で、データは標準でスマホ本体に暗号化保存。指紋・顔認証のアプリロックや、iCloud・WebDAV などへの自動差分バックアップに対応し、プライバシーの不安から解放されます。</p>
+            <p class="bento-desc">オフラインファースト設計で、データはスマホ本体だけに保存され、私たちのサーバーを通りません。指紋・顔認証のアプリロックや、iCloud・WebDAV・Google Drive などへの自動差分バックアップに対応し、プライバシーの不安から解放されます。</p>
           </div>
           <div class="bento-img-wrap">
             <img class="mockup-img" src="./images/en/bf.PNG" alt="バックアップの画面" loading="lazy">
@@ -479,6 +507,41 @@
       </div>
     </section>
     <!-- 页脚与联系方式 -->
+    <section class="more-section">
+      <h2 class="section-title">ほかにも便利な機能</h2>
+      <div class="feat-grid">
+        <div class="feat-item"><span class="feat-ico">🔄</span><div class="feat-text"><b>リアルタイム同期</b><span>複数の端末を約 1 分ごとに自動同期</span></div></div>
+        <div class="feat-item"><span class="feat-ico">👨‍👩‍👧</span><div class="feat-text"><b>家族の共有帳簿</b><span>最大 3 人で一緒に記帳</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🧩</span><div class="feat-text"><b>ホーム画面ウィジェット</b><span>収支・予算・リマインダー・持ち物がひと目で</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🗣️</span><div class="feat-text"><b>Siri とショートカット</b><span>ひとことやスクリーンショットで記帳</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🏷️</span><div class="feat-text"><b>タグとサブタグ</b><span>日記と支出で共通、タップで絞り込み</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🖼️</span><div class="feat-text"><b>日記フォト</b><span>年・月・タグで日記の写真を一覧</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🔤</span><div class="feat-text"><b>写真から文字入力</b><span>本や書類を撮るだけでテキストに（iPhone）</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🧴</span><div class="feat-text"><b>パッケージから期限を読み取り</b><span>製造日と賞味期限を自動で認識（iPhone）</span></div></div>
+        <div class="feat-item"><span class="feat-ico">⏰</span><div class="feat-text"><b>アラーム型リマインダー</b><span>大切な予定をアラームのように鳴らす（iOS 26 以降）</span></div></div>
+        <div class="feat-item"><span class="feat-ico">✅</span><div class="feat-text"><b>習慣トラッカー</b><span>連続日数と今週の進み具合がひと目で</span></div></div>
+        <div class="feat-item"><span class="feat-ico">📅</span><div class="feat-text"><b>日ごとの予算</b><span>今日あといくら使えるかを毎日計算</span></div></div>
+        <div class="feat-item"><span class="feat-ico">💱</span><div class="feat-text"><b>複数通貨</b><span>為替レートで自動換算、通貨をまたぐ振替にも対応</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🔁</span><div class="feat-text"><b>定期支出と分割払い</b><span>家賃・サブスク・分割払いを自動で記帳</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🐷</span><div class="feat-text"><b>貯金プラン</b><span>目標を決めてコツコツ貯金、進み具合をいつでも確認</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🌙</span><div class="feat-text"><b>ダークモード</b><span>システムに合わせるか手動で切り替え</span></div></div>
+        <div class="feat-item"><span class="feat-ico">🌐</span><div class="feat-text"><b>4 か国語対応</b><span>简体中文・繁體中文・English・日本語</span></div></div>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <h2 class="section-title">よくある質問</h2>
+      <div class="faq-list">
+        <details><summary>本当に完全無料ですか？</summary><p>はい。広告・サブスク・アプリ内課金は一切なく、すべての機能をそのまま使えます。AI 機能にはご自身で AI サービスから取得した API キーが必要で、その費用（無料枠のあるサービスも多数）はご利用者とサービス提供元の間で精算されます。私たちが料金をいただくことはありません。</p></details>
+        <details><summary>データはどこに保存されますか？</summary><p>スマホ本体だけに保存され、私たちのサーバーを通ることはありません。ご自身の iCloud・WebDAV・Google Drive・OneDrive・百度網盤にバックアップでき、バックアップもご自身のクラウドにだけ保存されます。</p></details>
+        <details><summary>機種変更や複数端末ではどう使いますか？</summary><p>「マイページ → バックアップと復元」でクラウドにバックアップし、新しい端末で同じクラウドに接続して復元します。「リアルタイム同期」をオンにすると、端末どうしが約 1 分ごとに自動で同期します。</p></details>
+        <details><summary>AI キーがなくても記帳できますか？</summary><p>できます。ひとこと記帳も Siri での記帳もそのまま使えます。「マイページ → AI エンジン」で API キー（DeepSeek・Kimi・通義千問・智譜・Gemini など）を入力すると、長く複雑な文章もより正確に読み取れ、AI のまとめレターや年間レポートも作成できます。</p></details>
+        <details><summary>家族と一緒に記帳できますか？</summary><p>できます。「家族の共有帳簿」は最大 3 人まで。全員が同じ専用の堅果雲（Nutstore）WebDAV アカウントで同期し、それぞれが記録した支出と収入が共有帳簿に表示されます。</p></details>
+        <details><summary>Android でダウンロードしたら .zip になりました</summary><p>一部のブラウザはインストーラーを .zip として保存します。ファイル名末尾の .zip を削除して（.apk にして）から開くとインストールできます。</p></details>
+        <details><summary>対応している端末は？</summary><p>iPhone・iPad・Android スマートフォンに対応。表示言語は簡体字中国語・繁体字中国語・英語・日本語から選べます。</p></details>
+      </div>
+    </section>
+
     <footer class="footer">
       <div class="contact-info">
         <div class="contact-item">
@@ -490,9 +553,11 @@
           <span class="contact-tag">アプリの「マイページ → フィードバック」から</span>
         </div>
       </div>
+      <div class="footer-links"><a href="/privacy-policy.html?lang=en">プライバシーポリシー</a><span>·</span><a href="/user-agreement.html?lang=en">利用規約</a></div>
       <p>© <span id="dynamic-year"></span> 雞毛蒜皮 App. All rights reserved.</p>
     </footer>
   </div>
+  <div id="dl-tip" class="dl-tip" role="status" aria-live="polite"></div>
   <script>
   // 🌐 语言切换
   function rememberLang(l) { try { localStorage.setItem('jmsp_site_lang', l); } catch (e) {} }
@@ -507,7 +572,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-    var CURRENT_PAGE_BUILD = '20261029_1';
+    var CURRENT_PAGE_BUILD = '20261029_2';
     var appConfig = {
       version: 'v1.5.5',
       androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.5.5/app-release.apk',
@@ -575,7 +640,7 @@
     function updateUI() {
       var officialSub = document.getElementById('android-official-sub');
       if (officialSub) {
-        officialSub.innerText = appConfig.version + ' | .zip で保存された場合は拡張子 .zip を削除してインストール';
+        officialSub.innerText = appConfig.version + ' · 公式 APK';
       }
       var pwdSpan = document.getElementById('lanzou-pwd');
       if (pwdSpan) {
@@ -605,8 +670,18 @@
       if (isWeChat()) {
         showMask();
       } else {
+        showDownloadTip('ダウンロードを開始しました。.zip として保存された場合は、ファイル名末尾の .zip を削除してからインストールしてください。');
         window.location.href = appConfig.androidGiteeUrl;
       }
+    }
+    var downloadTipTimer = null;
+    function showDownloadTip(text) {
+      var tip = document.getElementById('dl-tip');
+      if (!tip) return;
+      tip.textContent = text;
+      tip.classList.add('show');
+      clearTimeout(downloadTipTimer);
+      downloadTipTimer = setTimeout(function() { tip.classList.remove('show'); }, 8000);
     }
     function handleLanzouDownload() {
       if (isWeChat()) {
