@@ -117,6 +117,10 @@
       border-color: rgba(99, 102, 241, 0.3);
     }
     .nav-help:active { transform: scale(0.96); }
+    /* 左上「语言」与右上「使用指南」同高同宽（宽度由下面的脚本取两者较大值），top 相同 → 水平对齐 */
+    .nav-help { box-sizing: border-box; height: 40px; padding: 0 16px; line-height: 1; justify-content: center; white-space: nowrap; font-family: inherit; }
+    .nav-help svg { width: 18px; height: 18px; flex-shrink: 0; }
+    @media (max-width: 360px) { .nav-help { padding: 0 12px; } }
     .container {
       max-width: 960px;
       margin: 0 auto;
@@ -193,11 +197,13 @@
       .hero .app-icon { grid-column: 1; grid-row: 1 / span 4; align-self: center; }
       .hero .app-title { grid-column: 2; grid-row: 2; }
       .hero .app-slogan { grid-column: 2; grid-row: 3; }
-      .hero-badges { grid-column: 1 / -1; grid-row: 5; flex-wrap: nowrap; gap: 6px; margin-top: 18px; }
+      .hero-badges { grid-column: 1 / -1; grid-row: 5; flex-wrap: nowrap; justify-content: center; gap: 6px; margin-top: 18px; }
       .hero-badge { font-size: 13px; padding: 4px 10px; white-space: nowrap; }
-    }
-    @media (max-width: 360px) {
-      .hero-badge { font-size: 12px; padding: 4px 8px; }
+      .hero-badges.nocheck .hero-badge::before { content: none; }
+      .hero-badges.s12 .hero-badge { font-size: 12px; padding: 4px 8px; }
+      .hero-badges.s11 { gap: 4px; }
+      .hero-badges.s11 .hero-badge { font-size: 11px; padding: 4px 7px; }
+      .hero-badges.s10 .hero-badge { font-size: 10.5px; padding: 3px 6px; }
     }
     /* === 下载区域 === */
     .downloads { display: flex; flex-direction: column; gap: 16px; margin-bottom: 72px; max-width: 800px; margin-left: auto; margin-right: auto; animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
@@ -443,6 +449,15 @@
     </svg>
     使用指南
   </a>
+  <script>
+    // 两个按钮的文字长短随语言不同：取较宽的一个，两个都设成这个宽度（在首次绘制前执行，不会看到变宽）
+    (function () {
+      var a = document.querySelector('.nav-lang'), b = document.querySelector('a.nav-help');
+      if (!a || !b) return;
+      var w = Math.ceil(Math.max(a.getBoundingClientRect().width, b.getBoundingClientRect().width));
+      a.style.width = b.style.width = w + 'px';
+    })();
+  </script>
   <div class="container">
 
     <header class="hero">
@@ -450,7 +465,24 @@
       <div class="hero-content">
         <h1 class="app-title">鸡毛蒜皮</h1>
         <p class="app-slogan">一句话记账，随手写日记，数据只存在你自己的手机里。</p>
-        <div class="hero-badges"><span class="hero-badge">全免费</span><span class="hero-badge">零广告</span><span class="hero-badge">无会员</span></div>
+        <div class="hero-badges"><span class="hero-badge">全免费</span><span class="hero-badge">零广告</span><span class="hero-badge">无会员</span><span class="hero-badge">纯离线</span></div>
+        <script>
+          // 手机上 4 个标签必须一行：先用 13px 带 ✓，放不下依次去掉 ✓、改 12 / 11 / 10.5px（各语言文字长短不同，屏幕宽窄不同）
+          (function () {
+            var box = document.currentScript.previousElementSibling;
+            var steps = ['', 'nocheck', 'nocheck s12', 'nocheck s11', 'nocheck s10'];
+            function fit() {
+              box.className = 'hero-badges';
+              if (!window.matchMedia('(max-width: 768px)').matches) return;
+              for (var i = 0; i < steps.length; i++) {
+                box.className = 'hero-badges ' + steps[i];
+                if (box.scrollWidth <= box.clientWidth + 1) return;
+              }
+            }
+            fit();
+            window.addEventListener('resize', fit);
+          })();
+        </script>
       </div>
     </header>
     <section class="downloads">
@@ -633,7 +665,7 @@
     if (m && sw && !sw.contains(e.target)) m.classList.remove('open');
   });
 
-    var CURRENT_PAGE_BUILD = '20261029_4';
+    var CURRENT_PAGE_BUILD = '20261029_5';
     var appConfig = {
       version: 'v1.5.5',
       androidGiteeUrl: 'https://gitee.com/jmsp8/jmsp/releases/download/v1.5.5/app-release.apk',
