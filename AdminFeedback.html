@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=overlays-content">
-    <title>鸡毛蒜皮 - 管理后台</title>
+    <title>反馈管理后台</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -49,6 +49,8 @@
         .device-item:hover { background: #f9fafb; }
         .device-item.active { background: #eef2ff; border-bottom-color: transparent; }
         .dev-id { font-weight: 600; font-size: 13px; color: #111; word-break: break-all; }
+        .app-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; margin-right: 6px; vertical-align: 1px; background: #eef2ff; color: #4f46e5; }
+        .app-tag.aiji { background: #fdecea; color: #b5452f; }
         .dev-preview { font-size: 12px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; }
         
         /* 右侧：主内容区 */
@@ -170,6 +172,8 @@
             .device-item:hover { background: #242424; }
             .device-item.active { background: #2c3344; }
             .dev-id { color: #f5f5f5; }
+            .app-tag { background: #2c3344; color: #a5b4fc; }
+            .app-tag.aiji { background: #3a231c; color: #f0a08c; }
             
             .main-area, .chat-view { background: #121212; }
             
@@ -229,7 +233,7 @@
                     :class="{ active: currentDevice === item.device_id }"
                     @click="selectDevice(item.device_id)"
                 >
-                    <div class="dev-id">{{ item.device_id }}</div>
+                    <div class="dev-id"><span class="app-tag" :class="item.app">{{ APP_NAMES[item.app] || item.app || '鸡毛蒜皮' }}</span>{{ item.device_id }}</div>
                     <div class="dev-preview">{{ item.content }}</div>
                 </div>
             </div>
@@ -250,6 +254,7 @@
                     <div class="header-title">
                         <button class="mobile-back-btn" @click="goBackToDevices" style="margin-right: 8px;">← 返回</button>
                         <span>工单列表</span>
+                        <span v-if="currentApp" class="app-tag" :class="currentApp">{{ APP_NAMES[currentApp] || currentApp }}</span>
                         <span style="font-weight:normal; font-size:13px; color:#999; margin-left:8px;">{{ currentDevice }}</span>
                     </div>
                     <button class="delete-btn" @click="deleteDeviceThread(currentDevice)">清空该用户数据</button>
@@ -505,6 +510,9 @@ createApp({
         
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
         
+        // 多个 App 共用这个反馈后台：ticket_messages.app 区分（jmsp / aiji）
+        const APP_NAMES = { jmsp: '鸡毛蒜皮', aiji: '爱记古诗词' }
+
         // 核心状态
         const devices = ref([])         
         const allMessages = ref([])     
@@ -512,6 +520,8 @@ createApp({
         const currentTicketId = ref(null) 
         const replyText = ref('')
         const messageBoxRef = ref(null)
+
+        const currentApp = computed(() => devices.value.find(d => d.device_id === currentDevice.value)?.app || '')
 
         const mobileView = computed(() => {
             if (!currentDevice.value) return 'device'
@@ -623,7 +633,7 @@ createApp({
         const fetchDevices = async () => {
             const { data, error } = await supabaseClient
                 .from('ticket_messages')
-                .select('device_id, created_at, content')
+                .select('device_id, created_at, content, app')
                 .order('created_at', { ascending: false })
 
             if (!error && data) {
@@ -937,7 +947,8 @@ createApp({
             messageBoxRef, parseMessage, formatDate, openImage,
             fileInputRef, selectedFiles, imagePreviews, isSending,
             triggerImageSelect, handleFileChange, removeImage,
-            copiedMsgId, copyLogs
+            copiedMsgId, copyLogs,
+            APP_NAMES, currentApp
         }
     }
 }).mount('#app')
