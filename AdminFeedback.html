@@ -106,6 +106,7 @@
         .copy-log-btn { flex-shrink: 0; background: #007aff; color: #fff; border: none; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 500; cursor: pointer; transition: background 0.2s, opacity 0.2s; }
         .copy-log-btn:hover { opacity: 0.85; }
         .copy-log-btn.copied { background: #10b981; }
+        .log-text { margin-top: 6px; font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; opacity: 0.9; }
         .admin-msg .log-block { background: rgba(255,255,255,0.15); }
         .admin-msg .copy-log-btn { background: #fff; color: #007aff; }
         .admin-msg .copy-log-btn.copied { background: #fff; color: #10b981; }
@@ -324,13 +325,15 @@
                                     </div>
                                     <div v-if="parseMessage(msg.content).logs" class="log-block">
                                         <div class="log-block-header">
-                                            <span>📋 运行日志</span>
+                                            <span>{{ parseMessage(msg.content).logs.length <= 300 ? '📱 设备信息' : '📋 运行日志' }}</span>
                                             <button
                                                 class="copy-log-btn"
                                                 :class="{ copied: copiedMsgId === msg.id }"
                                                 @click.stop="copyLogs(msg, parseMessage(msg.content).logs)"
                                             >{{ copiedMsgId === msg.id ? '已复制 ✓' : '复制日志' }}</button>
                                         </div>
+                                        <!-- 短的（爱记古诗词只附一行 App 版本和系统版本）直接显示；长的（鸡毛蒜皮的运行日志）只给复制按钮 -->
+                                        <div v-if="parseMessage(msg.content).logs.length <= 300" class="log-text">{{ parseMessage(msg.content).logs }}</div>
                                     </div>
                                     <div class="msg-time">{{ formatDate(msg.created_at) }}</div>
                                     <button class="del-msg-btn" @click="deleteMessage(msg)">删除</button>
