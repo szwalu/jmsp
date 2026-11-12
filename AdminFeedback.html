@@ -334,6 +334,7 @@
                                         </div>
                                         <!-- 短的（爱记古诗词只附一行 App 版本和系统版本）直接显示；长的（鸡毛蒜皮的运行日志）只给复制按钮 -->
                                         <div v-if="parseMessage(msg.content).logs.length <= 300" class="log-text">{{ parseMessage(msg.content).logs }}</div>
+                                        <div v-else-if="logSummary(parseMessage(msg.content).logs)" class="log-text">{{ logSummary(parseMessage(msg.content).logs) }}</div>
                                     </div>
                                     <div class="msg-time">{{ formatDate(msg.created_at) }}</div>
                                     <button class="del-msg-btn" @click="deleteMessage(msg)">删除</button>
@@ -933,6 +934,20 @@ createApp({
             }
         }
 
+        // 🌟 长日志（鸡毛蒜皮）摘要：从日志开头的「App 版本」「UA」两行取出版本号和系统版本，显示在复制按钮下面
+        const logSummary = (logs) => {
+            const head = logs.slice(0, 1200)
+            const ver = (head.match(/App 版本:\s*([^\n]+)/) || [])[1]
+            const ua = (head.match(/UA:\s*([^\n]+)/) || [])[1] || ''
+            const ios = (ua.match(/OS (\d+[_\d]*) like Mac OS X/) || [])[1]
+            const and = (ua.match(/Android ([\d.]+)/) || [])[1]
+            const sys = ios ? `iOS ${ios.replace(/_/g, '.')}` : and ? `Android ${and}` : ((head.match(/平台:\s*([^\n]+)/) || [])[1] || '')
+            const parts = []
+            if (ver && ver !== '未知') parts.push(`鸡毛蒜皮 ${ver}`)
+            if (sys) parts.push(sys)
+            return parts.join(' · ')
+        }
+
         const formatDate = (isoString) => {
             if (!isoString) return ''
             const d = new Date(isoString)
@@ -951,7 +966,7 @@ createApp({
             fileInputRef, selectedFiles, imagePreviews, isSending,
             triggerImageSelect, handleFileChange, removeImage,
             copiedMsgId, copyLogs,
-            APP_NAMES, currentApp
+            APP_NAMES, currentApp, logSummary
         }
     }
 }).mount('#app')
