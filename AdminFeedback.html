@@ -45,12 +45,16 @@
         .list-header { padding: 16px; border-bottom: 1px solid #e5e5e5; display: flex; justify-content: space-between; align-items: center; background: #f9fafb; }
         .list-header h3 { font-size: 15px; margin: 0; color: #333; }
         .device-items-wrap { flex: 1; overflow-y: auto; padding: 12px; }
+        .app-filter { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 12px 0; }
+        .app-filter button { border: 1px solid #e5e5e5; background: #fff; color: #666; font-size: 12px; padding: 3px 10px; border-radius: 12px; cursor: pointer; }
+        .app-filter button.on { background: #007aff; border-color: #007aff; color: #fff; }
         .device-item { padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; border-radius: 8px; margin-bottom: 6px; transition: background 0.2s; }
         .device-item:hover { background: #f9fafb; }
         .device-item.active { background: #eef2ff; border-bottom-color: transparent; }
         .dev-id { font-weight: 600; font-size: 13px; color: #111; word-break: break-all; }
         .app-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; margin-right: 6px; vertical-align: 1px; background: #eef2ff; color: #4f46e5; }
         .app-tag.aiji { background: #fdecea; color: #b5452f; }
+        .app-tag.ccbw { background: #e4efea; color: #2e7563; }
         .dev-preview { font-size: 12px; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 6px; }
         
         /* 右侧：主内容区 */
@@ -174,7 +178,10 @@
             .device-item.active { background: #2c3344; }
             .dev-id { color: #f5f5f5; }
             .app-tag { background: #2c3344; color: #a5b4fc; }
+            .app-filter button { background: #1e1e1e; border-color: #333; color: #aaa; }
+            .app-filter button.on { background: #0a84ff; border-color: #0a84ff; color: #fff; }
             .app-tag.aiji { background: #3a231c; color: #f0a08c; }
+            .app-tag.ccbw { background: #1b2c27; color: #63b8a0; }
             
             .main-area, .chat-view { background: #121212; }
             
@@ -226,9 +233,13 @@
                 <h3>用户列表</h3>
                 <button class="logout-btn" @click="handleLogout">退出</button>
             </div>
+            <div class="app-filter">
+                <button :class="{ on: !appFilter }" @click="appFilter = ''">全部</button>
+                <button v-for="(name, key) in APP_NAMES" :key="key" :class="{ on: appFilter === key }" @click="appFilter = key">{{ name }}</button>
+            </div>
             <div class="device-items-wrap">
                 <div 
-                    v-for="item in devices" 
+                    v-for="item in filteredDevices" 
                     :key="item.device_id"
                     class="device-item"
                     :class="{ active: currentDevice === item.device_id }"
@@ -514,11 +525,14 @@ createApp({
         
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
         
-        // 多个 App 共用这个反馈后台：ticket_messages.app 区分（jmsp / aiji）
-        const APP_NAMES = { jmsp: '鸡毛蒜皮', aiji: '爱记古诗词' }
+        // 多个 App 共用这个反馈后台：ticket_messages.app 区分（jmsp / aiji / ccbw）
+        const APP_NAMES = { jmsp: '鸡毛蒜皮', aiji: '爱记古诗词', ccbw: '词词不忘' }
 
         // 核心状态
         const devices = ref([])         
+        const appFilter = ref('')       // '' = 全部；否则 jmsp / aiji / ccbw
+        // 早期记录没有 app 字段，按鸡毛蒜皮算（和列表里的标签一致）
+        const filteredDevices = computed(() => appFilter.value ? devices.value.filter(d => (d.app || 'jmsp') === appFilter.value) : devices.value)
         const allMessages = ref([])     
         const currentDevice = ref(null) 
         const currentTicketId = ref(null) 
@@ -958,7 +972,7 @@ createApp({
         
         return {
             isLoggedIn, email, password, loginError, loading, handleLogin, handleLogout,
-            devices, currentDevice, currentTicketId, mobileView,
+            devices, filteredDevices, appFilter, currentDevice, currentTicketId, mobileView,
             groupedTickets, currentTicketMessages, isCurrentTicketClosed,
             replyText, selectDevice, goBackToDevices, openTicket, closeCurrentTicket, sendReply,
             deleteMessage, deleteDeviceThread, deleteTicket, 
