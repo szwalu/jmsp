@@ -85,8 +85,9 @@ a { color:var(--red); }
 <tr><td>Notifications</td><td>Daily reminder</td><td>When you turn the reminder on</td><td>No reminders; everything else works</td></tr>
 <tr><td>Microphone, speech recognition (iOS)</td><td>"Hold to talk" in Flying-Flower and Poem Chain, converted to text on the device</td><td>First time you hold to talk</td><td>No voice input; typing still works</td></tr>
 <tr><td>Photos (add only)</td><td>Save a share image to Photos</td><td>First time you save an image</td><td>Can't save to Photos; sharing still works</td></tr>
+<tr><td>Camera, photo library (read) (iOS)</td><td>Take a photo or pick an image to attach in Feedback; only the one you take or select is read</td><td>When you tap the screenshot button in Feedback and choose camera or photos</td><td>You cannot attach images but can still send text; the rest works</td></tr>
 </table>
-<p>The App does not request location, contacts, camera, phone or SMS permissions, does not read your photo library, and does not read device identifiers (IMEI, OAID, IDFA) or the list of installed apps.</p>
+<p>The App does not request location, contacts, phone or SMS permissions; apart from the photo or image you choose to attach in Feedback, it does not use the camera or read your photo library; and it does not read device identifiers (IMEI, OAID, IDFA) or the list of installed apps.</p>
 
 <h2>3. Third parties</h2>
 <p>No third-party analytics, advertising, push, login or payment SDKs are included. Open-source components (Capacitor and its plugins, SQLite, the system speech API) run locally and send nothing to third parties. Feedback is stored using Supabase's database and storage services (Supabase acts only as a storage provider). We do not sell, rent or share your personal information, except where required by law.</p>
